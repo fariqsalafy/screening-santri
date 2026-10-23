@@ -85,6 +85,7 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .sub .row{margin-bottom:11px}
 .tw-cell{min-width:120px}
 .tw-s{font-size:12.5px;font-weight:650;color:var(--text);margin-bottom:5px;line-height:1.35}
+.tw-ket{font-size:11px;color:var(--text2);line-height:1.4;margin-top:5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-width:190px}
 .actions{position:fixed;left:0;right:0;bottom:0;padding:12px 14px 14px;background:linear-gradient(to top,#0a0f1c 55%,transparent);z-index:60}
 .actions-inner{max-width:1032px;margin:0 auto;display:flex;gap:10px}
 .btn{flex:1;padding:14px 18px;border-radius:12px;border:none;font-size:14.5px;font-weight:800;font-family:inherit;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -450,7 +451,8 @@ const catCell=(r,c)=>{
   const t=r.tw[c.id];
   if(!t||!(t.li||t.surat))return "<span class=\"na\" style='color:var(--text3)'>-</span>";
   const ay=t.ayat?" · s/d "+esc(t.ayat):"";
-  return `<div class="tw-s">${esc(t.li||t.surat)}${ay}</div><span class="badge ${esc(t.pred)}">${esc(PRED[t.pred]||"-")}</span>`;
+  const ket=t.ket?`<div class="tw-ket">${esc(t.ket)}</div>`:"";
+  return `<div class="tw-s">${esc(t.li||t.surat)}${ay}</div><span class="badge ${esc(t.pred)}">${esc(PRED[t.pred]||"-")}</span>${ket}`;
 };
 function renderRekap(){
   const q=$("rkSearch").value.trim().toLowerCase();
