@@ -83,9 +83,14 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .sub-head .sh-ket{font-size:10.5px;color:var(--text3);margin-top:2px}
 .sub .fld{margin-bottom:11px}
 .sub .row{margin-bottom:11px}
-.tw-cell{min-width:120px}
-.tw-s{font-size:12.5px;font-weight:650;color:var(--text);margin-bottom:5px;line-height:1.35}
-.tw-ket{font-size:11px;color:var(--text2);line-height:1.4;margin-top:5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-width:190px}
+.tw-cell{min-width:130px}
+.tw-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.tw-row .badge{padding:3px 9px;font-size:10px}
+.tw-s{font-size:12.5px;font-weight:650;color:var(--text);line-height:1.35}
+.tw-ket{font-size:11px;color:var(--text2);line-height:1.4;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:220px}
+.wa-c{min-width:150px}
+.wa-it{font-size:11.5px;color:var(--text2);line-height:1.55;margin-bottom:2px}
+.wa-it b{color:var(--text3);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}
 .actions{position:fixed;left:0;right:0;bottom:0;padding:12px 14px 14px;background:linear-gradient(to top,#0a0f1c 55%,transparent);z-index:60}
 .actions-inner{max-width:1032px;margin:0 auto;display:flex;gap:10px}
 .btn{flex:1;padding:14px 18px;border-radius:12px;border:none;font-size:14.5px;font-weight:800;font-family:inherit;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -115,7 +120,7 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .stat .l{font-size:10px;color:var(--text2);font-weight:600;margin-top:4px;letter-spacing:.3px;text-transform:uppercase}
 .stat.c1 .n{color:var(--teal)}.stat.c2 .n{color:var(--gold)}.stat.c3 .n{color:var(--blue)}.stat.c4 .n{color:var(--red)}
 .table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow-x:auto;margin-bottom:14px}
-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:960px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:1040px}
 thead th{position:sticky;top:0;background:var(--bg3);text-align:left;padding:11px 14px;font-size:10.5px;color:var(--text2);
   font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border2);white-space:nowrap}
 tbody td{padding:12px 14px;border-bottom:1px solid rgba(42,58,88,.5);vertical-align:top}
@@ -158,7 +163,7 @@ tr.detail-row td{padding:0;background:var(--bg2)}
   .seg{grid-template-columns:repeat(2,1fr)}
   .brand h1{font-size:16px}
   thead th,tbody td{padding:10px 10px}
-  table{font-size:12.5px;min-width:920px}
+  table{font-size:12.5px;min-width:980px}
 }
 </style>
 </head>
@@ -190,13 +195,10 @@ tr.detail-row td{padding:0;background:var(--bg2)}
   </div>
 
   <section class="card">
-    <div class="card-head"><div class="step">1</div><div><h2>Identitas Santri</h2><div class="hint">No urut otomatis mengikuti pendaftaran</div></div></div>
+    <div class="card-head"><div class="step">1</div><div><h2>Identitas Santri</h2><div class="hint">Semua isian opsional — isi yang tersedia saja</div></div></div>
     <div class="card-body">
-      <div class="row two">
-        <div class="fld"><label>No Urut</label><input id="f_no" type="number" min="1" inputmode="numeric"></div>
-        <div class="fld"><label>Nama Lengkap <span class="req">*</span></label><input id="f_nama" type="text" placeholder="Tulis nama santri" autocomplete="off"></div>
-      </div>
-      <div class="row two">
+      <div class="fld"><label>Nama Lengkap</label><input id="f_nama" type="text" placeholder="Tulis nama santri" autocomplete="off"></div>
+      <div class="row two" style="margin-top:13px">
         <div class="fld"><label>Asal Sekolah / TPA</label><input id="f_asal" type="text" placeholder="Contoh: MI Aisyah, TPA Nurul Huda" autocomplete="off"></div>
         <div class="fld"><label>Jumlah Hafalan</label><input id="f_haf" type="text" inputmode="decimal" placeholder="Contoh: 1,5 juz"><div class="sm-note">Bisa pakai &ldquo;juz&rdquo; atau surat-ayat</div></div>
       </div>
@@ -316,7 +318,7 @@ tr.detail-row td{padding:0;background:var(--bg2)}
   <div class="table-wrap">
     <table>
       <thead><tr>
-        <th>No</th><th>Nama</th><th>Asal</th><th>Hafalan</th><th>Juz 30</th><th>Juz 28–29</th><th>Sambung Ayat</th><th>Waktu</th>
+        <th>Nama</th><th>Asal</th><th>Hafalan</th><th>Wawancara</th><th>Juz 30</th><th>Juz 28–29</th><th>Sambung Ayat</th><th>Waktu</th>
       </tr></thead>
       <tbody id="rkBody"></tbody>
     </table>
@@ -406,33 +408,30 @@ function predOf(cid){const a=document.querySelector(`.seg[data-cat="${cid}"] but
 function val(g){const a=$("g_"+g).querySelector(".active");return a?a.dataset.v:""}
 function saveForm(){
   const nama=$("f_nama").value.trim();
-  if(!nama){toast("Nama santri wajib diisi");$("f_nama").focus();return}
   const tw={};
-  for(const c of CATS){
-    const sh=c.judul.split("—")[0].trim();
-    const sel=$(c.key+"_surat");
-    if(!sel.value){toast(sh+": pilih surat dulu");sel.focus();return}
-    const isL=sel.value==="Lainnya";
-    const li=isL?$(c.key+"_li").value.trim():"";
-    if(isL&&!li){toast(sh+": tulis judul suratnya");$(c.key+"_li").focus();return}
-    const ayat=c.ayat?$(c.key+"_ayat").value.trim():"";
-    if(c.ayat&&c.ayatReq&&!ayat){toast(sh+": isi sambung sampai ayat ke berapa");$(c.key+"_ayat").focus();return}
-    const pred=predOf(c.id);
-    if(!pred){toast(sh+": pilih predikat dulu");document.querySelector(`.seg[data-cat="${c.id}"]`).scrollIntoView({block:"center"});return}
-    tw[c.id]={surat:isL?"":sel.value,ayat,li,pred,ket:$(c.key+"_ket").value.trim()};
+  let has=false;
+  CATS.forEach(c=>{
+    const sel=$(c.key+"_surat"),isL=sel.value==="Lainnya";
+    const t={surat:isL?"":sel.value,ayat:c.ayat?$(c.key+"_ayat").value.trim():"",
+      li:isL?$(c.key+"_li").value.trim():"",pred:predOf(c.id),
+      ket:$(c.key+"_ket").value.trim()};
+    if(t.surat||t.li||t.ayat||t.pred||t.ket)has=true;
+    tw[c.id]=t;
+  });
+  if(!nama&&$("f_asal").value.trim()===""&&$("f_haf").value.trim()===""&&!has
+    &&val("q1")===""&&val("q2")===""&&val("q3")===""){
+    toast("Form masih kosong — isi dulu");return;
   }
-  const row={
-    no:parseInt($("f_no").value)||rows.length+1,
+  rows.push({
     nama,asal:$("f_asal").value.trim(),haf:$("f_haf").value.trim()||"-",
     q1:{c:val("q1")||"-",t:$("f_q1").value.trim()},
     q2:{c:val("q2")||"-",t:$("f_q2").value.trim()},
     q3:{c:val("q3")||"-",t:$("f_q3").value.trim()},
     tw,
-    w:new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"short"})+", "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":")};
-  rows.push(row);persist();
-  toast("Tersimpan — santri #"+row.no+" "+row.nama.split(" ")[0]);
+    w:new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"short"})+", "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":")});
+  persist();
+  toast("Tersimpan"+(nama?" — "+nama.split(" ")[0]:""));
   resetForm();
-  $("f_no").value=rows.length+1;
   goTab("rekap");
 }
 function resetForm(){
@@ -449,10 +448,16 @@ function resetForm(){
 }
 const catCell=(r,c)=>{
   const t=r.tw[c.id];
-  if(!t||!(t.li||t.surat))return "<span class=\"na\" style='color:var(--text3)'>-</span>";
+  if(!t||!(t.li||t.surat))return "<span style='color:var(--text3);font-size:12px'>-</span>";
   const ay=t.ayat?" · s/d "+esc(t.ayat):"";
   const ket=t.ket?`<div class="tw-ket">${esc(t.ket)}</div>`:"";
-  return `<div class="tw-s">${esc(t.li||t.surat)}${ay}</div><span class="badge ${esc(t.pred)}">${esc(PRED[t.pred]||"-")}</span>${ket}`;
+  return `<div class="tw-row"><span class="tw-s">${esc(t.li||t.surat)}${ay}</span><span class="badge ${esc(t.pred)}">${esc(PRED[t.pred]||"-")}</span></div>${ket}`;
+};
+const waCell=r=>{
+  const it=(lbl,t)=>`<div class="wa-it"><b>${lbl}:</b> ${t}</div>`;
+  return it("Target",r.q1.c==="punya"?esc(r.q1.t||"punya"):"belum")
+        +it("Saudara",r.q2.c==="ya"?esc(r.q2.t||"ada"):"tidak ada")
+        +it("TPA",r.q3.c==="ya"?esc(r.q3.t||"pernah"):"tidak pernah");
 };
 function renderRekap(){
   const q=$("rkSearch").value.trim().toLowerCase();
@@ -479,10 +484,10 @@ function renderRekap(){
           <div class="dg-item"><span class="badge ${esc(t?t.pred:"")}">${esc(t?PRED[t.pred]||"-":"-")}</span></div>
           <div class="dg-item"><b>Ket:</b> ${esc(t?t.ket||"-":"-")}</div></div>`};
       return `<tr onclick="toggleDetail('${id}',this)">
-        <td class="no-c">${esc(r.no)}</td>
-        <td class="nama-c">${esc(r.nama)}</td>
+        <td class="nama-c">${esc(r.nama||"-")}</td>
         <td class="asal-c">${esc(r.asal||"-")}</td>
         <td class="haf-c">${esc(r.haf)}</td>
+        <td class="wa-c">${waCell(r)}</td>
         <td class="tw-cell">${catCell(r,CATS[0])}</td>
         <td class="tw-cell">${catCell(r,CATS[1])}</td>
         <td class="tw-cell">${catCell(r,CATS[2])}</td>
@@ -559,10 +564,7 @@ function fillSelects(){
     });
   });
 }
-function initForm(){
-  $("f_no").value=rows.length+1;
-}
-fillSelects();initForm();renderRekap();
+fillSelects();renderRekap();
 </script>
 </body>
 </html>
