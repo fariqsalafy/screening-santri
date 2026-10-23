@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screening Santri Baru — Tes Seleksi Tahfidz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0b1120;--bg2:#101928;--bg3:#17233a;--bg4:#1d2c46;--border:#2a3a58;--border2:#3b4d70;
+  --text:#eef2f9;--text2:#a9b7cf;--text3:#6d7f9e;
+  --gold:#e8b64c;--gold2:#cf9b33;--teal:#3ddbc2;--blue:#7aa7ff;--red:#ff7a7a;--green:#5fd68a;
+}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,sans-serif;
+  background:radial-gradient(ellipse at top,#101b30,#0a0f1c 70%);color:var(--text);min-height:100vh;
+  -webkit-tap-highlight-color:transparent
+}
+.wrap{max-width:1060px;margin:0 auto;padding:0 14px 90px}
+header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
+.logo{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 4px 18px rgba(232,182,76,.25)}
+.logo svg{width:24px;height:24px}
+.brand h1{font-size:18px;font-weight:800;letter-spacing:.2px}
+.brand p{font-size:11.5px;color:var(--text2);margin-top:2px}
+.tabs{display:flex;gap:8px;background:var(--bg2);border:1px solid var(--border);padding:5px;border-radius:14px;margin:6px 0 18px;position:sticky;top:8px;z-index:50;backdrop-filter:blur(6px)}
+.tabs button{flex:1;padding:11px 12px;border-radius:10px;border:none;background:transparent;color:var(--text2);
+  font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.tabs button.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#101726;box-shadow:0 3px 14px rgba(232,182,76,.25)}
+.tabs button:not(.active):hover{color:var(--text)}
+.banner{display:flex;gap:10px;align-items:flex-start;background:rgba(61,219,194,.07);border:1px solid rgba(61,219,194,.25);
+  border-radius:12px;padding:11px 14px;font-size:12.5px;color:var(--teal);line-height:1.55;margin-bottom:16px}
+.banner svg{flex-shrink:0;width:17px;height:17px;margin-top:1px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;margin-bottom:14px;overflow:hidden}
+.card-head{display:flex;align-items:center;gap:11px;padding:15px 17px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.step{width:26px;height:26px;border-radius:8px;background:rgba(232,182,76,.14);color:var(--gold);font-size:13px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-head h2{font-size:14.5px;font-weight:800}
+.card-head .hint{font-size:11px;color:var(--text3);margin-top:2px}
+.card-body{padding:15px 17px 7px}
+.row{display:flex;gap:11px;margin-bottom:13px}
+.row.two>*{flex:1}
+.fld{display:flex;flex-direction:column;gap:6px;flex:1;margin-bottom:0}
+.fld label{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.4px;text-transform:uppercase}
+.fld label .req{color:var(--gold)}
+.fld input,.fld select,.fld textarea{
+  width:100%;padding:12px 13px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);
+  font-size:14.5px;font-family:inherit;outline:none;transition:.2s
+}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,182,76,.12)}
+.fld textarea{resize:vertical;min-height:60px}
+.fld .sm-note{font-size:10.5px;color:var(--text3)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips+.chips{margin-top:7px}
+.chip{padding:9px 14px;border-radius:999px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);
+  font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:.15s;line-height:1.2}
+.chip:hover{border-color:var(--gold);color:var(--text)}
+.chip.active{background:rgba(232,182,76,.16);border-color:var(--gold);color:var(--gold)}
+.follow{margin:10px 0 13px;display:none;animation:fade .25s ease}
+.follow.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+.q{margin-bottom:5px}
+.q-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.45}
+.q-label .qn{display:inline-flex;width:20px;height:20px;border-radius:6px;background:var(--bg4);color:var(--teal);
+  font-size:11px;font-weight:800;align-items:center;justify-content:center;margin-right:7px;vertical-align:2px}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.seg button{padding:10px 6px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);
+  color:var(--text2);font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s}
+.seg button.active{color:#10101a;border-width:1px}
+.seg button.active[data-p="sangat"]{background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:var(--gold)}
+.seg button.active[data-p="baik"]{background:linear-gradient(135deg,var(--teal),#2bbfa8);border-color:var(--teal)}
+.seg button.active[data-p="cukup"]{background:linear-gradient(135deg,var(--blue),#5b83e0);border-color:var(--blue)}
+.seg button.active[data-p="ulang"]{background:linear-gradient(135deg,var(--red),#e05b5b);border-color:var(--red)}
+.actions{position:fixed;left:0;right:0;bottom:0;padding:12px 14px 14px;background:linear-gradient(to top,#0a0f1c 55%,transparent);z-index:60}
+.actions-inner{max-width:1032px;margin:0 auto;display:flex;gap:10px}
+.btn{flex:1;padding:14px 18px;border-radius:12px;border:none;font-size:14.5px;font-weight:800;font-family:inherit;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#101726;box-shadow:0 4px 20px rgba(232,182,76,.3)}
+.btn-gold:active{transform:scale(.98)}
+.btn-ghost{flex:0 0 auto;background:var(--bg3);border:1px solid var(--border2);color:var(--text2)}
+.btn-ghost:hover{color:var(--text);border-color:var(--gold)}
+.form-footer-note{text-align:center;font-size:11px;color:var(--text3);margin-bottom:8px}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);background:var(--green);color:#06130b;
+  padding:12px 22px;border-radius:12px;font-size:13.5px;font-weight:800;opacity:0;pointer-events:none;transition:.3s;z-index:100;box-shadow:0 8px 30px rgba(0,0,0,.4);white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.rekap-tools{display:flex;gap:9px;margin-bottom:13px;flex-wrap:wrap}
+.search{position:relative;flex:1;min-width:210px}
+.search input{width:100%;padding:12px 13px 12px 40px;border-radius:11px;border:1px solid var(--border);background:var(--bg2);
+  color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:.2s}
+.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(232,182,76,.1)}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--text3)}
+.filter-sel{padding:12px 13px;border-radius:11px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:13.5px;font-family:inherit;outline:none;cursor:pointer;max-width:170px}
+.filter-sel:focus{border-color:var(--gold)}
+.mini-btn{padding:12px 15px;border-radius:11px;border:1px solid var(--border2);background:var(--bg2);color:var(--text2);
+  font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.mini-btn:hover{border-color:var(--gold);color:var(--text)}
+.mini-btn svg{width:15px;height:15px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:14px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:13px 8px 11px;text-align:center}
+.stat .n{font-size:23px;font-weight:800;line-height:1.1}
+.stat .l{font-size:10px;color:var(--text2);font-weight:600;margin-top:4px;letter-spacing:.3px;text-transform:uppercase}
+.stat.c1 .n{color:var(--teal)}.stat.c2 .n{color:var(--gold)}.stat.c3 .n{color:var(--blue)}.stat.c4 .n{color:var(--red)}
+.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow-x:auto;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:860px}
+thead th{position:sticky;top:0;background:var(--bg3);text-align:left;padding:11px 14px;font-size:10.5px;color:var(--text2);
+  font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border2);white-space:nowrap}
+tbody td{padding:12px 14px;border-bottom:1px solid rgba(42,58,88,.5);vertical-align:top}
+tbody tr{cursor:pointer;transition:.15s}
+tbody tr:hover td{background:rgba(232,182,76,.05)}
+tbody tr.open{background:rgba(232,182,76,.07)}
+tbody tr:last-child td{border-bottom:none}
+.no-c{color:var(--text3);font-size:12px;white-space:nowrap}
+.nama-c{font-weight:700;font-size:14px;white-space:nowrap}
+.asal-c{color:var(--text2);font-size:12.5px;white-space:nowrap}
+.haf-c{font-size:12.5px;color:var(--text);white-space:nowrap}
+.tilawah-c{font-size:12.5px;color:var(--text2);line-height:1.45}
+.tilawah-c b{color:var(--teal);font-weight:700}
+.badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.3px;white-space:nowrap}
+.badge.sangat{background:rgba(232,182,76,.15);color:var(--gold);border:1px solid rgba(232,182,76,.35)}
+.badge.baik{background:rgba(61,219,194,.13);color:var(--teal);border:1px solid rgba(61,219,194,.3)}
+.badge.cukup{background:rgba(122,167,255,.13);color:var(--blue);border:1px solid rgba(122,167,255,.3)}
+.badge.ulang{background:rgba(255,122,122,.13);color:var(--red);border:1px solid rgba(255,122,122,.3)}
+.ket-c{color:var(--text3);font-size:12px;max-width:190px}
+.waktu-c{color:var(--text3);font-size:11px;white-space:nowrap}
+tr.detail-row td{padding:0;background:var(--bg2)}
+.detail{padding:14px 17px 17px;animation:fade .25s ease}
+.detail-grid{display:flex;flex-wrap:wrap;gap:20px}
+.dg-block{flex:1;min-width:200px}
+.dg-block h4{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin-bottom:7px}
+.dg-item{font-size:12.5px;color:var(--text2);line-height:1.55;margin-bottom:3px}
+.dg-item b{color:var(--text);font-weight:650}
+.dg-item .na{color:var(--text3)}
+.detail-actions{margin-top:12px;display:flex;gap:8px}
+.da-btn{padding:8px 14px;border-radius:9px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);
+  font-size:11.5px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+.da-btn:hover{color:var(--text);border-color:var(--gold)}
+.da-btn.danger:hover{color:var(--red);border-color:var(--red)}
+.empty{text-align:center;padding:46px 20px;color:var(--text3)}
+.empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
+.empty p{font-size:13.5px;line-height:1.6}
+.rekap-foot{text-align:center;font-size:11px;color:var(--text3);padding:6px 0 4px}
+@media (max-width:640px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .seg{grid-template-columns:repeat(2,1fr)}
+  .brand h1{font-size:16px}
+  thead th,tbody td{padding:10px 10px}
+  table{font-size:13px;min-width:820px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#101726" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+  </div>
+  <div class="brand">
+    <h1>Screening Santri Baru</h1>
+    <p>Tes Seleksi Tahfidz &middot; form input &amp; rekap data</p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button id="tabBtnInput" class="active" onclick="goTab('input')">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+    Form Santri</button>
+  <button id="tabBtnRekap" onclick="goTab('rekap')">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    Rekap Data</button>
+</nav>
+
+<div id="tabInput">
+  <div class="banner">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/></svg>
+    <div><b>1 santri = 1 form.</b> Target pengisian 3–5 menit per santri. Semua hasil langsung muncul di tab Rekap, dan nantinya tersimpan otomatis ke Google Sheets.</div>
+  </div>
+
+  <section class="card">
+    <div class="card-head"><div class="step">1</div><div><h2>Identitas Santri</h2><div class="hint">No urut otomatis mengikuti pendaftaran</div></div></div>
+    <div class="card-body">
+      <div class="row two">
+        <div class="fld"><label>No Urut</label><input id="f_no" type="number" min="1" inputmode="numeric"></div>
+        <div class="fld"><label>Nama Lengkap <span class="req">*</span></label><input id="f_nama" type="text" placeholder="Tulis nama santri" autocomplete="off"></div>
+      </div>
+      <div class="row two">
+        <div class="fld"><label>Asal Sekolah / TPA</label><input id="f_asal" type="text" placeholder="Contoh: MI Aisyah, TPA Nurul Huda" autocomplete="off"></div>
+        <div class="fld"><label>Jumlah Hafalan</label><input id="f_haf" type="text" inputmode="decimal" placeholder="Contoh: 1,5 juz"><div class="sm-note">Bisa pakai &ldquo;juz&rdquo; atau surat-ayat</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="step">2</div><div><h2>Wawancara</h2><div class="hint">Pilih jawaban cepat, lengkapi detail bila perlu</div></div></div>
+    <div class="card-body">
+      <div class="q">
+        <div class="q-label"><span class="qn">1</span>Apakah punya target hafalan yang ingin diselesaikan?</div>
+        <div class="chips" id="g_q1">
+          <button type="button" class="chip" data-v="punya" data-g="q1">Punya target</button>
+          <button type="button" class="chip" data-v="belum" data-g="q1">Belum ada</button>
+        </div>
+        <div class="follow" id="w_q1">
+          <div class="fld"><label>Targetnya</label><input id="f_q1" type="text" placeholder="Contoh: selesai juz 30 sebelum klas 9" autocomplete="off"></div>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label"><span class="qn">2</span>Apakah punya saudara / kakak / adik yang banyak hafalan?</div>
+        <div class="chips" id="g_q2">
+          <button type="button" class="chip" data-v="ya" data-g="q2">Ada</button>
+          <button type="button" class="chip" data-v="tidak" data-g="q2">Tidak ada</button>
+        </div>
+        <div class="follow" id="w_q2">
+          <div class="fld"><label>Siapa &amp; hafalannya</label><input id="f_q2" type="text" placeholder="Contoh: Kakak — khatam 5 juz" autocomplete="off"></div>
+        </div>
+      </div>
+
+      <div class="q">
+        <div class="q-label"><span class="qn">3</span>Apakah pernah ikut TPA atau sekolah tahfidz?</div>
+        <div class="chips" id="g_q3">
+          <button type="button" class="chip" data-v="ya" data-g="q3">Pernah</button>
+          <button type="button" class="chip" data-v="tidak" data-g="q3">Belum pernah</button>
+        </div>
+        <div class="follow" id="w_q3">
+          <div class="fld"><label>Di mana &amp; berapa lama</label><input id="f_q3" type="text" placeholder="Contoh: TPA Nurul Huda, 1 tahun" autocomplete="off"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="step">3</div><div><h2>Tilawah — Melafalkan 1 Surat Penuh</h2><div class="hint">Syarat: dalam keadaan bersuci</div></div></div>
+    <div class="card-body">
+      <div class="q">
+        <div class="q-label">Sesuaikan pilihan dengan jumlah hafalan</div>
+        <div class="chips" id="g_grp">
+          <button type="button" class="chip" data-v="juz30" data-g="grp">Juz 30</button>
+          <button type="button" class="chip" data-v="juz2829" data-g="grp">Juz 28–29</button>
+          <button type="button" class="chip" data-v="panjang" data-g="grp">Surat panjang</button>
+        </div>
+      </div>
+      <div class="row" id="w_surat" style="display:none">
+        <div class="fld"><label>Surat yang dilafalkan</label>
+          <select id="f_surat"><option value="">— pilih surat —</option></select>
+        </div>
+        <div class="fld" id="w_ayat" style="display:none"><label>Jumlah Ayat</label><input id="f_ayat" type="text" inputmode="numeric" placeholder="Contoh: 30"></div>
+        <div class="fld" id="w_lainnya" style="display:none"><label>Tulis judul surat</label><input id="f_lainnya" type="text" placeholder="Judul surat" autocomplete="off"></div>
+      </div>
+      <div class="q">
+        <div class="q-label">Predikat tilawah</div>
+        <div class="seg" id="g_pred">
+          <button type="button" data-p="sangat">Sangat<br>Baik</button>
+          <button type="button" data-p="baik">Baik</button>
+          <button type="button" data-p="cukup">Cukup</button>
+          <button type="button" data-p="ulang">Perlu<br>Diulang</button>
+        </div>
+      </div>
+      <div class="fld"><label>Keterangan</label><textarea id="f_ket" placeholder="Teguran, kefasihan, makhraj, atau catatan khusus lainnya…"></textarea></div>
+    </div>
+  </section>
+
+  <p class="form-footer-note">Setelah tersimpan, form otomatis kosong untuk santri berikutnya.</p>
+</div>
+
+<div id="tabRekap" hidden>
+  <div class="stats">
+    <div class="stat c1"><div class="n" id="stTotal">0</div><div class="l">Santri</div></div>
+    <div class="stat c2"><div class="n" id="stSangat">0</div><div class="l">Sangat Baik</div></div>
+    <div class="stat c3"><div class="n" id="stBaikCukup">0</div><div class="l">Baik + Cukup</div></div>
+    <div class="stat c4"><div class="n" id="stUlang">0</div><div class="l">Perlu Diulang</div></div>
+  </div>
+
+  <div class="rekap-tools">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+      <input id="rkSearch" type="text" placeholder="Cari nama / asal sekolah…" oninput="renderRekap()">
+    </div>
+    <select id="rkFilter" class="filter-sel" onchange="renderRekap()">
+      <option value="">Semua predikat</option>
+      <option value="sangat">Sangat Baik</option>
+      <option value="baik">Baik</option>
+      <option value="cukup">Cukup</option>
+      <option value="ulang">Perlu Diulang</option>
+    </select>
+    <button class="mini-btn" onclick="exportCSV()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Excel/CSV</button>
+    <button class="mini-btn" onclick="toast('Nanti: otomatis sync ke Google Sheets')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg>
+      Sync Sheets</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>No</th><th>Nama</th><th>Asal</th><th>Hafalan</th><th>Tilawah</th><th>Predikat</th><th>Ket</th><th>Waktu</th>
+      </tr></thead>
+      <tbody id="rkBody"></tbody>
+    </table>
+  </div>
+  <p class="rekap-foot" id="rkFoot"></p>
+</div>
+
+<div class="actions" id="actionBar">
+  <div class="actions-inner">
+    <button class="btn btn-gold" onclick="saveForm()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Simpan &amp; Lanjut</button>
+    <button class="btn btn-ghost" onclick="goTab('rekap')">Rekap</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const SURAT = {
+  juz30:["An Naba","Al Mutaffifin","Al Fajr","As Syam","Ad Dhuha","Lainnya"],
+  juz2829:["Al Mulk","Al Ma'arij","Al Jin","Al Qiyamah","Al Mursalat","Al Mujadalah","Al Jumuah","At Tahrim","Lainnya"],
+  panjang:[["An Naziat",42],["Al A'la",19],["Al Qoriah",40],["As Saff",14],["At Thalaq",12],["Al Haqoh",52],["Al Insan",31],["Lainnya"]]
+};
+const PRED = {sangat:"Sangat Baik",baik:"Baik",cukup:"Cukup",ulang:"Perlu Diulang"};
+const DEMO=[
+ {no:1,nama:"Ahmad Fauzan Hakim",asal:"MI Aisyah",haf:"1 juz",q1:{c:"punya",t:"Selesai juz 30 sebelum kelas 9"},q2:{c:"tidak",t:""},q3:{c:"ya",t:"TPA Nurul Huda, 1 tahun"},tw:{grp:"juz30",surat:"An Naba",ayat:"",li:"",pred:"sangat",ket:"Tajwid bagus, suara jernih, sangat santun"},w:"23 Okt, 19.20"},
+ {no:2,nama:"Sarah Kirana Amalia",asal:"Tahfidz Bait Arqam",haf:"3 juz",q1:{c:"punya",t:"Khatam 4 juz tahun ini"},q2:{c:"ya",t:"Kakak — khatam 30 juz"},q3:{c:"ya",t:"TPQ Bait Arqam, 2 tahun"},tw:{grp:"juz2829",surat:"Al Mulk",ayat:"",li:"",pred:"sangat",ket:"Mulus, hafalan lekat"},w:"23 Okt, 19.24"},
+ {no:3,nama:"Muhammad Rizki Pratama",asal:"SD Muhammadiyah 4",haf:"belum",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{grp:"juz30",surat:"Al Fajr",ayat:"",li:"",pred:"cukup",ket:"Cukup lancar, makhraj th dz perlu dibiasakan"},w:"23 Okt, 19.31"},
+ {no:4,nama:"Naila Syakira Putri",asal:"Iqro Rahma",haf:"Juz 30 (sebagian)",q1:{c:"punya",t:"Ingin khatam 1 juz"},q2:{c:"ya",t:"Kakak — hafal juz 30"},q3:{c:"ya",t:"Iqro Rahma, 1 tahun"},tw:{grp:"juz30",surat:"Ad Dhuha",ayat:"",li:"",pred:"baik",ket:"Bacaan perlahan, kadang mbalek di ayat 11"},w:"23 Okt, 19.38"},
+ {no:5,nama:"Umar Hanif Abdullah",asal:"SDN 1 Konco",haf:"-",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{grp:"juz30",surat:"As Syam",ayat:"",li:"",pred:"ulang",ket:"Masih baca kalangan, belum ufalan"},w:"23 Okt, 19.45"},
+ {no:6,nama:"Humaira Nabila R.",asal:"MI Kholisoniyyah",haf:"2 juz",q1:{c:"punya",t:"Target 10 juz"},q2:{c:"ya",t:"Adik — hafal juz 30"},q3:{c:"ya",t:"TPQ Al-Ikhlas, 2 tahun"},tw:{grp:"juz2829",surat:"Al Qiyamah",ayat:"",li:"",pred:"sangat",ket:"Musikalisasi indah, sangat mahir"},w:"23 Okt, 19.52"},
+ {no:7,nama:"Fatkhur Rohman Abidin",asal:"Pondok Al Habib",haf:"5 juz",q1:{c:"punya",t:"Lanjut sampai 10 juz"},q2:{c:"ya",t:"Abang — khatam 15 juz"},q3:{c:"ya",t:"Pondok Al Habib, 1 tahun"},tw:{grp:"panjang",surat:"Al Haqoh",ayat:"31",li:"",pred:"baik",ket:"11 ayat mulus, kembali sebentar di ayat 31"},w:"23 Okt, 20.01"},
+ {no:8,nama:"Kayla Aulia Zahra",asal:"TK Aisyiyah",haf:"-",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{grp:"juz30",surat:"Lainnya",ayat:"",li:"Al Adiyat",pred:"baik",ket:"Untuk usia, sudah cukup bagus"},w:"23 Okt, 20.07"}
+];
+const KEY="ss_rows_v1";
+let rows;
+try{rows=JSON.parse(localStorage.getItem(KEY))}catch(e){rows=null}
+if(!Array.isArray(rows)||!rows.length)rows=DEMO.slice();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const suratOf=r=>r.tw.li||r.tw.surat||"-";
+const tilawahTxt=r=>r.tw.grp==="panjang"?`<b>${esc(suratOf(r))}</b> · ${esc(r.tw.ayat||"-")} ayat`:`<b>${esc(suratOf(r))}</b>`;
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(rows))}catch(e){}}
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2200)}
+function goTab(x){
+  $("tabInput").hidden=x!=="input";$("tabRekap").hidden=x!=="rekap";
+  $("tabBtnInput").classList.toggle("active",x==="input");
+  $("tabBtnRekap").classList.toggle("active",x==="rekap");
+  $("actionBar").style.display=x==="input"?"block":"none";
+  if(x==="rekap")renderRekap();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".chip[data-g]").forEach(ch=>{
+  ch.addEventListener("click",()=>{
+    document.querySelectorAll(`.chip[data-g="${ch.dataset.g}"]`).forEach(c=>c.classList.remove("active"));
+    ch.classList.add("active");
+    onGroup(ch.dataset.g,ch.dataset.v);
+  });
+});
+document.querySelectorAll("#g_pred button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("#g_pred button").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+  });
+});
+function onGroup(g,v){
+  if(g==="grp"){
+    $("w_surat").style.display="block";
+    const sel=$("f_surat");sel.innerHTML="";
+    const opt0=document.createElement("option");opt0.value="";opt0.textContent="— pilih surat —";sel.appendChild(opt0);
+    SURAT[v].forEach(s=>{
+      const o=document.createElement("option");
+      if(Array.isArray(s)){o.value=s[0];o.textContent=s[0]+" ("+s[1]+" ayat)"}else{o.value=s;o.textContent=s}
+      sel.appendChild(o);
+    });
+    onSurat("");
+  }else{
+    const wl=$("w_q1");if(g==="q1"){wl.classList.toggle("show",v==="punya");
+    if(v!=="punya")$("f_q1").value="";}
+    const wl2=$("w_q2");if(g==="q2"){wl2.classList.toggle("show",v==="ya");
+    if(v!=="ya")$("f_q2").value="";}
+    const wl3=$("w_q3");if(g==="q3"){wl3.classList.toggle("show",v==="ya");
+    if(v!=="ya")$("f_q3").value="";}
+  }
+}
+function onSurat(v){
+  const s=$("f_surat").value;
+  const isLain=s==="Lainnya";
+  $("w_lainnya").style.display=isLain?"flex":"none";
+  $("w_ayat").style.display=($("g_grp").querySelector(".active")?.dataset.v==="panjang"||s==="Lainnya")?"flex":"none";
+}
+$("f_surat").addEventListener("change",onSurat);
+function val(g){const a=$("g_"+g).querySelector(".active");return a?a.dataset.v:""}
+function saveForm(){
+  const nama=$("f_nama").value.trim();
+  if(!nama){toast("Nama santri wajib diisi");$("f_nama").focus();return}
+  const pred=document.querySelector("#g_pred button.active")?.dataset.p||"";
+  if(!pred){toast("Pilih predikat tilawah dulu");return}
+  const grp=val("grp");
+  if(!grp){toast("Pilih kelompok surat dulu");return}
+  const row={
+    no:parseInt($("f_no").value)||rows.length+1,
+    nama,asal:$("f_asal").value.trim(),haf:$("f_haf").value.trim()||"-",
+    q1:{c:val("q1")||"-",t:$("f_q1").value.trim()},
+    q2:{c:val("q2")||"-",t:$("f_q2").value.trim()},
+    q3:{c:val("q3")||"-",t:$("f_q3").value.trim()},
+    tw:{grp,surat:$("f_surat").value,ayat:$("f_ayat").value.trim(),
+        li:$("f_surat").value==="Lainnya"?$("f_lainnya").value.trim():"",
+        pred,ket:$("f_ket").value.trim()},
+    w:new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"short"})+", "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":")};
+  rows.push(row);persist();
+  toast("Tersimpan — santri #"+row.no+" "+row.nama.split(" ")[0]);
+  $("f_nama").value="";$("f_asal").value="";$("f_haf").value="";$("f_q1").value="";$("f_q2").value="";$("f_q3").value="";
+  $("f_ket").value="";$("f_ayat").value="";$("f_lainnya").value="";
+  document.querySelectorAll(".chip.active,#g_pred button.active").forEach(c=>c.classList.remove("active"));
+  $("w_q1").classList.remove("show");$("w_q2").classList.remove("show");$("w_q3").classList.remove("show");
+  $("w_surat").style.display="none";
+  const next=rows.length+1;
+  $("f_no").value=next;goTab("rekap");
+}
+function renderRekap(){
+  const q=$("rkSearch").value.trim().toLowerCase();
+  const f=$("rkFilter").value;
+  let list=rows.filter(r=>{
+    const okF=!f||r.tw.pred===f;
+    const okQ=!q||r.nama.toLowerCase().includes(q)||(r.asal||"").toLowerCase().includes(q);
+    return okF&&okQ;
+  });
+  $("stTotal").textContent=rows.length;
+  $("stSangat").textContent=rows.filter(r=>r.tw.pred==="sangat").length;
+  $("stBaikCukup").textContent=rows.filter(r=>r.tw.pred==="baik"||r.tw.pred==="cukup").length;
+  $("stUlang").textContent=rows.filter(r=>r.tw.pred==="ulang").length;
+  const tb=$("rkBody");
+  if(!list.length){
+    tb.innerHTML=`<tr><td colspan="8"><div class="empty"><p>Belum ada data yang cocok.<br>Hasil form input akan muncul di sini.</p></div></td></tr>`;
+  }else{
+    tb.innerHTML=list.map(r=>{
+      const i=rows.indexOf(r),id="d"+i;
+      return `<tr onclick="toggleDetail('${id}',this)">
+        <td class="no-c">${esc(r.no)}</td>
+        <td class="nama-c">${esc(r.nama)}</td>
+        <td class="asal-c">${esc(r.asal||"-")}</td>
+        <td class="haf-c">${esc(r.haf)}</td>
+        <td class="tilawah-c">${tilawahTxt(r)}</td>
+        <td><span class="badge ${esc(r.tw.pred)}">${esc(PRED[r.tw.pred]||"-")}</span></td>
+        <td class="ket-c">${esc(r.tw.ket||"-")}</td>
+        <td class="waktu-c">${esc(r.w)}</td>
+      </tr>
+      <tr class="detail-row" id="${id}" style="display:none"><td colspan="8">
+        <div class="detail">
+          <div class="detail-grid">
+            <div class="dg-block"><h4>Wawancara</h4>
+              <div class="dg-item"><b>Target hafalan:</b> ${r.q1.c==="punya"?"Punya":"Belum ada"}${r.q1.t?" — "+esc(r.q1.t):""}</div>
+              <div class="dg-item"><b>Saudara hafalan:</b> ${r.q2.c==="ya"?"Ada":"Tidak ada"}${r.q2.t?" — "+esc(r.q2.t):""}</div>
+              <div class="dg-item"><b>Riwayat TPA:</b> ${r.q3.c==="ya"?"Pernah":"Belum pernah"}${r.q3.t?" — "+esc(r.q3.t):""}</div>
+            </div>
+            <div class="dg-block"><h4>Detail Tilawah</h4>
+              <div class="dg-item"><b>Kelompok:</b> ${esc({juz30:"Juz 30",juz2829:"Juz 28-29",panjang:"Surat panjang"}[r.tw.grp]||"-")}</div>
+              <div class="dg-item"><b>Surat:</b> ${esc(suratOf(r))}${r.tw.ayat?" · "+esc(r.tw.ayat)+" ayat":""}</div>
+              <div class="dg-item"><b>Predikat:</b> ${esc(PRED[r.tw.pred]||"-")}</div>
+            </div>
+          </div>
+          <div class="detail-actions">
+            <button class="da-btn danger" onclick="event.stopPropagation();delRow(${i})">Hapus data</button>
+          </div>
+        </div>
+      </td></tr>`;
+    }).join("");
+  }
+  $("rkFoot").textContent = rows.length?`${rows.length} santri · mockup (data demo disimpan di lokal)`:"";
+}
+function toggleDetail(id,tr){
+  const el=$(id);
+  const isShow=el.style.display!=="none";
+  document.querySelectorAll(".detail-row").forEach(x=>x.style.display="none");
+  document.querySelectorAll("tbody tr.open").forEach(x=>x.classList.remove("open"));
+  if(!isShow){el.style.display="";tr.classList.add("open")}
+}
+function delRow(i){
+  if(!confirm("Hapus data "+rows[i].nama+"?"))return;
+  rows.splice(i,1);persist();renderRekap();toast("Data dihapus");
+}
+function exportCSV(){
+  const head=["No","Nama","Asal Sekolah","Jumlah Hafalan","Q1 Target","Q2 Saudara","Q3 TPA","Kelompok","Surat","Ayat","Predikat","Keterangan","Waktu"];
+  const line=r=>[r.no,r.nama,r.asal,r.haf,
+    r.q1.c==="punya"?"Punya: "+(r.q1.t||""):"Belum",
+    r.q2.c==="ya"?"Ada: "+(r.q2.t||""):"Tidak",
+    r.q3.c==="ya"?"Pernah: "+(r.q3.t||""):"Belum",
+    ({juz30:"Juz 30",juz2829:"Juz 28-29",panjang:"Surat panjang"})[r.tw.grp]||"",
+    suratOf(r),r.tw.ayat,PRED[r.tw.pred]||"",r.tw.ket||"",r.w
+  ].map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",");
+  const csv="\uFEFF"+[head.join(","),...rows.map(line)].join("\r\n");
+  const a=document.createElement("a");
+  a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(csv);
+  a.download="rekap-screening-santri.csv";a.click();
+  toast("CSV siap — nanti format asli pakai Sheets");
+}
+function initForm(){
+  $("f_no").value=rows.length+1;
+}
+initForm();renderRekap();
+</script>
+</body>
+</html>
