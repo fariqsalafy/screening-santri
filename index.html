@@ -228,22 +228,22 @@ tr.detail-row td{padding:0;background:var(--bg2)}
   </section>
 
   <section class="card">
-    <div class="card-head"><div class="step">3</div><div><h2>Tilawah — Melafalkan 1 Surat Penuh</h2><div class="hint">Syarat: dalam keadaan bersuci</div></div></div>
+      <div class="card-head"><div class="step">3</div><div><h2>Tilawah — Pilihan Surat</h2><div class="hint">Urutan daftar = prioritas &middot; &ldquo;Lainnya&rdquo; = tulis manual</div></div></div>
     <div class="card-body">
       <div class="q">
-        <div class="q-label">Sesuaikan pilihan dengan jumlah hafalan</div>
+        <div class="q-label">Kategori sesuai kemampuan hafalan</div>
         <div class="chips" id="g_grp">
-          <button type="button" class="chip" data-v="juz30" data-g="grp">Juz 30</button>
-          <button type="button" class="chip" data-v="juz2829" data-g="grp">Juz 28–29</button>
-          <button type="button" class="chip" data-v="panjang" data-g="grp">Surat panjang</button>
+          <button type="button" class="chip" data-v="juz30" data-g="grp">Juz 30 &middot; 1 surat penuh</button>
+          <button type="button" class="chip" data-v="juz2829" data-g="grp">Juz 28–29 &middot; tidak penuh</button>
+          <button type="button" class="chip" data-v="panjang" data-g="grp">Sambung Ayat</button>
         </div>
       </div>
       <div class="row" id="w_surat" style="display:none">
-        <div class="fld"><label>Surat yang dilafalkan</label>
+        <div class="fld"><label>Surat (ikut prioritas)</label>
           <select id="f_surat"><option value="">— pilih surat —</option></select>
         </div>
-        <div class="fld" id="w_ayat" style="display:none"><label>Jumlah Ayat</label><input id="f_ayat" type="text" inputmode="numeric" placeholder="Contoh: 30"></div>
-        <div class="fld" id="w_lainnya" style="display:none"><label>Tulis judul surat</label><input id="f_lainnya" type="text" placeholder="Judul surat" autocomplete="off"></div>
+        <div class="fld" id="w_ayat" style="display:none"><label>Ayat terakhir</label><input id="f_ayat" type="text" inputmode="numeric" placeholder="Contoh: 30"><div class="sm-note" id="ayatNote"></div></div>
+        <div class="fld" id="w_lainnya" style="display:none"><label>Tulis judul surat (manual)</label><input id="f_lainnya" type="text" placeholder="Judul surat" autocomplete="off"></div>
       </div>
       <div class="q">
         <div class="q-label">Predikat tilawah</div>
@@ -325,18 +325,23 @@ const DEMO=[
  {no:3,nama:"Muhammad Rizki Pratama",asal:"SD Muhammadiyah 4",haf:"belum",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{grp:"juz30",surat:"Al Fajr",ayat:"",li:"",pred:"cukup",ket:"Cukup lancar, makhraj th dz perlu dibiasakan"},w:"23 Okt, 19.31"},
  {no:4,nama:"Naila Syakira Putri",asal:"Iqro Rahma",haf:"Juz 30 (sebagian)",q1:{c:"punya",t:"Ingin khatam 1 juz"},q2:{c:"ya",t:"Kakak — hafal juz 30"},q3:{c:"ya",t:"Iqro Rahma, 1 tahun"},tw:{grp:"juz30",surat:"Ad Dhuha",ayat:"",li:"",pred:"baik",ket:"Bacaan perlahan, kadang mbalek di ayat 11"},w:"23 Okt, 19.38"},
  {no:5,nama:"Umar Hanif Abdullah",asal:"SDN 1 Konco",haf:"-",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{grp:"juz30",surat:"As Syam",ayat:"",li:"",pred:"ulang",ket:"Masih baca kalangan, belum ufalan"},w:"23 Okt, 19.45"},
- {no:6,nama:"Humaira Nabila R.",asal:"MI Kholisoniyyah",haf:"2 juz",q1:{c:"punya",t:"Target 10 juz"},q2:{c:"ya",t:"Adik — hafal juz 30"},q3:{c:"ya",t:"TPQ Al-Ikhlas, 2 tahun"},tw:{grp:"juz2829",surat:"Al Qiyamah",ayat:"",li:"",pred:"sangat",ket:"Musikalisasi indah, sangat mahir"},w:"23 Okt, 19.52"},
+ {no:6,nama:"Humaira Nabila R.",asal:"MI Kholisoniyyah",haf:"2 juz",q1:{c:"punya",t:"Target 10 juz"},q2:{c:"ya",t:"Adik — hafal juz 30"},q3:{c:"ya",t:"TPQ Al-Ikhlas, 2 tahun"},tw:{grp:"juz2829",surat:"Al Qiyamah",ayat:"20",li:"",pred:"sangat",ket:"Sampai ayat 20, bacaan merdu"},w:"23 Okt, 19.52"},
  {no:7,nama:"Fatkhur Rohman Abidin",asal:"Pondok Al Habib",haf:"5 juz",q1:{c:"punya",t:"Lanjut sampai 10 juz"},q2:{c:"ya",t:"Abang — khatam 15 juz"},q3:{c:"ya",t:"Pondok Al Habib, 1 tahun"},tw:{grp:"panjang",surat:"Al Haqoh",ayat:"31",li:"",pred:"baik",ket:"11 ayat mulus, kembali sebentar di ayat 31"},w:"23 Okt, 20.01"},
  {no:8,nama:"Kayla Aulia Zahra",asal:"TK Aisyiyah",haf:"-",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{grp:"juz30",surat:"Lainnya",ayat:"",li:"Al Adiyat",pred:"baik",ket:"Untuk usia, sudah cukup bagus"},w:"23 Okt, 20.07"}
 ];
-const KEY="ss_rows_v1";
+const KEY="ss_rows_v2";
 let rows;
 try{rows=JSON.parse(localStorage.getItem(KEY))}catch(e){rows=null}
 if(!Array.isArray(rows)||!rows.length)rows=DEMO.slice();
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const suratOf=r=>r.tw.li||r.tw.surat||"-";
-const tilawahTxt=r=>r.tw.grp==="panjang"?`<b>${esc(suratOf(r))}</b> · ${esc(r.tw.ayat||"-")} ayat`:`<b>${esc(suratOf(r))}</b>`;
+const tilawahTxt=r=>{
+  const b=`<b>${esc(suratOf(r))}</b>`;
+  if(r.tw.grp==="panjang")return b+" · sambung s/d ayat "+esc(r.tw.ayat||"-");
+  if(r.tw.grp==="juz2829")return r.tw.ayat?b+" · s/d ayat "+esc(r.tw.ayat):b;
+  return b+" · penuh";
+};
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(rows))}catch(e){}}
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2200)}
 function goTab(x){
@@ -365,9 +370,11 @@ function onGroup(g,v){
     $("w_surat").style.display="block";
     const sel=$("f_surat");sel.innerHTML="";
     const opt0=document.createElement("option");opt0.value="";opt0.textContent="— pilih surat —";sel.appendChild(opt0);
-    SURAT[v].forEach(s=>{
+    SURAT[v].forEach((s,i)=>{
       const o=document.createElement("option");
-      if(Array.isArray(s)){o.value=s[0];o.textContent=s[0]+" ("+s[1]+" ayat)"}else{o.value=s;o.textContent=s}
+      if(Array.isArray(s)){o.value=s[0];o.textContent=(i+1)+". "+s[0]+" ("+s[1]+" ayat)"}
+      else if(s==="Lainnya"){o.value=s;o.textContent="Lainnya (tulis manual)"}
+      else{o.value=s;o.textContent=(i+1)+". "+s}
       sel.appendChild(o);
     });
     onSurat("");
@@ -380,11 +387,14 @@ function onGroup(g,v){
     if(v!=="ya")$("f_q3").value="";}
   }
 }
-function onSurat(v){
+function onSurat(){
+  const grp=$("g_grp").querySelector(".active")?.dataset.v;
   const s=$("f_surat").value;
   const isLain=s==="Lainnya";
   $("w_lainnya").style.display=isLain?"flex":"none";
-  $("w_ayat").style.display=($("g_grp").querySelector(".active")?.dataset.v==="panjang"||s==="Lainnya")?"flex":"none";
+  const showAyat=grp==="panjang"||grp==="juz2829";
+  $("w_ayat").style.display=showAyat?"flex":"none";
+  $("ayatNote").textContent=grp==="panjang"?"Wajib — ayat terakhir yang terbaca":"Opsional";
 }
 $("f_surat").addEventListener("change",onSurat);
 function val(g){const a=$("g_"+g).querySelector(".active");return a?a.dataset.v:""}
@@ -394,7 +404,9 @@ function saveForm(){
   const pred=document.querySelector("#g_pred button.active")?.dataset.p||"";
   if(!pred){toast("Pilih predikat tilawah dulu");return}
   const grp=val("grp");
-  if(!grp){toast("Pilih kelompok surat dulu");return}
+  if(!grp){toast("Pilih kategori surat dulu");return}
+  if(($("f_surat").value||"")===""){toast("Pilih surat dulu");return}
+  if(grp==="panjang"&&!$("f_ayat").value.trim()){toast("Isi ayat terakhir untuk sambung ayat");$("f_ayat").focus();return}
   const row={
     no:parseInt($("f_no").value)||rows.length+1,
     nama,asal:$("f_asal").value.trim(),haf:$("f_haf").value.trim()||"-",
@@ -452,8 +464,8 @@ function renderRekap(){
               <div class="dg-item"><b>Riwayat TPA:</b> ${r.q3.c==="ya"?"Pernah":"Belum pernah"}${r.q3.t?" — "+esc(r.q3.t):""}</div>
             </div>
             <div class="dg-block"><h4>Detail Tilawah</h4>
-              <div class="dg-item"><b>Kelompok:</b> ${esc({juz30:"Juz 30",juz2829:"Juz 28-29",panjang:"Surat panjang"}[r.tw.grp]||"-")}</div>
-              <div class="dg-item"><b>Surat:</b> ${esc(suratOf(r))}${r.tw.ayat?" · "+esc(r.tw.ayat)+" ayat":""}</div>
+              <div class="dg-item"><b>Kelompok:</b> ${esc({juz30:"Juz 30 · 1 surat penuh",juz2829:"Juz 28–29 · tidak penuh",panjang:"Sambung ayat"}[r.tw.grp]||"-")}</div>
+              <div class="dg-item"><b>Surat:</b> ${esc(suratOf(r))}${r.tw.ayat?" · terakhir ayat "+esc(r.tw.ayat):""}</div>
               <div class="dg-item"><b>Predikat:</b> ${esc(PRED[r.tw.pred]||"-")}</div>
             </div>
           </div>
@@ -483,7 +495,7 @@ function exportCSV(){
     r.q1.c==="punya"?"Punya: "+(r.q1.t||""):"Belum",
     r.q2.c==="ya"?"Ada: "+(r.q2.t||""):"Tidak",
     r.q3.c==="ya"?"Pernah: "+(r.q3.t||""):"Belum",
-    ({juz30:"Juz 30",juz2829:"Juz 28-29",panjang:"Surat panjang"})[r.tw.grp]||"",
+    ({juz30:"Juz 30 · penuh",juz2829:"Juz 28–29 · tidak penuh",panjang:"Sambung ayat"})[r.tw.grp]||"",
     suratOf(r),r.tw.ayat,PRED[r.tw.pred]||"",r.tw.ket||"",r.w
   ].map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",");
   const csv="\uFEFF"+[head.join(","),...rows.map(line)].join("\r\n");
