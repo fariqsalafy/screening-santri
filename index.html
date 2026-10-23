@@ -72,6 +72,19 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .seg button.active[data-p="baik"]{background:linear-gradient(135deg,var(--teal),#2bbfa8);border-color:var(--teal)}
 .seg button.active[data-p="cukup"]{background:linear-gradient(135deg,var(--blue),#5b83e0);border-color:var(--blue)}
 .seg button.active[data-p="ulang"]{background:linear-gradient(135deg,var(--red),#e05b5b);border-color:var(--red)}
+.seg-sm{grid-template-columns:repeat(4,1fr);gap:6px}
+.seg-sm button{padding:9px 4px;font-size:11.5px;border-radius:9px}
+.sub{padding:14px 17px 16px;border-bottom:1px solid var(--border)}
+.sub:last-child{border-bottom:none}
+.sub-head{display:flex;gap:9px;align-items:flex-start;margin-bottom:11px}
+.sub-tag{width:22px;height:22px;border-radius:7px;font-size:11px;font-weight:800;color:#12161f;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sub-tag.t1{background:var(--gold)}.sub-tag.t2{background:var(--teal)}.sub-tag.t3{background:var(--blue)}
+.sub-head h3{font-size:13.5px;font-weight:800}
+.sub-head .sh-ket{font-size:10.5px;color:var(--text3);margin-top:2px}
+.sub .fld{margin-bottom:11px}
+.sub .row{margin-bottom:11px}
+.tw-cell{min-width:120px}
+.tw-s{font-size:12.5px;font-weight:650;color:var(--text);margin-bottom:5px;line-height:1.35}
 .actions{position:fixed;left:0;right:0;bottom:0;padding:12px 14px 14px;background:linear-gradient(to top,#0a0f1c 55%,transparent);z-index:60}
 .actions-inner{max-width:1032px;margin:0 auto;display:flex;gap:10px}
 .btn{flex:1;padding:14px 18px;border-radius:12px;border:none;font-size:14.5px;font-weight:800;font-family:inherit;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -101,7 +114,7 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .stat .l{font-size:10px;color:var(--text2);font-weight:600;margin-top:4px;letter-spacing:.3px;text-transform:uppercase}
 .stat.c1 .n{color:var(--teal)}.stat.c2 .n{color:var(--gold)}.stat.c3 .n{color:var(--blue)}.stat.c4 .n{color:var(--red)}
 .table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow-x:auto;margin-bottom:14px}
-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:860px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:960px}
 thead th{position:sticky;top:0;background:var(--bg3);text-align:left;padding:11px 14px;font-size:10.5px;color:var(--text2);
   font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border2);white-space:nowrap}
 tbody td{padding:12px 14px;border-bottom:1px solid rgba(42,58,88,.5);vertical-align:top}
@@ -144,7 +157,7 @@ tr.detail-row td{padding:0;background:var(--bg2)}
   .seg{grid-template-columns:repeat(2,1fr)}
   .brand h1{font-size:16px}
   thead th,tbody td{padding:10px 10px}
-  table{font-size:13px;min-width:820px}
+  table{font-size:12.5px;min-width:920px}
 }
 </style>
 </head>
@@ -172,7 +185,7 @@ tr.detail-row td{padding:0;background:var(--bg2)}
 <div id="tabInput">
   <div class="banner">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/></svg>
-    <div><b>1 santri = 1 form.</b> Target pengisian 3–5 menit per santri. Semua hasil langsung muncul di tab Rekap, dan nantinya tersimpan otomatis ke Google Sheets.</div>
+    <div><b>1 santri = 1 form.</b> Tilawah dinilai di 3 kategori (semua wajib diisi) + wawancara. Hasil langsung muncul di tab Rekap, nantinya tersimpan otomatis ke Google Sheets.</div>
   </div>
 
   <section class="card">
@@ -228,33 +241,43 @@ tr.detail-row td{padding:0;background:var(--bg2)}
   </section>
 
   <section class="card">
-      <div class="card-head"><div class="step">3</div><div><h2>Tilawah — Pilihan Surat</h2><div class="hint">Urutan daftar = prioritas &middot; &ldquo;Lainnya&rdquo; = tulis manual</div></div></div>
-    <div class="card-body">
-      <div class="q">
-        <div class="q-label">Kategori sesuai kemampuan hafalan</div>
-        <div class="chips" id="g_grp">
-          <button type="button" class="chip" data-v="juz30" data-g="grp">Juz 30 &middot; 1 surat penuh</button>
-          <button type="button" class="chip" data-v="juz2829" data-g="grp">Juz 28–29 &middot; tidak penuh</button>
-          <button type="button" class="chip" data-v="panjang" data-g="grp">Sambung Ayat</button>
+    <div class="card-head"><div class="step">3</div><div><h2>Tilawah — 3 Kategori Ujian</h2><div class="hint">Semua kategori wajib dinilai &middot; urutan surat = prioritas</div></div></div>
+    <div class="card-body" style="padding:0">
+      <div class="sub">
+        <div class="sub-head"><span class="sub-tag t1">1</span><div><h3>Juz 30 — melafalkan 1 surat penuh</h3><div class="sh-ket">Pilih 1 surat, harus dari pembacaan penuh</div></div></div>
+        <div class="row two">
+          <div class="fld"><label>Surat (ikut prioritas)</label><select id="s30_surat"><option value="">— pilih surat —</option></select></div>
+          <div class="fld" id="w_s30_li" style="display:none"><label>Tulis judul (manual)</label><input id="s30_li" type="text" placeholder="Judul surat" autocomplete="off"></div>
         </div>
+        <div class="fld"><label>Predikat</label><div class="seg seg-sm" data-cat="juz30"><button type="button" data-p="sangat">Sangat Baik</button><button type="button" data-p="baik">Baik</button><button type="button" data-p="cukup">Cukup</button><button type="button" data-p="ulang">Perlu Diulang</button></div></div>
+        <div class="fld"><label>Keterangan</label><input id="s30_ket" type="text" placeholder="Catatan: makhraj, teguran, dsb" autocomplete="off"></div>
       </div>
-      <div class="row" id="w_surat" style="display:none">
-        <div class="fld"><label>Surat (ikut prioritas)</label>
-          <select id="f_surat"><option value="">— pilih surat —</option></select>
+
+      <div class="sub">
+        <div class="sub-head"><span class="sub-tag t2">2</span><div><h3>Juz 28–29 — surat tidak penuh</h3><div class="sh-ket">Wajib untuk semua peserta</div></div></div>
+        <div class="row two">
+          <div class="fld"><label>Surat (ikut prioritas)</label><select id="s28_surat"><option value="">— pilih surat —</option></select></div>
+          <div class="fld" id="w_s28_li" style="display:none"><label>Tulis judul (manual)</label><input id="s28_li" type="text" placeholder="Judul surat" autocomplete="off"></div>
         </div>
-        <div class="fld" id="w_ayat" style="display:none"><label>Ayat terakhir</label><input id="f_ayat" type="text" inputmode="numeric" placeholder="Contoh: 30"><div class="sm-note" id="ayatNote"></div></div>
-        <div class="fld" id="w_lainnya" style="display:none"><label>Tulis judul surat (manual)</label><input id="f_lainnya" type="text" placeholder="Judul surat" autocomplete="off"></div>
-      </div>
-      <div class="q">
-        <div class="q-label">Predikat tilawah</div>
-        <div class="seg" id="g_pred">
-          <button type="button" data-p="sangat">Sangat<br>Baik</button>
-          <button type="button" data-p="baik">Baik</button>
-          <button type="button" data-p="cukup">Cukup</button>
-          <button type="button" data-p="ulang">Perlu<br>Diulang</button>
+        <div class="row two">
+          <div class="fld"><label>Ayat terakhir terbaca</label><input id="s28_ayat" type="text" inputmode="numeric" placeholder="Contoh: 20"><div class="sm-note">Opsional</div></div>
+          <div class="fld"><label>Predikat</label><div class="seg seg-sm" data-cat="juz2829"><button type="button" data-p="sangat">Sangat Baik</button><button type="button" data-p="baik">Baik</button><button type="button" data-p="cukup">Cukup</button><button type="button" data-p="ulang">Perlu Diulang</button></div></div>
         </div>
+        <div class="fld"><label>Keterangan</label><input id="s28_ket" type="text" placeholder="Catatan: makhraj, teguran, dsb" autocomplete="off"></div>
       </div>
-      <div class="fld"><label>Keterangan</label><textarea id="f_ket" placeholder="Teguran, kefasihan, makhraj, atau catatan khusus lainnya…"></textarea></div>
+
+      <div class="sub">
+        <div class="sub-head"><span class="sub-tag t3">3</span><div><h3>Sambung Ayat</h3><div class="sh-ket">Penguji menyebut ayat, peserta menyambung</div></div></div>
+        <div class="row two">
+          <div class="fld"><label>Surat (ikut prioritas)</label><select id="sam_surat"><option value="">— pilih surat —</option></select></div>
+          <div class="fld" id="w_sam_li" style="display:none"><label>Tulis judul (manual)</label><input id="sam_li" type="text" placeholder="Judul surat" autocomplete="off"></div>
+        </div>
+        <div class="row two">
+          <div class="fld"><label>Sambung sampai ayat</label><input id="sam_ayat" type="text" inputmode="numeric" placeholder="Contoh: 30"><div class="sm-note">Wajib</div></div>
+          <div class="fld"><label>Predikat</label><div class="seg seg-sm" data-cat="sambung"><button type="button" data-p="sangat">Sangat Baik</button><button type="button" data-p="baik">Baik</button><button type="button" data-p="cukup">Cukup</button><button type="button" data-p="ulang">Perlu Diulang</button></div></div>
+        </div>
+        <div class="fld"><label>Keterangan</label><input id="sam_ket" type="text" placeholder="Catatan: makhraj, teguran, dsb" autocomplete="off"></div>
+      </div>
     </div>
   </section>
 
@@ -292,7 +315,7 @@ tr.detail-row td{padding:0;background:var(--bg2)}
   <div class="table-wrap">
     <table>
       <thead><tr>
-        <th>No</th><th>Nama</th><th>Asal</th><th>Hafalan</th><th>Tilawah</th><th>Predikat</th><th>Ket</th><th>Waktu</th>
+        <th>No</th><th>Nama</th><th>Asal</th><th>Hafalan</th><th>Juz 30</th><th>Juz 28–29</th><th>Sambung Ayat</th><th>Waktu</th>
       </tr></thead>
       <tbody id="rkBody"></tbody>
     </table>
@@ -316,32 +339,31 @@ tr.detail-row td{padding:0;background:var(--bg2)}
 const SURAT = {
   juz30:["An Naba","Al Mutaffifin","Al Fajr","As Syam","Ad Dhuha","Lainnya"],
   juz2829:["Al Mulk","Al Ma'arij","Al Jin","Al Qiyamah","Al Mursalat","Al Mujadalah","Al Jumuah","At Tahrim","Lainnya"],
-  panjang:[["An Naziat",42],["Al A'la",19],["Al Qoriah",40],["As Saff",14],["At Thalaq",12],["Al Haqoh",52],["Al Insan",31],["Lainnya"]]
+  sambung:[["An Naziat",42],["Al A'la",19],["Al Qoriah",40],["As Saff",14],["At Thalaq",12],["Al Haqoh",52],["Al Insan",31],["Lainnya"]]
 };
 const PRED = {sangat:"Sangat Baik",baik:"Baik",cukup:"Cukup",ulang:"Perlu Diulang"};
-const DEMO=[
- {no:1,nama:"Ahmad Fauzan Hakim",asal:"MI Aisyah",haf:"1 juz",q1:{c:"punya",t:"Selesai juz 30 sebelum kelas 9"},q2:{c:"tidak",t:""},q3:{c:"ya",t:"TPA Nurul Huda, 1 tahun"},tw:{grp:"juz30",surat:"An Naba",ayat:"",li:"",pred:"sangat",ket:"Tajwid bagus, suara jernih, sangat santun"},w:"23 Okt, 19.20"},
- {no:2,nama:"Sarah Kirana Amalia",asal:"Tahfidz Bait Arqam",haf:"3 juz",q1:{c:"punya",t:"Khatam 4 juz tahun ini"},q2:{c:"ya",t:"Kakak — khatam 30 juz"},q3:{c:"ya",t:"TPQ Bait Arqam, 2 tahun"},tw:{grp:"juz2829",surat:"Al Mulk",ayat:"",li:"",pred:"sangat",ket:"Mulus, hafalan lekat"},w:"23 Okt, 19.24"},
- {no:3,nama:"Muhammad Rizki Pratama",asal:"SD Muhammadiyah 4",haf:"belum",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{grp:"juz30",surat:"Al Fajr",ayat:"",li:"",pred:"cukup",ket:"Cukup lancar, makhraj th dz perlu dibiasakan"},w:"23 Okt, 19.31"},
- {no:4,nama:"Naila Syakira Putri",asal:"Iqro Rahma",haf:"Juz 30 (sebagian)",q1:{c:"punya",t:"Ingin khatam 1 juz"},q2:{c:"ya",t:"Kakak — hafal juz 30"},q3:{c:"ya",t:"Iqro Rahma, 1 tahun"},tw:{grp:"juz30",surat:"Ad Dhuha",ayat:"",li:"",pred:"baik",ket:"Bacaan perlahan, kadang mbalek di ayat 11"},w:"23 Okt, 19.38"},
- {no:5,nama:"Umar Hanif Abdullah",asal:"SDN 1 Konco",haf:"-",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{grp:"juz30",surat:"As Syam",ayat:"",li:"",pred:"ulang",ket:"Masih baca kalangan, belum ufalan"},w:"23 Okt, 19.45"},
- {no:6,nama:"Humaira Nabila R.",asal:"MI Kholisoniyyah",haf:"2 juz",q1:{c:"punya",t:"Target 10 juz"},q2:{c:"ya",t:"Adik — hafal juz 30"},q3:{c:"ya",t:"TPQ Al-Ikhlas, 2 tahun"},tw:{grp:"juz2829",surat:"Al Qiyamah",ayat:"20",li:"",pred:"sangat",ket:"Sampai ayat 20, bacaan merdu"},w:"23 Okt, 19.52"},
- {no:7,nama:"Fatkhur Rohman Abidin",asal:"Pondok Al Habib",haf:"5 juz",q1:{c:"punya",t:"Lanjut sampai 10 juz"},q2:{c:"ya",t:"Abang — khatam 15 juz"},q3:{c:"ya",t:"Pondok Al Habib, 1 tahun"},tw:{grp:"panjang",surat:"Al Haqoh",ayat:"31",li:"",pred:"baik",ket:"11 ayat mulus, kembali sebentar di ayat 31"},w:"23 Okt, 20.01"},
- {no:8,nama:"Kayla Aulia Zahra",asal:"TK Aisyiyah",haf:"-",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{grp:"juz30",surat:"Lainnya",ayat:"",li:"Al Adiyat",pred:"baik",ket:"Untuk usia, sudah cukup bagus"},w:"23 Okt, 20.07"}
+const CATS = [
+  {id:"juz30",key:"s30",judul:"Juz 30 — 1 surat penuh",ayat:false,ayatReq:false},
+  {id:"juz2829",key:"s28",judul:"Juz 28–29 — surat tidak penuh",ayat:true,ayatReq:false},
+  {id:"sambung",key:"sam",judul:"Sambung Ayat",ayat:true,ayatReq:true}
 ];
-const KEY="ss_rows_v2";
+const twName=t=>t?(t.li||t.surat||"-"):"-";
+const DEMO=[
+ {no:1,nama:"Ahmad Fauzan Hakim",asal:"MI Aisyah",haf:"1 juz",q1:{c:"punya",t:"Selesai juz 30 sebelum kelas 9"},q2:{c:"tidak",t:""},q3:{c:"ya",t:"TPA Nurul Huda, 1 tahun"},tw:{juz30:{surat:"An Naba",ayat:"",li:"",pred:"sangat",ket:"Tajwid bagus, suara jernih"},juz2829:{surat:"Al Mulk",ayat:"12",li:"",pred:"baik",ket:"Lancar sampai 12"},sambung:{surat:"An Naziat",ayat:"5",li:"",pred:"cukup",ket:"Sambungan kadang berhenti"}},w:"23 Okt, 19.20"},
+ {no:2,nama:"Sarah Kirana Amalia",asal:"Tahfidz Bait Arqam",haf:"3 juz",q1:{c:"punya",t:"Khatam 4 juz tahun ini"},q2:{c:"ya",t:"Kakak — khatam 30 juz"},q3:{c:"ya",t:"TPQ Bait Arqam, 2 tahun"},tw:{juz30:{surat:"Al Mutaffifin",ayat:"",li:"",pred:"sangat",ket:"Hafalan lekat, bacaan santun"},juz2829:{surat:"Al Ma'arij",ayat:"30",li:"",pred:"sangat",ket:"Mulus sampai 30"},sambung:{surat:"Al Haqoh",ayat:"40",li:"",pred:"baik",ket:"Tertahan di ayat pembengkokan"}},w:"23 Okt, 19.24"},
+ {no:3,nama:"Muhammad Rizki Pratama",asal:"SD Muhammadiyah 4",haf:"belum hafal",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{juz30:{surat:"Al Fajr",ayat:"",li:"",pred:"cukup",ket:"Makhraj th, dz perlu dibiasakan"},juz2829:{surat:"Al Mulk",ayat:"10",li:"",pred:"cukup",ket:"Terbata-bata di ayat 7"},sambung:{surat:"An Naziat",ayat:"3",li:"",pred:"baik",ket:"Terbantu arahan penguji"}},w:"23 Okt, 19.31"},
+ {no:4,nama:"Naila Syakira Putri",asal:"Iqro Rahma",haf:"Juz 30 (sebagian)",q1:{c:"punya",t:"Ingin khatam 1 juz"},q2:{c:"ya",t:"Kakak — hafal juz 30"},q3:{c:"ya",t:"Iqro Rahma, 1 tahun"},tw:{juz30:{surat:"Ad Dhuha",ayat:"",li:"",pred:"baik",ket:"Kadang mbalek di ayat 11"},juz2829:{surat:"Al Jumuah",ayat:"11",li:"",pred:"baik",ket:"Lancar sampai 11"},sambung:{surat:"Al Qoriah",ayat:"8",li:"",pred:"cukup",ket:"Makhraj kurang kenceng"}},w:"23 Okt, 19.38"},
+ {no:5,nama:"Umar Hanif Abdullah",asal:"SDN 1 Konco",haf:"-",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{juz30:{surat:"As Syam",ayat:"",li:"",pred:"ulang",ket:"Masih baca kalangan"},juz2829:{surat:"Al Mulk",ayat:"5",li:"",pred:"cukup",ket:"Sambung 5 ayat berantam"},sambung:{surat:"An Naziat",ayat:"2",li:"",pred:"ulang",ket:"Belum ufalan"}},w:"23 Okt, 19.45"},
+ {no:6,nama:"Humaira Nabila R.",asal:"MI Kholisoniyyah",haf:"2 juz",q1:{c:"punya",t:"Target 10 juz"},q2:{c:"ya",t:"Adik — hafal juz 30"},q3:{c:"ya",t:"TPQ Al-Ikhlas, 2 tahun"},tw:{juz30:{surat:"Al Fajr",ayat:"",li:"",pred:"sangat",ket:"Bacaan merdu"},juz2829:{surat:"Al Qiyamah",ayat:"20",li:"",pred:"sangat",ket:"Sampai 20 tanpa bongkah"},sambung:{surat:"At Thalaq",ayat:"9",li:"",pred:"baik",ket:"Mulus, sedikit cepat"}},w:"23 Okt, 19.52"},
+ {no:7,nama:"Fatkhur Rohman Abidin",asal:"Pondok Al Habib",haf:"5 juz",q1:{c:"punya",t:"Lanjut sampai 10 juz"},q2:{c:"ya",t:"Abang — khatam 15 juz"},q3:{c:"ya",t:"Pondok Al Habib, 1 tahun"},tw:{juz30:{surat:"",ayat:"",li:"Al Kahfi",pred:"sangat",ket:"Panjang penuh, sangat lancar"},juz2829:{surat:"Al Mujadalah",ayat:"25",li:"",pred:"baik",ket:"Sampai 25 lancar"},sambung:{surat:"Al Haqoh",ayat:"31",li:"",pred:"baik",ket:"Kembali sebentar di 31"}},w:"23 Okt, 20.01"},
+ {no:8,nama:"Kayla Aulia Zahra",asal:"TK Aisyiyah",haf:"-",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{juz30:{surat:"",ayat:"",li:"Al Adiyat",pred:"baik",ket:"Untuk usia sudah bagus"},juz2829:{surat:"Al Mulk",ayat:"7",li:"",pred:"baik",ket:"Dibantu 1x"},sambung:{surat:"Al Insan",ayat:"4",li:"",pred:"cukup",ket:"Makhraj perlu dipelankan"}},w:"23 Okt, 20.07"}
+];
+const KEY="ss_rows_v3";
 let rows;
 try{rows=JSON.parse(localStorage.getItem(KEY))}catch(e){rows=null}
 if(!Array.isArray(rows)||!rows.length)rows=DEMO.slice();
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-const suratOf=r=>r.tw.li||r.tw.surat||"-";
-const tilawahTxt=r=>{
-  const b=`<b>${esc(suratOf(r))}</b>`;
-  if(r.tw.grp==="panjang")return b+" · sambung s/d ayat "+esc(r.tw.ayat||"-");
-  if(r.tw.grp==="juz2829")return r.tw.ayat?b+" · s/d ayat "+esc(r.tw.ayat):b;
-  return b+" · penuh";
-};
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(rows))}catch(e){}}
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2200)}
 function goTab(x){
@@ -359,115 +381,127 @@ document.querySelectorAll(".chip[data-g]").forEach(ch=>{
     onGroup(ch.dataset.g,ch.dataset.v);
   });
 });
-document.querySelectorAll("#g_pred button").forEach(b=>{
+document.querySelectorAll(".seg[data-cat] button").forEach(b=>{
   b.addEventListener("click",()=>{
-    document.querySelectorAll("#g_pred button").forEach(x=>x.classList.remove("active"));
+    b.closest(".seg").querySelectorAll("button").forEach(x=>x.classList.remove("active"));
     b.classList.add("active");
   });
 });
 function onGroup(g,v){
-  if(g==="grp"){
-    $("w_surat").style.display="block";
-    const sel=$("f_surat");sel.innerHTML="";
-    const opt0=document.createElement("option");opt0.value="";opt0.textContent="— pilih surat —";sel.appendChild(opt0);
-    SURAT[v].forEach((s,i)=>{
-      const o=document.createElement("option");
-      if(Array.isArray(s)){o.value=s[0];o.textContent=(i+1)+". "+s[0]+" ("+s[1]+" ayat)"}
-      else if(s==="Lainnya"){o.value=s;o.textContent="Lainnya (tulis manual)"}
-      else{o.value=s;o.textContent=(i+1)+". "+s}
-      sel.appendChild(o);
-    });
-    onSurat("");
-  }else{
-    const wl=$("w_q1");if(g==="q1"){wl.classList.toggle("show",v==="punya");
-    if(v!=="punya")$("f_q1").value="";}
-    const wl2=$("w_q2");if(g==="q2"){wl2.classList.toggle("show",v==="ya");
-    if(v!=="ya")$("f_q2").value="";}
-    const wl3=$("w_q3");if(g==="q3"){wl3.classList.toggle("show",v==="ya");
-    if(v!=="ya")$("f_q3").value="";}
-  }
+  const map={q1:["punya","w_q1","f_q1"],q2:["ya","w_q2","f_q2"],q3:["ya","w_q3","f_q3"]};
+  const m=map[g];if(!m)return;
+  const on=v===m[0];
+  $(m[1]).classList.toggle("show",on);
+  if(!on)$(m[2]).value="";
 }
-function onSurat(){
-  const grp=$("g_grp").querySelector(".active")?.dataset.v;
-  const s=$("f_surat").value;
-  const isLain=s==="Lainnya";
-  $("w_lainnya").style.display=isLain?"flex":"none";
-  const showAyat=grp==="panjang"||grp==="juz2829";
-  $("w_ayat").style.display=showAyat?"flex":"none";
-  $("ayatNote").textContent=grp==="panjang"?"Wajib — ayat terakhir yang terbaca":"Opsional";
-}
-$("f_surat").addEventListener("change",onSurat);
+CATS.forEach(c=>{
+  const sel=$(c.key+"_surat"),wrap=$("w_"+c.key+"_li");
+  sel.addEventListener("change",()=>{
+    wrap.style.display=sel.value==="Lainnya"?"flex":"none";
+    if(sel.value!=="Lainnya")$(c.key+"_li").value="";
+  });
+});
+function predOf(cid){const a=document.querySelector(`.seg[data-cat="${cid}"] button.active`);return a?a.dataset.p:""}
 function val(g){const a=$("g_"+g).querySelector(".active");return a?a.dataset.v:""}
 function saveForm(){
   const nama=$("f_nama").value.trim();
   if(!nama){toast("Nama santri wajib diisi");$("f_nama").focus();return}
-  const pred=document.querySelector("#g_pred button.active")?.dataset.p||"";
-  if(!pred){toast("Pilih predikat tilawah dulu");return}
-  const grp=val("grp");
-  if(!grp){toast("Pilih kategori surat dulu");return}
-  if(($("f_surat").value||"")===""){toast("Pilih surat dulu");return}
-  if(grp==="panjang"&&!$("f_ayat").value.trim()){toast("Isi ayat terakhir untuk sambung ayat");$("f_ayat").focus();return}
+  const tw={};
+  for(const c of CATS){
+    const sh=c.judul.split("—")[0].trim();
+    const sel=$(c.key+"_surat");
+    if(!sel.value){toast(sh+": pilih surat dulu");sel.focus();return}
+    const isL=sel.value==="Lainnya";
+    const li=isL?$(c.key+"_li").value.trim():"";
+    if(isL&&!li){toast(sh+": tulis judul suratnya");$(c.key+"_li").focus();return}
+    const ayat=c.ayat?$(c.key+"_ayat").value.trim():"";
+    if(c.ayat&&c.ayatReq&&!ayat){toast(sh+": isi sambung sampai ayat ke berapa");$(c.key+"_ayat").focus();return}
+    const pred=predOf(c.id);
+    if(!pred){toast(sh+": pilih predikat dulu");document.querySelector(`.seg[data-cat="${c.id}"]`).scrollIntoView({block:"center"});return}
+    tw[c.id]={surat:isL?"":sel.value,ayat,li,pred,ket:$(c.key+"_ket").value.trim()};
+  }
   const row={
     no:parseInt($("f_no").value)||rows.length+1,
     nama,asal:$("f_asal").value.trim(),haf:$("f_haf").value.trim()||"-",
     q1:{c:val("q1")||"-",t:$("f_q1").value.trim()},
     q2:{c:val("q2")||"-",t:$("f_q2").value.trim()},
     q3:{c:val("q3")||"-",t:$("f_q3").value.trim()},
-    tw:{grp,surat:$("f_surat").value,ayat:$("f_ayat").value.trim(),
-        li:$("f_surat").value==="Lainnya"?$("f_lainnya").value.trim():"",
-        pred,ket:$("f_ket").value.trim()},
+    tw,
     w:new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"short"})+", "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":")};
   rows.push(row);persist();
   toast("Tersimpan — santri #"+row.no+" "+row.nama.split(" ")[0]);
-  $("f_nama").value="";$("f_asal").value="";$("f_haf").value="";$("f_q1").value="";$("f_q2").value="";$("f_q3").value="";
-  $("f_ket").value="";$("f_ayat").value="";$("f_lainnya").value="";
-  document.querySelectorAll(".chip.active,#g_pred button.active").forEach(c=>c.classList.remove("active"));
-  $("w_q1").classList.remove("show");$("w_q2").classList.remove("show");$("w_q3").classList.remove("show");
-  $("w_surat").style.display="none";
-  const next=rows.length+1;
-  $("f_no").value=next;goTab("rekap");
+  resetForm();
+  $("f_no").value=rows.length+1;
+  goTab("rekap");
 }
+function resetForm(){
+  $("f_asal").value="";$("f_haf").value="";$("f_q1").value="";$("f_q2").value="";$("f_q3").value="";
+  $("w_q1").classList.remove("show");$("w_q2").classList.remove("show");$("w_q3").classList.remove("show");
+  document.querySelectorAll(".chip.active").forEach(c=>c.classList.remove("active"));
+  CATS.forEach(c=>{
+    $(c.key+"_surat").value="";$(c.key+"_li").value="";
+    if(c.ayat)$(c.key+"_ayat").value="";
+    $(c.key+"_ket").value="";
+    $("w_"+c.key+"_li").style.display="none";
+    document.querySelectorAll(`.seg[data-cat="${c.id}"] button`).forEach(x=>x.classList.remove("active"));
+  });
+}
+const catCell=(r,c)=>{
+  const t=r.tw[c.id];
+  if(!t||!(t.li||t.surat))return "<span class=\"na\" style='color:var(--text3)'>-</span>";
+  const ay=t.ayat?" · s/d "+esc(t.ayat):"";
+  return `<div class="tw-s">${esc(t.li||t.surat)}${ay}</div><span class="badge ${esc(t.pred)}">${esc(PRED[t.pred]||"-")}</span>`;
+};
 function renderRekap(){
   const q=$("rkSearch").value.trim().toLowerCase();
   const f=$("rkFilter").value;
-  let list=rows.filter(r=>{
-    const okF=!f||r.tw.pred===f;
+  const list=rows.filter(r=>{
+    const okF=!f||CATS.some(c=>r.tw[c.id]&&r.tw[c.id].pred===f);
     const okQ=!q||r.nama.toLowerCase().includes(q)||(r.asal||"").toLowerCase().includes(q);
     return okF&&okQ;
   });
+  const cnt=p=>rows.reduce((a,r)=>a+CATS.filter(c=>r.tw[c.id]&&r.tw[c.id].pred===p).length,0);
   $("stTotal").textContent=rows.length;
-  $("stSangat").textContent=rows.filter(r=>r.tw.pred==="sangat").length;
-  $("stBaikCukup").textContent=rows.filter(r=>r.tw.pred==="baik"||r.tw.pred==="cukup").length;
-  $("stUlang").textContent=rows.filter(r=>r.tw.pred==="ulang").length;
+  $("stSangat").textContent=cnt("sangat");
+  $("stBaikCukup").textContent=cnt("baik")+cnt("cukup");
+  $("stUlang").textContent=cnt("ulang");
   const tb=$("rkBody");
   if(!list.length){
     tb.innerHTML=`<tr><td colspan="8"><div class="empty"><p>Belum ada data yang cocok.<br>Hasil form input akan muncul di sini.</p></div></td></tr>`;
   }else{
     tb.innerHTML=list.map(r=>{
       const i=rows.indexOf(r),id="d"+i;
+      const catRow=c=>{const t=r.tw[c.id];const ay=(t&&t.ayat)?" · s/d ayat "+esc(t.ayat):"";
+        return `<div class="dg-block"><h4>${esc(c.judul)}</h4>
+          <div class="dg-item"><b>Surat:</b> ${esc(twName(t))}${ay}</div>
+          <div class="dg-item"><span class="badge ${esc(t?t.pred:"")}">${esc(t?PRED[t.pred]||"-":"-")}</span></div>
+          <div class="dg-item"><b>Ket:</b> ${esc(t?t.ket||"-":"-")}</div></div>`};
       return `<tr onclick="toggleDetail('${id}',this)">
         <td class="no-c">${esc(r.no)}</td>
         <td class="nama-c">${esc(r.nama)}</td>
         <td class="asal-c">${esc(r.asal||"-")}</td>
         <td class="haf-c">${esc(r.haf)}</td>
-        <td class="tilawah-c">${tilawahTxt(r)}</td>
-        <td><span class="badge ${esc(r.tw.pred)}">${esc(PRED[r.tw.pred]||"-")}</span></td>
-        <td class="ket-c">${esc(r.tw.ket||"-")}</td>
+        <td class="tw-cell">${catCell(r,CATS[0])}</td>
+        <td class="tw-cell">${catCell(r,CATS[1])}</td>
+        <td class="tw-cell">${catCell(r,CATS[2])}</td>
         <td class="waktu-c">${esc(r.w)}</td>
       </tr>
       <tr class="detail-row" id="${id}" style="display:none"><td colspan="8">
         <div class="detail">
           <div class="detail-grid">
+            <div class="dg-block"><h4>Identitas</h4>
+              <div class="dg-item"><b>Asal:</b> ${esc(r.asal||"-")}</div>
+              <div class="dg-item"><b>Jumlah hafalan:</b> ${esc(r.haf)}</div>
+              <div class="dg-item"><b>Waktu tes:</b> ${esc(r.w)}</div>
+            </div>
             <div class="dg-block"><h4>Wawancara</h4>
               <div class="dg-item"><b>Target hafalan:</b> ${r.q1.c==="punya"?"Punya":"Belum ada"}${r.q1.t?" — "+esc(r.q1.t):""}</div>
               <div class="dg-item"><b>Saudara hafalan:</b> ${r.q2.c==="ya"?"Ada":"Tidak ada"}${r.q2.t?" — "+esc(r.q2.t):""}</div>
               <div class="dg-item"><b>Riwayat TPA:</b> ${r.q3.c==="ya"?"Pernah":"Belum pernah"}${r.q3.t?" — "+esc(r.q3.t):""}</div>
             </div>
-            <div class="dg-block"><h4>Detail Tilawah</h4>
-              <div class="dg-item"><b>Kelompok:</b> ${esc({juz30:"Juz 30 · 1 surat penuh",juz2829:"Juz 28–29 · tidak penuh",panjang:"Sambung ayat"}[r.tw.grp]||"-")}</div>
-              <div class="dg-item"><b>Surat:</b> ${esc(suratOf(r))}${r.tw.ayat?" · terakhir ayat "+esc(r.tw.ayat):""}</div>
-              <div class="dg-item"><b>Predikat:</b> ${esc(PRED[r.tw.pred]||"-")}</div>
-            </div>
+            ${catRow(CATS[0])}
+            ${catRow(CATS[1])}
+            ${catRow(CATS[2])}
           </div>
           <div class="detail-actions">
             <button class="da-btn danger" onclick="event.stopPropagation();delRow(${i})">Hapus data</button>
@@ -490,24 +524,43 @@ function delRow(i){
   rows.splice(i,1);persist();renderRekap();toast("Data dihapus");
 }
 function exportCSV(){
-  const head=["No","Nama","Asal Sekolah","Jumlah Hafalan","Q1 Target","Q2 Saudara","Q3 TPA","Kelompok","Surat","Ayat","Predikat","Keterangan","Waktu"];
-  const line=r=>[r.no,r.nama,r.asal,r.haf,
-    r.q1.c==="punya"?"Punya: "+(r.q1.t||""):"Belum",
-    r.q2.c==="ya"?"Ada: "+(r.q2.t||""):"Tidak",
-    r.q3.c==="ya"?"Pernah: "+(r.q3.t||""):"Belum",
-    ({juz30:"Juz 30 · penuh",juz2829:"Juz 28–29 · tidak penuh",panjang:"Sambung ayat"})[r.tw.grp]||"",
-    suratOf(r),r.tw.ayat,PRED[r.tw.pred]||"",r.tw.ket||"",r.w
-  ].map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",");
-  const csv="\uFEFF"+[head.join(","),...rows.map(line)].join("\r\n");
+  const head=["No","Nama","Asal Sekolah","Jumlah Hafalan",
+    "Juz30 Surat","Juz30 s/d Ayat","Juz30 Predikat","Juz30 Ket",
+    "J28 Surat","J28 s/d Ayat","J28 Predikat","J28 Ket",
+    "Sambung Surat","Sambung s/d Ayat","Sambung Predikat","Sambung Ket",
+    "Q1 Target","Q2 Saudara","Q3 TPA","Waktu"];
+  const line=r=>{
+    const base=[r.no,r.nama,r.asal,r.haf];
+    const tw=[];
+    CATS.forEach(c=>{const t=r.tw[c.id]||{};tw.push(twName(t),t.ayat||"",PRED[t.pred]||"",t.ket||"")});
+    const qa=[
+      r.q1.c==="punya"?"Punya: "+(r.q1.t||""):"Belum",
+      r.q2.c==="ya"?"Ada: "+(r.q2.t||""):"Tidak",
+      r.q3.c==="ya"?"Pernah: "+(r.q3.t||""):"Belum"];
+    return base.concat(tw,qa,[r.w]);
+  };
+  const csv="\uFEFF"+[head.join(","),...rows.map(r=>line(r).map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(","))].join("\r\n");
   const a=document.createElement("a");
   a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(csv);
   a.download="rekap-screening-santri.csv";a.click();
   toast("CSV siap — nanti format asli pakai Sheets");
 }
+function fillSelects(){
+  CATS.forEach(c=>{
+    const sel=$(c.key+"_surat");
+    SURAT[c.id].forEach((s,i)=>{
+      const o=document.createElement("option");
+      if(Array.isArray(s)){o.value=s[0];o.textContent=(i+1)+". "+s[0]+" ("+s[1]+" ayat)"}
+      else if(s==="Lainnya"){o.value="Lainnya";o.textContent="Lainnya (tulis manual)"}
+      else{o.value=s;o.textContent=(i+1)+". "+s}
+      sel.appendChild(o);
+    });
+  });
+}
 function initForm(){
   $("f_no").value=rows.length+1;
 }
-initForm();renderRekap();
+fillSelects();initForm();renderRekap();
 </script>
 </body>
 </html>
