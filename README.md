@@ -14,7 +14,7 @@ Project pribadi (bukan SMP ABBS). Satu file `index.html` (vanilla JS), tanpa bui
      - **Juz 28–29** — surat tidak penuh (+ ayat terakhir, opsional)
      - **Sambung Ayat** — penguji menyebut ayat, peserta menyambung (**wajib** mencatat ayat) 
      Masing-masing punya predikat: Sangat Baik / Baik / Cukup / Perlu Diulang + keterangan.
-- **Rekap** — kartu statistik, pencarian & filter predikat, tabel: Nama | Asal | Hafalan | Wawancara (3 jawaban langsung) | Juz 30 | Juz 28–29 | Sambung Ayat (surat + badge predikat + keterangan) | Waktu. Klik baris → detail lengkap + hapus.
+- **Rekap** — kartu statistik, pencarian & filter predikat, tabel 16 kolom sesuai template (NO | Nama | Asal | Hafalan | Target | Saudara | TPA | 3 kategori × Surat/Predikat/Keterangan) dengan garis tiap sel; urutan terbaru di atas; hapus via tombol muncul saat hover di baris.
 - **Rekap & Export** — tabel rekap mengikuti `template rekapan.xlsx` (header 2 tingkat identitas + wawancara + 3 kategori × Surat/Predikat/Ket, kolom NO, seluruh sel bergaris). Data terbaru selalu tampil di atas (`_t`) & tampilan otomatis menyegarkan via Sheets (interval 30 detik + saat tab dibuka kembali). Export Excel diisi langsung ke template (JSZip) — hasilnya sama dengan rekap web; fallback SheetJS (polos, merge & lebar kolom sama) lalu CSV.
 - **Data** — database **Google Spreadsheet** via Apps Script Web App (`Code.gs`); `data.json` di root hanya sebagai cadangan/cadangan migrasi awal.
 

@@ -19,7 +19,7 @@ body{
   background:radial-gradient(ellipse at top,#101b30,#0a0f1c 70%);color:var(--text);min-height:100vh;
   -webkit-tap-highlight-color:transparent
 }
-.wrap{max-width:1060px;margin:0 auto;padding:0 14px 90px}
+.wrap{margin:0 auto;padding:0 18px 90px}
 header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .logo{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
   background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 4px 18px rgba(232,182,76,.25)}
@@ -88,7 +88,7 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .wq-c{font-size:12px;color:var(--text2);white-space:nowrap}
 .t-idx{color:var(--text3);font-size:11.5px;text-align:center}
 .actions{position:fixed;left:0;right:0;bottom:0;padding:12px 14px 14px;background:linear-gradient(to top,#0a0f1c 55%,transparent);z-index:60}
-.actions-inner{max-width:1032px;margin:0 auto;display:flex;gap:10px}
+.actions-inner{margin:0 auto;display:flex;gap:10px}
 .btn{flex:1;padding:14px 18px;border-radius:12px;border:none;font-size:14.5px;font-weight:800;font-family:inherit;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#101726;box-shadow:0 4px 20px rgba(232,182,76,.3)}
 .btn-gold:active{transform:scale(.98)}
@@ -130,9 +130,8 @@ thead th{position:sticky;top:33px;background:var(--bg3);text-align:center;paddin
   font-weight:700;letter-spacing:.4px;text-transform:uppercase;border:1px solid var(--border2);white-space:nowrap}
 thead th.grp{top:0;height:33px}
 tbody td{padding:9px 10px;border:1px solid rgba(42,58,88,.55);vertical-align:top}
-tbody tr{cursor:pointer;transition:.15s}
+tbody tr{transition:.15s}
 tbody tr:hover td{background:rgba(232,182,76,.05)}
-tbody tr.open{background:rgba(232,182,76,.07)}
 .nama-c{font-weight:700;font-size:14px;white-space:nowrap}
 .asal-c{color:var(--text2);font-size:12.5px;white-space:nowrap}
 .haf-c{font-size:12.5px;color:var(--text);white-space:nowrap}
@@ -144,19 +143,12 @@ tbody tr.open{background:rgba(232,182,76,.07)}
 .badge.cukup{background:rgba(122,167,255,.13);color:var(--blue);border:1px solid rgba(122,167,255,.3)}
 .badge.ulang{background:rgba(255,122,122,.13);color:var(--red);border:1px solid rgba(255,122,122,.3)}
 .ket-c{color:var(--text2);font-size:12px;max-width:190px;line-height:1.4}
-tr.detail-row td{padding:0;background:var(--bg2)}
-.detail{padding:14px 17px 17px;animation:fade .25s ease}
-.detail-grid{display:flex;flex-wrap:wrap;gap:20px}
-.dg-block{flex:1;min-width:200px}
-.dg-block h4{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin-bottom:7px}
-.dg-item{font-size:12.5px;color:var(--text2);line-height:1.55;margin-bottom:3px}
-.dg-item b{color:var(--text);font-weight:650}
-.dg-item .na{color:var(--text3)}
-.detail-actions{margin-top:12px;display:flex;gap:8px}
-.da-btn{padding:8px 14px;border-radius:9px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);
-  font-size:11.5px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px}
-.da-btn:hover{color:var(--text);border-color:var(--gold)}
-.da-btn.danger:hover{color:var(--red);border-color:var(--red)}
+.t-last{position:relative}
+.row-del{position:absolute;top:50%;right:1px;transform:translateY(-50%);opacity:0;pointer-events:none;transition:.15s;
+  border:1px solid rgba(255,122,122,.4);color:var(--red);background:rgba(255,122,122,.08);
+  border-radius:8px;padding:3px 9px;font-family:inherit;font-size:10.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+tbody tr:hover .row-del{opacity:1;pointer-events:auto}
+.row-del:hover{background:rgba(255,122,122,.2)}
 .empty{text-align:center;padding:46px 20px;color:var(--text3)}
 .empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
 .empty p{font-size:13.5px;line-height:1.6}
@@ -473,12 +465,12 @@ function resetForm(){
 }
 const dimTxt=()=>"<span style='color:var(--text3);font-size:12px'>-</span>";
 const wqCell=(q,no)=>(q.c==="punya"||q.c==="ya")?(q.t?`<span style="color:var(--text)">${esc(q.t)}</span>`:dimTxt()):`<span style="color:var(--text3);font-size:12px">${no}</span>`;
-const catCells=(r,c)=>{
+const catCells=(r,c,last,idx)=>{
   const t=r.tw[c.id]||{};
   const has=t.li||t.surat;
   return `<td class="ws-cell">${has?esc(twName(t))+(t.ayat?" <span style='color:var(--text3);font-weight:400;font-size:11px'>s/d "+esc(t.ayat)+"</span>":""):dimTxt()}</td>`
     +`<td class="badge-c">${t.pred?`<span class="badge ${esc(t.pred)}">${esc(PRED[t.pred])}</span>`:dimTxt()}</td>`
-    +`<td>${t.ket?`<span class="ket-c">${esc(t.ket)}</span>`:dimTxt()}</td>`;
+    +`<td${last?' class="t-last"':''}>${t.ket?`<span class="ket-c">${esc(t.ket)}</span>`:dimTxt()}${last?`<button class="row-del" title="Hapus data ${esc(r.nama||"")}" onclick="event.stopPropagation();delRow(${idx})">Hapus</button>`:""}</td>`;
 };
 function renderRekap(){
   const q=$("rkSearch").value.trim().toLowerCase();
@@ -498,13 +490,8 @@ function renderRekap(){
     tb.innerHTML=`<tr><td colspan="16"><div class="empty"><p>Belum ada data yang cocok.<br>Hasil form input akan muncul di sini.</p></div></td></tr>`;
   }else{
     tb.innerHTML=list.map((r,li)=>{
-      const i=rows.indexOf(r),id="d"+i;
-      const catRow=c=>{const t=r.tw[c.id];const ay=(t&&t.ayat)?" · s/d ayat "+esc(t.ayat):"";
-        return `<div class="dg-block"><h4>${esc(c.judul)}</h4>
-          <div class="dg-item"><b>Surat:</b> ${esc(twName(t))}${ay}</div>
-          <div class="dg-item"><span class="badge ${esc(t?t.pred:"")}">${esc(t?PRED[t.pred]||"-":"-")}</span></div>
-          <div class="dg-item"><b>Ket:</b> ${esc(t?t.ket||"-":"-")}</div></div>`};
-      return `<tr onclick="toggleDetail('${id}',this)">
+      const i=rows.indexOf(r);
+      return `<tr>
         <td class="t-idx">${li+1}</td>
         <td class="nama-c">${esc(r.nama||"-")}</td>
         <td class="asal-c">${esc(r.asal||"-")}</td>
@@ -512,32 +499,10 @@ function renderRekap(){
         <td class="wq-c">${wqCell(r.q1,"belum")}</td>
         <td class="wq-c">${wqCell(r.q2,"tidak")}</td>
         <td class="wq-c">${wqCell(r.q3,"belum")}</td>
-        ${catCells(r,CATS[0])}
-        ${catCells(r,CATS[1])}
-        ${catCells(r,CATS[2])}
-      </tr>
-      <tr class="detail-row" id="${id}" style="display:none"><td colspan="16">
-        <div class="detail">
-          <div class="detail-grid">
-            <div class="dg-block"><h4>Identitas</h4>
-              <div class="dg-item"><b>Asal:</b> ${esc(r.asal||"-")}</div>
-              <div class="dg-item"><b>Jumlah hafalan:</b> ${esc(r.haf)}</div>
-              <div class="dg-item"><b>Waktu tes:</b> ${esc(r.w)}</div>
-            </div>
-            <div class="dg-block"><h4>Wawancara</h4>
-              <div class="dg-item"><b>Target hafalan:</b> ${r.q1.c==="punya"?"Punya":"Belum ada"}${r.q1.t?" — "+esc(r.q1.t):""}</div>
-              <div class="dg-item"><b>Saudara hafalan:</b> ${r.q2.c==="ya"?"Ada":"Tidak ada"}${r.q2.t?" — "+esc(r.q2.t):""}</div>
-              <div class="dg-item"><b>Riwayat TPA:</b> ${r.q3.c==="ya"?"Pernah":"Belum pernah"}${r.q3.t?" — "+esc(r.q3.t):""}</div>
-            </div>
-            ${catRow(CATS[0])}
-            ${catRow(CATS[1])}
-            ${catRow(CATS[2])}
-          </div>
-          <div class="detail-actions">
-            <button class="da-btn danger" onclick="event.stopPropagation();delRow(${i})">Hapus data</button>
-          </div>
-        </div>
-      </td></tr>`;
+        ${catCells(r,CATS[0],false)}
+        ${catCells(r,CATS[1],false)}
+        ${catCells(r,CATS[2],true,i)}
+      </tr>`;
     }).join("");
   }
   updateSyncUI();
@@ -616,13 +581,6 @@ async function boot(){
 }
 fillSelects();renderRekap();boot();
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)apiSync(false)});
-function toggleDetail(id,tr){
-  const el=$(id);
-  const isShow=el.style.display!=="none";
-  document.querySelectorAll(".detail-row").forEach(x=>x.style.display="none");
-  document.querySelectorAll("tbody tr.open").forEach(x=>x.classList.remove("open"));
-  if(!isShow){el.style.display="";tr.classList.add("open")}
-}
 function delRow(i){
   const r=rows[i];
   if(!confirm("Hapus data "+(r.nama||"santri ini")+"?"))return;
