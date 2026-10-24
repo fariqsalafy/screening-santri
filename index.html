@@ -98,15 +98,6 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);background:var(--green);color:#06130b;
   padding:12px 22px;border-radius:12px;font-size:13.5px;font-weight:800;opacity:0;pointer-events:none;transition:.3s;z-index:100;box-shadow:0 8px 30px rgba(0,0,0,.4);white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.modal{position:fixed;inset:0;background:rgba(4,8,15,.78);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
-.modal[hidden]{display:none}
-.m-card{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;max-width:430px;width:100%;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.m-card h3{font-size:15px;font-weight:800;margin-bottom:9px}
-.m-note{font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:10px}
-.m-link{font-size:12.5px;color:var(--teal);font-weight:700;text-decoration:none;display:inline-block;margin-bottom:13px}
-.m-actions{display:flex;gap:8px;margin-top:4px}
-.m-actions .btn{padding:11px 10px;font-size:13px;border-radius:10px;flex:1}
-.m-actions .btn-gold{flex:1.4}
 .rekap-tools{display:flex;gap:9px;margin-bottom:13px;flex-wrap:wrap}
 .search{position:relative;flex:1;min-width:210px}
 .search input{width:100%;padding:12px 13px 12px 40px;border-radius:11px;border:1px solid var(--border);background:var(--bg2);
@@ -154,11 +145,57 @@ tbody tr:hover .row-del{opacity:1;pointer-events:auto}
 .empty p{font-size:13.5px;line-height:1.6}
 .rekap-foot{text-align:center;font-size:11px;color:var(--text3);padding:6px 0 4px}
 @media (max-width:640px){
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .seg{grid-template-columns:repeat(2,1fr)}
-  .brand h1{font-size:16px}
-  thead th,tbody td{padding:9px 9px}
-  table{font-size:12px;min-width:1540px}
+  .wrap{padding:0 12px 82px}
+  header{padding:16px 0 11px;gap:10px}
+  .logo{width:38px;height:38px;border-radius:10px}
+  .logo svg{width:20px;height:20px}
+  .brand h1{font-size:15.5px}
+  .brand p{font-size:10.5px;margin-top:1px}
+  .tabs{padding:4px;margin:2px 0 13px;border-radius:12px}
+  .tabs button{padding:9px 6px;font-size:12.5px;gap:6px}
+  .banner{padding:10px 12px;font-size:11.5px;border-radius:11px;margin-bottom:13px}
+  .banner svg{width:15px;height:15px}
+  .card{border-radius:14px;margin-bottom:12px}
+  .card-head{padding:12px 13px;gap:9px}
+  .card-head h2{font-size:13.5px}
+  .card-head .hint{font-size:10px}
+  .card-body{padding:12px 12px 4px}
+  .row{gap:8px;margin-bottom:10px}
+  .fld input,.fld select,.fld textarea{padding:10px 11px;font-size:14px}
+  .chip{padding:8px 12px;font-size:12.5px}
+  .q-label{font-size:12.5px}
+  .seg{grid-template-columns:repeat(2,1fr);gap:6px}
+  .sub{padding:12px 12px 13px}
+  .sub-head{margin-bottom:9px}
+  .stats{grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+  .stat{padding:10px 3px 8px;border-radius:11px}
+  .stat .n{font-size:17px}
+  .stat .l{font-size:8.5px;letter-spacing:.2px}
+  .rekap-tools{gap:6px;margin-bottom:11px}
+  .search{flex:1 1 100%;min-width:0}
+  .search input{padding:10px 11px 10px 37px;font-size:13.5px}
+  .search svg{left:11px}
+  .filter-sel{flex:1 1 auto;max-width:none;padding:10px 11px;font-size:12.5px;min-width:0}
+  .mini-btn{flex:1 1 0;justify-content:center;align-self:stretch;padding:10px 8px;font-size:12px}
+  .table-wrap{border-radius:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{font-size:11.5px;min-width:1300px}
+  thead th{padding:6px 6px;font-size:9px}
+  thead th.grp{height:28px}
+  thead th{top:28px}
+  tbody td{padding:7px 6px}
+  .t-idx{font-size:10px}
+  .nama-c{font-size:12.5px}
+  .asal-c,.haf-c,.ws-cell,.wq-c{font-size:11px}
+  .badge{padding:2px 7px;font-size:9px}
+  .ket-c{font-size:10.5px}
+  .row-del{opacity:1;pointer-events:auto;right:0;padding:4px 8px;font-size:9.5px}
+  .rekap-foot{font-size:10.5px}
+  .empty{padding:34px 12px}
+  .empty p{font-size:12.5px}
+  .actions{padding:9px 12px calc(10px + env(safe-area-inset-bottom))}
+  .btn{padding:13px 14px;font-size:14px}
+  .toast{bottom:74px;white-space:normal;text-align:center;max-width:calc(100vw - 48px)}
+  .mini-btn{-webkit-tap-highlight-color:transparent}
 }
 </style>
 </head>
@@ -305,9 +342,6 @@ tbody tr:hover .row-del{opacity:1;pointer-events:auto}
     <button class="mini-btn" onclick="exportExcel()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Excel .xlsx</button>
-    <button class="mini-btn" onclick="openSet()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a4 4 0 0 0 0-8z"/></svg>
-      Sinkron Sheet</button>
   </div>
 
   <div class="table-wrap">
@@ -340,19 +374,6 @@ tbody tr:hover .row-del{opacity:1;pointer-events:auto}
 </div>
 
 <div class="toast" id="toast"></div>
-
-<div class="modal" id="mSet" hidden>
-  <div class="m-card">
-    <h3>Pengaturan Sinkron Google Sheets</h3>
-    <p class="m-note">Database memakai <b>Google Spreadsheet</b> via Apps Script Web App (<b>Code.gs</b>). Device lain otomatis sinkron asalkan pakai URL yang sama. Isi ulang <b>Web App URL</b> di bawah kalau kamu deploy spreadsheet baru; kosongkan lalu tekan <b>Bawaan</b> untuk kembali ke URL bawaan.</p>
-    <div class="fld"><label>Web App URL</label><input id="inApi" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></div>
-    <div class="m-actions">
-      <button id="btnApiSave" class="btn btn-gold">Simpan URL</button>
-      <button id="btnApiOff" class="btn btn-ghost">Bawaan</button>
-      <button id="btnSetClose" class="btn btn-ghost">Tutup</button>
-    </div>
-  </div>
-</div>
 </div>
 
 <script>
@@ -515,21 +536,6 @@ function keyOf(r){return r._id||((r.nama||"")+"|"+(r.w||""))}
 function mergeRows(a,b){const m=new Map();[...(a||[]),...(b||[])].forEach(r=>m.set(keyOf(r),r));return [...m.values()]}
 const byNew=(a,b)=>String(b._t||"").localeCompare(String(a._t||""));
 function uid(){return "r"+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function openSet(){$("inApi").value=apiUrl();$("mSet").hidden=false}
-document.addEventListener("DOMContentLoaded",()=>{
-  $("btnSetClose").onclick=()=>$("mSet").hidden=true;
-  $("btnApiSave").onclick=()=>{
-    const t=$("inApi").value.trim();
-    try{if(t&&t!==GAPI)localStorage.setItem(APKEY,t);else localStorage.removeItem(APKEY)}catch(e){}
-    updateSyncUI();$("mSet").hidden=true;
-    toast("URL Sheets disimpan — sinkron…");
-    apiSync(true);
-  };
-  $("btnApiOff").onclick=()=>{
-    try{localStorage.removeItem(APKEY)}catch(e){}
-    $("inApi").value=GAPI;updateSyncUI();toast("Kembali ke URL bawaan");
-  };
-});
 function updateSyncUI(){if($("rkFoot"))$("rkFoot").textContent=rows.length?`${rows.length} santri · ${apiOK===false?"data di device ini — Google Sheets tidak terjangkau":"database via Google Sheets"}`:""}
 async function tryJson(u){try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)return null;const j=await r.json();return Array.isArray(j)?j:null}catch(e){return null}}
 async function fetchLegacy(){return await tryJson("data.json")||await tryJson("https://raw.githubusercontent.com/fariqsalafy/screening-santri/main/data.json")}
