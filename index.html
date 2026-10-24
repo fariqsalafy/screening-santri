@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Screening Santri Baru — Tes Seleksi Tahfidz</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -84,14 +85,8 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .sub-head .sh-ket{font-size:10.5px;color:var(--text3);margin-top:2px}
 .sub .fld{margin-bottom:11px}
 .sub .row{margin-bottom:11px}
-.tw-cell{min-width:130px}
-.tw-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.tw-row .badge{padding:3px 9px;font-size:10px}
-.tw-s{font-size:12.5px;font-weight:650;color:var(--text);line-height:1.35}
-.tw-ket{font-size:11px;color:var(--text2);line-height:1.4;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:220px}
-.wa-c{min-width:150px}
-.wa-it{font-size:11.5px;color:var(--text2);line-height:1.55;margin-bottom:2px}
-.wa-it b{color:var(--text3);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}
+.wq-c{font-size:12px;color:var(--text2);white-space:nowrap}
+.t-idx{color:var(--text3);font-size:11.5px;text-align:center}
 .actions{position:fixed;left:0;right:0;bottom:0;padding:12px 14px 14px;background:linear-gradient(to top,#0a0f1c 55%,transparent);z-index:60}
 .actions-inner{max-width:1032px;margin:0 auto;display:flex;gap:10px}
 .btn{flex:1;padding:14px 18px;border-radius:12px;border:none;font-size:14.5px;font-weight:800;font-family:inherit;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -130,10 +125,11 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .stat .l{font-size:10px;color:var(--text2);font-weight:600;margin-top:4px;letter-spacing:.3px;text-transform:uppercase}
 .stat.c1 .n{color:var(--teal)}.stat.c2 .n{color:var(--gold)}.stat.c3 .n{color:var(--blue)}.stat.c4 .n{color:var(--red)}
 .table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow-x:auto;margin-bottom:14px}
-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:1040px}
-thead th{position:sticky;top:0;background:var(--bg3);text-align:left;padding:11px 14px;font-size:10.5px;color:var(--text2);
-  font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border2);white-space:nowrap}
-tbody td{padding:12px 14px;border-bottom:1px solid rgba(42,58,88,.5);vertical-align:top}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:1460px}
+thead th{position:sticky;top:33px;background:var(--bg3);text-align:center;padding:8px 10px;font-size:10.5px;color:var(--text2);
+  font-weight:700;letter-spacing:.4px;text-transform:uppercase;border-bottom:1px solid var(--border2);white-space:nowrap}
+thead th.grp{top:0;height:33px;border-bottom:1px solid var(--border2)}
+tbody td{padding:9px 10px;border-bottom:1px solid rgba(42,58,88,.5);vertical-align:top}
 tbody tr{cursor:pointer;transition:.15s}
 tbody tr:hover td{background:rgba(232,182,76,.05)}
 tbody tr.open{background:rgba(232,182,76,.07)}
@@ -141,15 +137,14 @@ tbody tr:last-child td{border-bottom:none}
 .nama-c{font-weight:700;font-size:14px;white-space:nowrap}
 .asal-c{color:var(--text2);font-size:12.5px;white-space:nowrap}
 .haf-c{font-size:12.5px;color:var(--text);white-space:nowrap}
-.tilawah-c{font-size:12.5px;color:var(--text2);line-height:1.45}
-.tilawah-c b{color:var(--teal);font-weight:700}
+.ws-cell{font-size:12.5px;font-weight:650;color:var(--text);white-space:nowrap}
+.badge-c{text-align:center;white-space:nowrap}
 .badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.3px;white-space:nowrap}
 .badge.sangat{background:rgba(232,182,76,.15);color:var(--gold);border:1px solid rgba(232,182,76,.35)}
 .badge.baik{background:rgba(61,219,194,.13);color:var(--teal);border:1px solid rgba(61,219,194,.3)}
 .badge.cukup{background:rgba(122,167,255,.13);color:var(--blue);border:1px solid rgba(122,167,255,.3)}
 .badge.ulang{background:rgba(255,122,122,.13);color:var(--red);border:1px solid rgba(255,122,122,.3)}
-.ket-c{color:var(--text3);font-size:12px;max-width:190px}
-.waktu-c{color:var(--text3);font-size:11px;white-space:nowrap}
+.ket-c{color:var(--text2);font-size:12px;max-width:190px;line-height:1.4}
 tr.detail-row td{padding:0;background:var(--bg2)}
 .detail{padding:14px 17px 17px;animation:fade .25s ease}
 .detail-grid{display:flex;flex-wrap:wrap;gap:20px}
@@ -171,8 +166,8 @@ tr.detail-row td{padding:0;background:var(--bg2)}
   .stats{grid-template-columns:repeat(2,1fr)}
   .seg{grid-template-columns:repeat(2,1fr)}
   .brand h1{font-size:16px}
-  thead th,tbody td{padding:10px 10px}
-  table{font-size:12.5px;min-width:980px}
+  thead th,tbody td{padding:9px 9px}
+  table{font-size:12px;min-width:1420px}
 }
 </style>
 </head>
@@ -327,7 +322,16 @@ tr.detail-row td{padding:0;background:var(--bg2)}
   <div class="table-wrap">
     <table>
       <thead><tr>
-        <th>Nama</th><th>Asal</th><th>Hafalan</th><th>Wawancara</th><th>Juz 30</th><th>Juz 28–29</th><th>Sambung Ayat</th><th>Waktu</th>
+        <th rowspan="2" class="grp">NO</th><th rowspan="2" class="grp">Nama Santri</th><th rowspan="2" class="grp">Asal Sekolah</th><th rowspan="2" class="grp">Hafalan</th>
+        <th colspan="3" class="grp">Wawancara</th>
+        <th colspan="3" class="grp">Juz 30</th>
+        <th colspan="3" class="grp">Juz 28-29</th>
+        <th colspan="3" class="grp">Sambung Ayat</th>
+      </tr><tr>
+        <th>Target</th><th>Saudara</th><th>TPA</th>
+        <th>Surat</th><th>Predikat</th><th>Ket</th>
+        <th>Surat</th><th>Predikat</th><th>Ket</th>
+        <th>Surat</th><th>Predikat</th><th>Ket</th>
       </tr></thead>
       <tbody id="rkBody"></tbody>
     </table>
@@ -468,18 +472,14 @@ function resetForm(){
     document.querySelectorAll(`.seg[data-cat="${c.id}"] button`).forEach(x=>x.classList.remove("active"));
   });
 }
-const catCell=(r,c)=>{
-  const t=r.tw[c.id];
-  if(!t||!(t.li||t.surat))return "<span style='color:var(--text3);font-size:12px'>-</span>";
-  const ay=t.ayat?" · s/d "+esc(t.ayat):"";
-  const ket=t.ket?`<div class="tw-ket">${esc(t.ket)}</div>`:"";
-  return `<div class="tw-row"><span class="tw-s">${esc(t.li||t.surat)}${ay}</span><span class="badge ${esc(t.pred)}">${esc(PRED[t.pred]||"-")}</span></div>${ket}`;
-};
-const waCell=r=>{
-  const it=(lbl,t)=>`<div class="wa-it"><b>${lbl}:</b> ${t}</div>`;
-  return it("Target",r.q1.c==="punya"?esc(r.q1.t||"punya"):"belum")
-        +it("Saudara",r.q2.c==="ya"?esc(r.q2.t||"ada"):"tidak ada")
-        +it("TPA",r.q3.c==="ya"?esc(r.q3.t||"pernah"):"tidak pernah");
+const dimTxt=()=>"<span style='color:var(--text3);font-size:12px'>-</span>";
+const wqCell=(q,no)=>(q.c==="punya"||q.c==="ya")?(q.t?`<span style="color:var(--text)">${esc(q.t)}</span>`:dimTxt()):`<span style="color:var(--text3);font-size:12px">${no}</span>`;
+const catCells=(r,c)=>{
+  const t=r.tw[c.id]||{};
+  const has=t.li||t.surat;
+  return `<td class="ws-cell">${has?esc(twName(t))+(t.ayat?" <span style='color:var(--text3);font-weight:400;font-size:11px'>s/d "+esc(t.ayat)+"</span>":""):dimTxt()}</td>`
+    +`<td class="badge-c">${t.pred?`<span class="badge ${esc(t.pred)}">${esc(PRED[t.pred])}</span>`:dimTxt()}</td>`
+    +`<td>${t.ket?`<span class="ket-c">${esc(t.ket)}</span>`:dimTxt()}</td>`;
 };
 function renderRekap(){
   const q=$("rkSearch").value.trim().toLowerCase();
@@ -496,9 +496,9 @@ function renderRekap(){
   $("stUlang").textContent=cnt("ulang");
   const tb=$("rkBody");
   if(!list.length){
-    tb.innerHTML=`<tr><td colspan="8"><div class="empty"><p>Belum ada data yang cocok.<br>Hasil form input akan muncul di sini.</p></div></td></tr>`;
+    tb.innerHTML=`<tr><td colspan="16"><div class="empty"><p>Belum ada data yang cocok.<br>Hasil form input akan muncul di sini.</p></div></td></tr>`;
   }else{
-    tb.innerHTML=list.map(r=>{
+    tb.innerHTML=list.map((r,li)=>{
       const i=rows.indexOf(r),id="d"+i;
       const catRow=c=>{const t=r.tw[c.id];const ay=(t&&t.ayat)?" · s/d ayat "+esc(t.ayat):"";
         return `<div class="dg-block"><h4>${esc(c.judul)}</h4>
@@ -506,16 +506,18 @@ function renderRekap(){
           <div class="dg-item"><span class="badge ${esc(t?t.pred:"")}">${esc(t?PRED[t.pred]||"-":"-")}</span></div>
           <div class="dg-item"><b>Ket:</b> ${esc(t?t.ket||"-":"-")}</div></div>`};
       return `<tr onclick="toggleDetail('${id}',this)">
+        <td class="t-idx">${li+1}</td>
         <td class="nama-c">${esc(r.nama||"-")}</td>
         <td class="asal-c">${esc(r.asal||"-")}</td>
         <td class="haf-c">${esc(r.haf)}</td>
-        <td class="wa-c">${waCell(r)}</td>
-        <td class="tw-cell">${catCell(r,CATS[0])}</td>
-        <td class="tw-cell">${catCell(r,CATS[1])}</td>
-        <td class="tw-cell">${catCell(r,CATS[2])}</td>
-        <td class="waktu-c">${esc(r.w)}</td>
+        <td class="wq-c">${wqCell(r.q1,"belum")}</td>
+        <td class="wq-c">${wqCell(r.q2,"tidak")}</td>
+        <td class="wq-c">${wqCell(r.q3,"belum")}</td>
+        ${catCells(r,CATS[0])}
+        ${catCells(r,CATS[1])}
+        ${catCells(r,CATS[2])}
       </tr>
-      <tr class="detail-row" id="${id}" style="display:none"><td colspan="8">
+      <tr class="detail-row" id="${id}" style="display:none"><td colspan="16">
         <div class="detail">
           <div class="detail-grid">
             <div class="dg-block"><h4>Identitas</h4>
@@ -623,36 +625,86 @@ function delRow(i){
   apiDelete(r);
 }
 function exportExcel(){
-  const head=["Nama","Asal Sekolah","Jumlah Hafalan",
-    "Juz30 Surat","Juz30 s/d Ayat","Juz30 Predikat","Juz30 Ket",
-    "J28 Surat","J28 s/d Ayat","J28 Predikat","J28 Ket",
-    "Sambung Surat","Sambung s/d Ayat","Sambung Predikat","Sambung Ket",
-    "Q1 Target","Q2 Saudara","Q3 TPA","Waktu"];
-  const data=[];
-  data.push(head);
-  rows.forEach(r=>{
-    const base=[r.nama||"",r.asal||"",r.haf||""];
-    const tw=[];
-    CATS.forEach(c=>{const t=r.tw[c.id]||{};tw.push(twName(t),t.ayat||"",PRED[t.pred]||"",t.ket||"")});
-    const qa=[
-      r.q1.c==="punya"?"Punya: "+(r.q1.t||""):"Belum",
-      r.q2.c==="ya"?"Ada: "+(r.q2.t||""):"Tidak",
-      r.q3.c==="ya"?"Pernah: "+(r.q3.t||""):"Belum"];
-    data.push(base.concat(tw,qa,[r.w||""]));
+  const data=rows.map((r,i)=>{
+    const T=id=>r.tw[id]||{};
+    const j30=T("juz30"),j28=T("juz2829"),sam=T("sambung");
+    const txt=o=>o.surat||o.li||"";
+    const sur=o=>txt(o)+(o.ayat?" s/d "+o.ayat:"");
+    return [i+1,r.nama||"",r.asal||"",r.haf||"",
+      r.q1.c==="punya"?(r.q1.t||"punya"):"belum",
+      r.q2.c==="ya"?(r.q2.t||"ada"):"tidak",
+      r.q3.c==="ya"?(r.q3.t||"pernah"):"belum",
+      txt(j30),PRED[j30.pred]||"",j30.ket||"",
+      sur(j28),PRED[j28.pred]||"",j28.ket||"",
+      sur(sam),PRED[sam.pred]||"",sam.ket||""];
   });
-  if(typeof XLSX!=="undefined"){
-    const ws=XLSX.utils.aoa_to_sheet(data);
-    ws["!cols"]=[{wch:22},{wch:20},{wch:14},
-      {wch:16},{wch:10},{wch:12},{wch:26},
-      {wch:16},{wch:10},{wch:12},{wch:26},
-      {wch:16},{wch:10},{wch:12},{wch:26},
-      {wch:26},{wch:22},{wch:24},{wch:14}];
-    const wb=XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb,ws,"Rekap");
-    XLSX.writeFile(wb,"rekap-screening-santri.xlsx");
-    toast("Excel .xlsx tersimpan");
-    return;
-  }
+  exportPlain(data);
+}
+async function exportTemplate(buf,data){
+  const NS="http://schemas.openxmlformats.org/spreadsheetml/2006/main";
+  const CL="ABCDEFGHIJKLMNOP";
+  const zip=await JSZip.loadAsync(buf);
+  const entry=Object.keys(zip.files).find(f=>/^xl\/worksheets\/sheet\d+\.xml$/.test(f));
+  const doc=new DOMParser().parseFromString(await zip.file(entry).async("string"),NS);
+  const sheetData=doc.getElementsByTagNameNS(NS,"sheetData")[0];
+  const tplRow=doc.getElementsByTagNameNS(NS,"row")[2];            // baris-3: 16 sel kosong sudah bergaya
+  const sRef=tplRow?(tplRow.getElementsByTagNameNS(NS,"c")[0].getAttribute("s")||"1"):"1";
+  data.forEach((vals,k)=>{
+    const rn=3+k;
+    let row=doc.getElementsByTagNameNS(NS,"row")[rn-1];
+    if(!row){
+      row=tplRow?tplRow.cloneNode(true):doc.createElementNS(NS,"row");
+      row.setAttribute("r",String(rn));row.setAttribute("spans","1:16");
+      if(tplRow)Array.from(row.getElementsByTagNameNS(NS,"c")).forEach((c,j)=>c.setAttribute("r",CL[j]+rn));
+      else for(let j=0;j<16;j++){const c=doc.createElementNS(NS,"c");c.setAttribute("r",CL[j]+rn);c.setAttribute("s",sRef);row.appendChild(c)}
+      sheetData.appendChild(row);
+    }
+    const cells=row.getElementsByTagNameNS(NS,"c");
+    vals.forEach((v,j)=>{
+      const cell=cells[j];if(!cell)return;
+      while(cell.firstChild)cell.removeChild(cell.firstChild);
+      if(v===""||v==null){cell.removeAttribute("t");return}
+      if(typeof v==="number"){cell.removeAttribute("t");const el=doc.createElementNS(NS,"v");el.textContent=String(v);cell.appendChild(el);return}
+      cell.setAttribute("t","inlineStr");
+      const is=doc.createElementNS(NS,"is"),tx=doc.createElementNS(NS,"t");
+      tx.textContent=String(v);is.appendChild(tx);cell.appendChild(is);
+    });
+  });
+  Array.from(doc.getElementsByTagNameNS(NS,"row")).forEach(rowEl=>{if(+rowEl.getAttribute("r")>2+data.length)rowEl.parentNode.removeChild(rowEl)});
+  const dim=doc.getElementsByTagNameNS(NS,"dimension")[0];
+  if(dim)dim.setAttribute("ref","A1:P"+(2+data.length));
+  zip.file(entry,new XMLSerializer().serializeToString(doc));
+  const blob=await zip.generateAsync({type:"blob"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download="rekap-screening-santri.xlsx";a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+function exportPlain(data){
+  if(typeof JSZip==="undefined"){plainOrCsv(data);return}
+  (async()=>{
+    try{
+      const res=await fetch(encodeURI("template rekapan.xlsx"),{cache:"no-store"});
+      if(res.ok){await exportTemplate(await res.arrayBuffer(),data);toast("Excel .xlsx (template rekapan) ✓");return}
+    }catch(e){}
+    plainOrCsv(data);
+  })();
+}
+function plainOrCsv(data){
+  if(typeof XLSX!=="undefined"){exportPlainXlsx(data);toast("Excel .xlsx tersimpan");return}
+  exportCsv(data);
+}
+function exportPlainXlsx(data){
+  const h1=["NO","Nama Santri","Asal Skolah","Hafalan","Wawancara","","","Juz 30","","","Juz 28-29","","","Sambung ayat","",""];
+  const h2=["","","","","target","saudara","TPA","Surat","Predikat","Keterangan","Surat","Predikat","Keterangan","Surat","Predikat","Keterangan"];
+  const ws=XLSX.utils.aoa_to_sheet([h1,h2,...data]);
+  const m=(r1,c1,r2,c2)=>({s:{r:r1,c:c1},e:{r:r2,c:c2}});
+  ws["!merges"]=[m(0,0,1,0),m(0,1,1,1),m(0,2,1,2),m(0,3,1,3),m(0,4,0,6),m(0,7,0,9),m(0,10,0,12),m(0,13,0,15)];
+  ws["!cols"]=[{wch:6},{wch:18},{wch:16},{wch:9},{wch:8},{wch:11},{wch:7},{wch:10},{wch:11},{wch:14},{wch:10},{wch:11},{wch:14},{wch:10},{wch:11},{wch:14}];
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,"Rekap");
+  XLSX.writeFile(wb,"rekap-screening-santri.xlsx");
+}
+function exportCsv(data){
   const csv="\uFEFF"+data.map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
   const a=document.createElement("a");
   a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(csv);
