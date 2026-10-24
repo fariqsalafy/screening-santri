@@ -321,7 +321,7 @@ tr.detail-row td{padding:0;background:var(--bg2)}
       Excel .xlsx</button>
     <button class="mini-btn" onclick="openSet()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a4 4 0 0 0 0-8z"/></svg>
-      Sinkron GitHub</button>
+      Sinkron Sheet</button>
   </div>
 
   <div class="table-wrap">
@@ -348,13 +348,12 @@ tr.detail-row td{padding:0;background:var(--bg2)}
 
 <div class="modal" id="mSet" hidden>
   <div class="m-card">
-    <h3>Pengaturan Sinkron GitHub</h3>
-    <p class="m-note">Data disimpan sebagai <b>data.json</b> di repo ini. Agar tiap device bisa ikut menulis, tempel Personal Access Token (fine-grained) yang punya izin <b>Contents: Read &amp; Write</b> untuk repo <b>fariqsalafy/screening-santri</b>. Token hanya tersimpan di device kamu.</p>
-    <a class="m-link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Buat token di GitHub &amp;rarr;</a>
-    <div class="fld"><label>Token</label><input id="inToken" type="password" placeholder="github_pat_…" autocomplete="off"></div>
+    <h3>Pengaturan Sinkron Google Sheets</h3>
+    <p class="m-note">Database memakai <b>Google Spreadsheet</b> via Apps Script Web App (<b>Code.gs</b>). Device lain otomatis sinkron asalkan pakai URL yang sama. Isi ulang <b>Web App URL</b> di bawah kalau kamu deploy spreadsheet baru; kosongkan lalu tekan <b>Bawaan</b> untuk kembali ke URL bawaan.</p>
+    <div class="fld"><label>Web App URL</label><input id="inApi" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></div>
     <div class="m-actions">
-      <button id="btnTokenSave" class="btn btn-gold">Simpan Token</button>
-      <button id="btnTokenOff" class="btn btn-ghost">Hapus</button>
+      <button id="btnApiSave" class="btn btn-gold">Simpan URL</button>
+      <button id="btnApiOff" class="btn btn-ghost">Bawaan</button>
       <button id="btnSetClose" class="btn btn-ghost">Tutup</button>
     </div>
   </div>
@@ -445,7 +444,7 @@ function saveForm(){
     &&val("q1")===""&&val("q2")===""&&val("q3")===""){
     toast("Form masih kosong — isi dulu");return;
   }
-  rows.push({    nama,asal:$("f_asal").value.trim(),haf:$("f_haf").value.trim()||"-",
+  rows.push({_id:uid(),nama,asal:$("f_asal").value.trim(),haf:$("f_haf").value.trim()||"-",
     q1:{c:val("q1")||"-",t:$("f_q1").value.trim()},
     q2:{c:val("q2")||"-",t:$("f_q2").value.trim()},
     q3:{c:val("q3")||"-",t:$("f_q3").value.trim()},
@@ -455,7 +454,7 @@ function saveForm(){
   toast("Tersimpan"+(nama?" — "+nama.split(" ")[0]:""));
   resetForm();
   goTab("rekap");
-  if(token())ghSync(true);
+  apiSync(true);
 }
 function resetForm(){
   $("f_asal").value="";$("f_haf").value="";$("f_q1").value="";$("f_q2").value="";$("f_q3").value="";
@@ -540,57 +539,73 @@ function renderRekap(){
       </td></tr>`;
     }).join("");
   }
-  $("rkFoot").textContent = rows.length?`${rows.length} santri · ${token()?"data.json (GitHub) aktif":"data di device ini — pasang token lewat Sinkron GitHub"}`:"";
+  updateSyncUI();
 }
-const API="https://api.github.com/repos/fariqsalafy/screening-santri/contents/data.json";
-const TOKKEY="ss_token";
-const token=()=>{try{return localStorage.getItem(TOKKEY)||""}catch(e){return ""}};
-function b64u(s){const b=new TextEncoder().encode(s);let st="";for(const c of b)st+=String.fromCharCode(c);return btoa(st)}
-function unb64(b){return new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\s|\"/g,"")),c=>c.charCodeAt(0)))}
+const GAPI="https://script.google.com/macros/s/AKfycbwz5S8Z8-ipCSogNuK4MUcAAj2uzcPXcHrypAUYwbuICBV0-QdxYEYezz-OGJnTanGZ3Q/exec";
+const APKEY="ss_api";
+let apiOK=null;
+const apiUrl=()=>{try{return (localStorage.getItem(APKEY)||"").trim()||GAPI}catch(e){return GAPI}};
 function keyOf(r){return r._id||((r.nama||"")+"|"+(r.w||""))}
 function mergeRows(a,b){const m=new Map();[...(a||[]),...(b||[])].forEach(r=>m.set(keyOf(r),r));return [...m.values()]}
-function openSet(){$("inToken").value=token();$("mSet").hidden=false}
+function uid(){return "r"+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function openSet(){$("inApi").value=apiUrl();$("mSet").hidden=false}
 document.addEventListener("DOMContentLoaded",()=>{
   $("btnSetClose").onclick=()=>$("mSet").hidden=true;
-  $("btnTokenSave").onclick=()=>{
-    const t=$("inToken").value.trim();
-    try{localStorage.setItem(TOKKEY,t)}catch(e){}
+  $("btnApiSave").onclick=()=>{
+    const t=$("inApi").value.trim();
+    try{if(t&&t!==GAPI)localStorage.setItem(APKEY,t);else localStorage.removeItem(APKEY)}catch(e){}
     updateSyncUI();$("mSet").hidden=true;
-    toast(t?"Token siap — data akan nulis ke data.json":"Token dikosongkan");
-    if(t)ghSync(true);
+    toast("URL Sheets disimpan — sinkron…");
+    apiSync(true);
   };
-  $("btnTokenOff").onclick=()=>{
-    try{localStorage.removeItem(TOKKEY)}catch(e){}
-    $("inToken").value="";updateSyncUI();toast("Token dihapus");
+  $("btnApiOff").onclick=()=>{
+    try{localStorage.removeItem(APKEY)}catch(e){}
+    $("inApi").value=GAPI;updateSyncUI();toast("Kembali ke URL bawaan");
   };
 });
-function updateSyncUI(){if($("rkFoot"))$("rkFoot").textContent=rows.length?`${rows.length} santri · ${token()?"data.json (GitHub) aktif":"data di device ini — pasang token lewat Sinkron GitHub"}`:""}
-async function ghSync(msg){
-  const t=token();if(!t)return false;
-  const H={Authorization:"Bearer "+t,Accept:"application/vnd.github+json"};
-  let sha=null,cur=null;
+function updateSyncUI(){if($("rkFoot"))$("rkFoot").textContent=rows.length?`${rows.length} santri · ${apiOK===false?"data di device ini — Google Sheets tidak terjangkau":"database via Google Sheets"}`:""}
+async function tryJson(u){try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)return null;const j=await r.json();return Array.isArray(j)?j:null}catch(e){return null}}
+async function fetchLegacy(){return await tryJson("data.json")||await tryJson("https://raw.githubusercontent.com/fariqsalafy/screening-santri/main/data.json")}
+const gErr=(r,j)=>(j&&j.error)||(j?"respon tak dikenal":"HTTP "+r.status);
+async function gGet(){
+  const u=apiUrl()+(apiUrl().includes("?")?"&":"?")+"action=list";
+  const r=await fetch(u,{cache:"no-store"});
+  const j=await r.json().catch(()=>null);
+  if(!j||!j.ok)throw new Error(gErr(r,j));
+  return j.rows||[];
+}
+async function gPost(payload){
+  const r=await fetch(apiUrl(),{method:"POST",body:JSON.stringify(payload)});
+  const j=await r.json().catch(()=>null);
+  if(!j||!j.ok)throw new Error(gErr(r,j));
+  return j;
+}
+async function apiSync(msg){
   try{
-    const res=await fetch(API,{headers:H});
-    if(res.ok){const j=await res.json();sha=j.sha;cur=JSON.parse(unb64(j.content))}
-    else if(res.status!==404){const j=await res.json().catch(()=>null);if(msg)toast("Gagal ambil data.json: "+((j&&j.message)||res.status));return false}
-  }catch(e){if(msg)toast("Gagal hubungi GitHub: "+e.message);return false}
-  if(Array.isArray(cur)){rows=mergeRows(cur,rows);persist()}
-  const body={message:"Update data.json — screening "+new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"short",year:"numeric"}),content:b64u(JSON.stringify(rows,null,2))};
-  if(sha)body.sha=sha;
+    const remote=await gGet();
+    apiOK=true;
+    if(remote.length)rows=mergeRows(remote,rows);
+    else{
+      const legacy=await fetchLegacy();
+      if(legacy&&legacy.length)rows=mergeRows(legacy,rows);
+      if(rows.length)rows=(await gPost({action:"merge",rows})).rows||rows;
+    }
+    persist();renderRekap();
+    if(msg)toast("Sinkron ✓ — "+rows.length+" santri di Sheets");
+    return true;
+  }catch(e){apiOK=false;if(msg)toast("Gagal sinkron Sheets: "+e.message);return false}
+}
+async function apiDelete(r){
   try{
-    const p=await fetch(API,{method:"PUT",headers:H,body:JSON.stringify(body)});
-    if(p.ok){renderRekap();if(msg)toast("data.json diperbarui ✓");return true}
-    const j=await p.json().catch(()=>null);
-    if(msg)toast("Gagal nulis data.json: "+((j&&j.message)||p.status));
-  }catch(e){if(msg)toast("Gagal hubungi GitHub: "+e.message)}
-  return false;
+    const j=await gPost({action:"delete",_id:r._id||"",nama:r.nama||"",w:r.w||""});
+    if(j.rows){rows=j.rows;persist();renderRekap()}
+  }catch(e){}
 }
 async function boot(){
-  const tryFetch=async u=>{try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)return null;return await r.json()}catch(e){return null}};
-  let remote=await tryFetch("data.json");
-  if(!remote)remote=await tryFetch("https://raw.githubusercontent.com/fariqsalafy/screening-santri/main/data.json");
-  if(Array.isArray(remote)&&remote.length){rows=mergeRows(remote,rows);persist()}
-  if(token())await ghSync(false);
+  if(!await apiSync(false)){
+    const legacy=await fetchLegacy();
+    if(legacy&&legacy.length){rows=mergeRows(legacy,rows);persist()}
+  }
   updateSyncUI();renderRekap();
 }
 fillSelects();renderRekap();boot();
@@ -602,9 +617,10 @@ function toggleDetail(id,tr){
   if(!isShow){el.style.display="";tr.classList.add("open")}
 }
 function delRow(i){
-  if(!confirm("Hapus data "+(rows[i].nama||"santri ini")+"?"))return;
+  const r=rows[i];
+  if(!confirm("Hapus data "+(r.nama||"santri ini")+"?"))return;
   rows.splice(i,1);persist();renderRekap();toast("Data dihapus");
-  if(token())ghSync(true);
+  apiDelete(r);
 }
 function exportExcel(){
   const head=["Nama","Asal Sekolah","Jumlah Hafalan",
