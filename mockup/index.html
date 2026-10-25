@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pilih Tema Terang — Screening Santri</title>
+<style>
+:root{--ink:#2A3040;--sub:#77808F;--line:#E6E9F0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:#F7F8FB;color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px 18px}
+.box{max-width:760px;width:100%}
+h1{font-size:22px;font-weight:800;text-align:center}
+p.sub{text-align:center;color:var(--sub);font-size:13.5px;margin:8px 0 24px;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+a.card{display:block;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 16px;text-decoration:none;color:inherit;box-shadow:0 4px 18px rgba(30,40,70,.06);transition:.15s}
+a.card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(30,40,70,.12)}
+.sw{height:64px;border-radius:12px;margin-bottom:12px;position:relative;overflow:hidden;border:1px solid rgba(0,0,0,.05)}
+.sw::after{content:"";position:absolute;left:14px;top:14px;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--a1),var(--a2));box-shadow:0 4px 12px rgba(0,0,0,.18)}
+a.card h2{font-size:15px;font-weight:800}
+a.card p{font-size:12px;color:var(--sub);margin-top:5px;line-height:1.55}
+.tag{display:inline-block;margin-top:10px;font-size:10.5px;font-weight:800;letter-spacing:.4px;color:var(--sub);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+.note{margin-top:22px;text-align:center;font-size:12px;color:var(--sub);line-height:1.7}
+@media (max-width:640px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>🎨 Pilih Tema Terang</h1>
+<p class="sub">Tiga mockup dengan isi &amp; layout yang sama persis — hanya palet warnanya yang berbeda.<br>Buka satu-satu, bandingkan, lalu bilang nomor berapa yang cocok (boleh juga minta campuran/penyesuaian).</p>
+<div class="grid">
+  <a class="card" href="1-pasir-emas.html" style="--a1:#D9A83C;--a2:#F0CC66">
+    <div class="sw" style="background:linear-gradient(160deg,#F8F4EA,#FDFBF5)"></div>
+    <h2>1 · Pasir &amp; Emas</h2>
+    <p>Hangat &amp; hangat kalem. Masih membawa karakter emas seperti aplikasi lama, tapi latar terang cerah.</p>
+    <span class="tag">LEMBUT · KLASIK</span>
+  </a>
+  <a class="card" href="2-mint-emerald.html" style="--a1:#17A57F;--a2:#4AC79B">
+    <div class="sw" style="background:linear-gradient(160deg,#EFF9F4,#FBFEFC)"></div>
+    <h2>2 · Mint &amp; Emerald</h2>
+    <p>Hijau segar khas nuansa tahfidz. Rasa tenang, bersih, dan "mu" untuk aplikasi pondok/TPA.</p>
+    <span class="tag">SEGAR · NATURAL</span>
+  </a>
+  <a class="card" href="3-langit-indigo.html" style="--a1:#5468F2;--a2:#8291F7">
+    <div class="sw" style="background:linear-gradient(160deg,#F2F5FC,#FCFDFF)"></div>
+    <h2>3 · Langit &amp; Indigo</h2>
+    <p>Biru-indigo bersih khas aplikasi sekolah modern. Terasa formal, rapi, dan fokus ke data.</p>
+    <span class="tag">FORMAL · RAPI</span>
+  </a>
+</div>
+<p class="note">Warna badge predikat (Sangat Baik / Baik / Cukup / Perlu Diulang) sengaja dibuat sama di ketiga varian agar mudah dibandingkan.<br>Semua data di mockup hanyalah contoh — bukan data santri asli.</p>
+</div>
+</body>
+</html>

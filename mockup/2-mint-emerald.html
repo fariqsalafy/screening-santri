@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mockup 2 — Mint & Emerald</title>
+<style>
+:root{
+  --bg:#EFF9F4; --bg2:#FFFFFF; --bg3:#F7FCF9;
+  --border:#DCEEE4; --border2:#C8E3D5;
+  --text:#1E3B2F; --text2:#5E7D6E; --text3:#90AC9E;
+  --a1:#17A57F; --a2:#4AC79B; --on-a:#FFFFFF;
+  --th:#E8F6EF; --th-t:#2E7D5F; --tbl-b:#DCEEE4;
+  --focus:#149C7C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 20px 110px}
+.theme-chip{position:sticky;top:10px;z-index:60;display:inline-block;margin-left:auto;background:var(--bg2);border:1px solid var(--border2);color:var(--text2);border-radius:999px;padding:6px 14px;font-size:11.5px;font-weight:800;letter-spacing:.4px;box-shadow:0 4px 14px rgba(23,165,127,.08)}
+header{display:flex;align-items:center;gap:14px;margin:8px 0 16px}
+.logo{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--on-a);box-shadow:0 6px 18px rgba(23,165,127,.25)}
+.logo svg{width:27px;height:27px}
+.brand h1{font-size:20px;font-weight:800;letter-spacing:.2px}
+.brand p{font-size:12.5px;color:var(--text2);margin-top:3px}
+.tabs{display:flex;gap:8px;background:var(--bg3);border:1px solid var(--border);padding:6px;border-radius:14px;margin:6px 0 16px}
+.tabs button{flex:1;padding:11px 12px;border-radius:10px;border:none;background:transparent;color:var(--text2);font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit}
+.tabs button.active{background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--on-a);box-shadow:0 3px 14px rgba(23,165,127,.28)}
+.banner{display:flex;gap:10px;align-items:center;padding:11px 14px;border:1px dashed var(--border2);border-radius:12px;font-size:12.5px;color:var(--text2);background:var(--bg3);margin-bottom:16px}
+.banner svg{width:16px;height:16px;flex-shrink:0;color:var(--text3)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:15px 8px 13px;text-align:center;position:relative;overflow:hidden;box-shadow:0 3px 12px rgba(23,165,127,.06)}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--sc)}
+.stat .n{font-size:25px;font-weight:800}
+.stat .l{font-size:10.5px;color:var(--text2);font-weight:700;letter-spacing:.4px;text-transform:uppercase;margin-top:3px}
+.rekap-tools{display:flex;gap:9px;margin-bottom:13px;flex-wrap:wrap}
+.search{flex:1;display:flex;align-items:center;gap:9px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:0 13px;min-width:230px}
+.search input{border:none;outline:none;padding:11px 0;font-size:13.5px;flex:1;background:transparent;color:var(--text);font-family:inherit}
+.search svg{width:16px;height:16px;color:var(--text3);flex-shrink:0}
+.sel{background:var(--bg2);border:1px solid var(--border);color:var(--text2);font-weight:700;font-size:12.5px;border-radius:12px;padding:11px 13px;font-family:inherit}
+.mini-btn{display:inline-flex;align-items:center;gap:7px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);font-weight:700;font-size:12.5px;border-radius:12px;padding:11px 14px;cursor:pointer;font-family:inherit}
+.mini-btn svg{width:15px;height:15px}
+.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:auto;box-shadow:0 4px 16px rgba(23,165,127,.06)}
+table{width:100%;border-collapse:collapse;min-width:1150px}
+th,td{padding:9px 10px;border:1px solid var(--tbl-b);text-align:center;vertical-align:top}
+thead th{background:var(--th);color:var(--th-t);font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap}
+tbody td{font-size:12.5px}
+tbody tr:nth-child(even){background:var(--bg3)}
+tbody tr:hover{background:#F2FBF7}
+.t-nama{text-align:left;font-weight:700;font-size:13px;white-space:nowrap}
+.t-asal,.t-lain{text-align:left;color:var(--text2);font-size:12px;white-space:nowrap}
+.t-ket{text-align:left;color:var(--text2);font-size:11.5px}
+.badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:10.5px;font-weight:800;white-space:nowrap;border:1px solid}
+.badge.sangat{background:#FCF1D2;color:#96700A;border-color:#EFD9A0}
+.badge.baik{background:#DFF6EA;color:#128159;border-color:#B9E6CE}
+.badge.cukup{background:#E9F0FD;color:#3F66BE;border-color:#C9D8F5}
+.badge.ulang{background:#FCE7E7;color:#C43F3F;border-color:#F3C3C3}
+.t-aksi{white-space:nowrap}
+.bt-act{opacity:.5;transition:.15s;border-radius:8px;padding:3px 9px;font-family:inherit;font-size:10.5px;font-weight:700;cursor:pointer;white-space:nowrap;border:1px solid}
+.bte{color:#0E8A74;border-color:#B7E4DA;background:#E8F8F3}
+.btx{color:#C24343;border-color:#F3C3C3;background:#FCEAEA}
+tbody tr:hover .bt-act{opacity:1}
+.foot{text-align:center;font-size:11px;color:var(--text3);padding:10px 0 2px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;margin-top:18px;box-shadow:0 4px 16px rgba(23,165,127,.06);overflow:hidden}
+.card-head{display:flex;align-items:center;gap:11px;padding:14px 18px;background:var(--bg3);border-bottom:1px solid var(--border)}
+.step{width:26px;height:26px;border-radius:9px;background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--on-a);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px}
+.card-head h2{font-size:14.5px;font-weight:800}
+.card-head .hint{font-size:11px;color:var(--text2);margin-top:2px}
+.card-body{padding:16px 18px 18px}
+.flds{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:12px}
+.fld label{display:block;font-size:11.5px;font-weight:800;color:var(--text2);margin-bottom:5px;letter-spacing:.3px}
+.fld input{width:100%;border:1px solid var(--border2);border-radius:11px;padding:11px 12px;font-size:13.5px;background:#fff;color:var(--text);font-family:inherit;outline:none;transition:.15s}
+.fld input:focus{border-color:var(--focus);box-shadow:0 0 0 3px rgba(23,165,127,.14)}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+.chip{padding:9px 14px;border-radius:999px;border:1px solid var(--border2);background:#fff;color:var(--text2);font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit}
+.chip.active{background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--on-a);border-color:transparent}
+.seg{display:inline-flex;gap:6px}
+.seg button{padding:8px 13px;border-radius:10px;border:1px solid var(--border2);background:#fff;color:var(--text2);font-weight:700;font-size:12px;cursor:pointer;font-family:inherit}
+.actions{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);padding:11px 20px;box-shadow:0 -6px 22px rgba(23,165,127,.09);z-index:80}
+.actions-inner{max-width:1180px;margin:0 auto;display:flex;gap:10px}
+.btn{flex:1;padding:13px;border-radius:12px;border:none;font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:9px}
+.btn-gold{background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--on-a);box-shadow:0 4px 18px rgba(23,165,127,.3)}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+@media (max-width:640px){
+  .flds{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="theme-chip">MOCKUP · Varian 2 — Mint &amp; Emerald</div>
+<header>
+  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+  <div class="brand"><h1>Screening Santri Baru</h1><p>Tes Seleksi Tahfidz · form input &amp; rekap data</p></div>
+</header>
+<nav class="tabs">
+  <button>Form Santri</button>
+  <button class="active">Rekap Data</button>
+</nav>
+<div class="banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>1 santri = 1 form. Tilawah dinilai di 3 kategori + wawancara. Hasil langsung muncul di tab Rekap, tersimpan otomatis ke Google Sheets.</div>
+<div class="stats">
+  <div class="stat" style="--sc:#17A57F"><div class="n">18</div><div class="l">Santri</div></div>
+  <div class="stat" style="--sc:#128159"><div class="n">6</div><div class="l">Sangat Baik</div></div>
+  <div class="stat" style="--sc:#3F66BE"><div class="n">8</div><div class="l">Baik + Cukup</div></div>
+  <div class="stat" style="--sc:#C43F3F"><div class="n">4</div><div class="l">Perlu Diulang</div></div>
+</div>
+<div class="rekap-tools">
+  <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg><input placeholder="Cari nama / asal sekolah…"></div>
+  <select class="sel"><option>Semua predikat</option></select>
+  <button class="mini-btn">⬇ Excel .xlsx</button>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr>
+<th rowspan="2">NO</th><th rowspan="2">Nama Santri</th><th rowspan="2">Asal</th><th rowspan="2">Hafalan</th>
+<th colspan="3">Wawancara</th><th colspan="3">Juz 30</th><th colspan="3">Juz 28–29</th><th colspan="3">Sambung Ayat</th><th rowspan="2">Aksi</th>
+</tr><tr><th>Target</th><th>Saudara</th><th>TPA</th><th>Surat</th><th>Predikat</th><th>Ket.</th><th>Surat</th><th>Predikat</th><th>Ket.</th><th>Surat</th><th>Predikat</th><th>Ket.</th></tr></thead>
+<tbody>
+<tr><td>1</td><td class="t-nama">Ahmad Fauzan Hakim</td><td class="t-asal">Mts Miftahul Huda</td><td class="t-lain">1 juz</td><td class="t-lain">selesai juz 30 sebelum kelas 9</td><td class="t-lain">Kakak — khatam 5 juz</td><td class="t-lain">TPA Nurul Huda, 1 th</td><td>Al Naba</td><td><span class="badge sangat">Sangat Baik</span></td><td class="t-ket">Tajwid bagus, suara jernih</td><td>Al Mulk s/d 12</td><td><span class="badge baik">Baik</span></td><td class="t-ket">Lancar</td><td>Al Haqoh s/d 31</td><td><span class="badge baik">Baik</span></td><td class="t-ket">Mulus</td><td class="t-aksi"><button class="bt-act bte">Edit</button> <button class="bt-act btx">Hapus</button></td></tr>
+<tr><td>2</td><td class="t-nama">Sarah Kirana Amalia</td><td class="t-asal">MI Aisyah</td><td class="t-lain">3 juz</td><td class="t-lain">target 10 juz</td><td class="t-lain">Adik — hafal juz 30</td><td class="t-lain">Iqro Rahma</td><td>Al Mutaffifin</td><td><span class="badge sangat">Sangat Baik</span></td><td class="t-ket">Hafalan lekat</td><td>Al Qiyamah s/d 20</td><td><span class="badge sangat">Sangat Baik</span></td><td class="t-ket">Sampai 20 tanpa bongkah</td><td>At Thalaq s/d 9</td><td><span class="badge baik">Baik</span></td><td class="t-ket">Sedikit cepat</td><td class="t-aksi"><button class="bt-act bte">Edit</button> <button class="bt-act btx">Hapus</button></td></tr>
+<tr><td>3</td><td class="t-nama">Muhammad Rizki Pratama</td><td class="t-asal">SDN 2 Modo</td><td class="t-lain">belum hafal</td><td class="t-lain">tilawah rutin</td><td class="t-lain">Tidak ada</td><td class="t-lain">Belum pernah</td><td>Al Fajr</td><td><span class="badge cukup">Cukup</span></td><td class="t-ket">Makhraj th–dz perlu dibiasakan</td><td>Al Mujadalah s/d 25</td><td><span class="badge baik">Baik</span></td><td class="t-ket">Sampai 25 lancar</td><td>Al Insan s/d 31</td><td><span class="badge cukup">Cukup</span></td><td class="t-ket">Kembali sebentar di 31</td><td class="t-aksi"><button class="bt-act bte">Edit</button> <button class="bt-act btx">Hapus</button></td></tr>
+<tr><td>4</td><td class="t-nama">Naila Syakira Putri</td><td class="t-asal">Iqro Rahma</td><td class="t-lain">Juz 30 (sebagian)</td><td class="t-lain">ingin khatam 1 juz</td><td class="t-lain">Kakak — hafal juz 30</td><td class="t-lain">Iqro Rahma, 1 th</td><td>Ad Dhuha</td><td><span class="badge baik">Baik</span></td><td class="t-ket">Kadang mbalek di ayat 11</td><td>Al Jumuah s/d 11</td><td><span class="badge baik">Baik</span></td><td class="t-ket">Lancar sampai 11</td><td>Al Qoriah s/d 8</td><td><span class="badge cukup">Cukup</span></td><td class="t-ket">Makhraj kurang kenceng</td><td class="t-aksi"><button class="bt-act bte">Edit</button> <button class="bt-act btx">Hapus</button></td></tr>
+<tr><td>5</td><td class="t-nama">Umar Hanif Abdullah</td><td class="t-asal">SDN 1 Konco</td><td class="t-lain">–</td><td class="t-lain">Belum ada</td><td class="t-lain">Tidak ada</td><td class="t-lain">Belum pernah</td><td>As Syam</td><td><span class="badge ulang">Perlu Diulang</span></td><td class="t-ket">Masih baca kalangan</td><td>Al Mulk s/d 5</td><td><span class="badge cukup">Cukup</span></td><td class="t-ket">Sambung 5 ayat berantam</td><td>An Naziat s/d 2</td><td><span class="badge ulang">Perlu Diulang</span></td><td class="t-ket">Belum ufalan</td><td class="t-aksi"><button class="bt-act bte">Edit</button> <button class="bt-act btx">Hapus</button></td></tr>
+</tbody>
+</table>
+</div>
+<p class="foot">8 santri · tampilan realtime dari Google Sheets</p>
+<div class="card">
+  <div class="card-head"><div class="step">1</div><div><h2>Identitas Santri</h2><div class="hint">Semua isian opsional — isi yang tersedia saja</div></div></div>
+  <div class="card-body">
+    <div class="flds">
+      <div class="fld"><label>NAMA LENGKAP</label><input value="Ahmad Fauzan Hakim"></div>
+      <div class="fld"><label>ASAL SEKOLAH / TPA</label><input value="Mts Miftahul Huda"></div>
+    </div>
+    <div class="flds">
+      <div class="fld"><label>APAKAH PUNYA TARGET HAFALAN?</label><div class="chips" style="margin:0"><button class="chip active">Punya target</button><button class="chip">Belum ada</button></div></div>
+      <div class="fld"><label>PREDIKAT TILAWAH (JUZ 30)</label><div class="seg"><button class="chip active">Sangat Baik</button><button class="chip">Baik</button><button class="chip">Cukup</button><button class="chip">Perlu Diulang</button></div></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="actions"><div class="actions-inner">
+  <button class="btn btn-gold">✓ Simpan &amp; Lanjut</button>
+  <button class="btn btn-ghost">Rekap</button>
+</div></div>
+</body>
+</html>
