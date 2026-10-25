@@ -530,7 +530,6 @@ function renderRekap(){
 }
 const GAPI="https://script.google.com/macros/s/AKfycbwz5S8Z8-ipCSogNuK4MUcAAj2uzcPXcHrypAUYwbuICBV0-QdxYEYezz-OGJnTanGZ3Q/exec";
 const APKEY="ss_api";
-let lastRemote=new Set();
 let apiOK=null;
 const apiUrl=()=>{try{return (localStorage.getItem(APKEY)||"").trim()||GAPI}catch(e){return GAPI}};
 function keyOf(r){return r._id||((r.nama||"")+"|"+(r.w||""))}
@@ -562,19 +561,12 @@ async function apiSync(msg){
       try{const legacy=await fetchLegacy();if(legacy&&legacy.length)rows=mergeRows(legacy,rows)}catch(e){}
     }
     const before=JSON.stringify(rows);
-    const rkPrev=lastRemote;
-    const rk=new Set(remote.map(keyOf));
-    const fresh=rows.filter(r=>!rk.has(keyOf(r))&&!rkPrev.has(keyOf(r)));
-    let all=remote;
-    if(fresh.length){
-      const j=await gPost({action:"merge",rows:fresh});
-      all=(j&&j.rows)?j.rows:remote.concat(fresh);
+    if(rows.length){
+      const j=await gPost({action:"merge",rows});
+      rows=(j&&j.rows)?j.rows:rows;
+    }else if(remote.length){
+      rows=remote;
     }
-    const keep=[...all];
-    const kk=new Set(all.map(keyOf));
-    rows.forEach(r=>{const k=keyOf(r);if(!kk.has(k)&&!rkPrev.has(k))keep.push(r)});
-    lastRemote=kk;
-    rows=keep;
     const changed=JSON.stringify(rows)!==before;
     if(changed){persist();renderRekap()}
     if(msg)toast(changed?"Sinkron ✓ — data diperbarui":"Data sudah versi terbaru");

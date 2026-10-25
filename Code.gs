@@ -23,6 +23,7 @@
  */
 
 const SHEET_NAME = 'data';
+const TOMB_NAME = 'deleted';
 const SECRET = '';
 
 const HEADERS = [
@@ -155,11 +156,13 @@ function keyOf_(r) {
 }
 
 function mergeRows_(incoming) {
-  const objs = readRows_();
+  const tomb = tombs_();
+  const objs = readRows_().filter(o => !tomb['t:' + keyOf_(o)]);
   const map = {};
   objs.forEach((o, i) => { map[keyOf_(o)] = i; });
   incoming.forEach(o => {
     const k = keyOf_(o);
+    if (tomb['t:' + k]) return;           // sudah dihapus di tempat lain — jangan hidupkan ulang
     if (map[k] != null) objs[map[k]] = o;
     else { map[k] = objs.length; objs.push(o); }
   });
@@ -171,12 +174,33 @@ function deleteRow_(body) {
   const k = body._id ? 'i:' + body._id
     : (body.nama || body.w) ? 'k:' + (body.nama || '') + '|' + (body.w || '') : null;
   if (!k) return { ok: false, error: 'kirim _id, atau nama & w' };
-  let objs = readRows_();
-  const before = objs.length;
-  objs = objs.filter(o => keyOf_(o) !== k);
-  if (objs.length === before) return { ok: false, error: 'baris tidak ditemukan', rows: objs };
+  const objs = readRows_().filter(o => keyOf_(o) !== k);
   writeRows_(objs);
+  tombAdd_(k);                             // catat sebagai dihapus — cegah restore dari salinan device lain
   return { ok: true, rows: readRows_() };
+}
+
+/* catat key yang dihapus pada sheet "deleted" */
+function tombs_() {
+  const ss = SpreadsheetApp.getActive();
+  const sh = ss.getSheetByName(TOMB_NAME);
+  if (!sh || sh.getLastRow() < 2) return {};
+  const m = {};
+  sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues().forEach(r => {
+    const v = String(r[0]).trim();
+    if (v) m['t:' + v] = 1;
+  });
+  return m;
+}
+
+function tombAdd_(k) {
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName(TOMB_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(TOMB_NAME);
+    sh.appendRow(['key', 'at']);
+  }
+  sh.appendRow([k, new Date().toISOString()]);
 }
 
 /* ——— util request/response ——————————————————————— */
