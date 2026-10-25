@@ -399,13 +399,13 @@ const DEMO=[
  {nama:"Fatkhur Rohman Abidin",asal:"Pondok Al Habib",haf:"5 juz",q1:{c:"punya",t:"Lanjut sampai 10 juz"},q2:{c:"ya",t:"Abang — khatam 15 juz"},q3:{c:"ya",t:"Pondok Al Habib, 1 tahun"},tw:{juz30:{surat:"",ayat:"",li:"Al Kahfi",pred:"sangat",ket:"Panjang penuh, sangat lancar"},juz2829:{surat:"Al Mujadalah",ayat:"25",li:"",pred:"baik",ket:"Sampai 25 lancar"},sambung:{surat:"Al Haqoh",ayat:"31",li:"",pred:"baik",ket:"Kembali sebentar di 31"}},w:"23 Okt, 20.01"},
  {nama:"Kayla Aulia Zahra",asal:"TK Aisyiyah",haf:"-",q1:{c:"belum",t:""},q2:{c:"tidak",t:""},q3:{c:"tidak",t:""},tw:{juz30:{surat:"",ayat:"",li:"Al Adiyat",pred:"baik",ket:"Untuk usia sudah bagus"},juz2829:{surat:"Al Mulk",ayat:"7",li:"",pred:"baik",ket:"Dibantu 1x"},sambung:{surat:"Al Insan",ayat:"4",li:"",pred:"cukup",ket:"Makhraj perlu dipelankan"}},w:"23 Okt, 20.07"}
 ];
-const KEY="ss_rows_v3";
-let rows;
-try{rows=JSON.parse(localStorage.getItem(KEY))}catch(e){rows=null}
-if(!Array.isArray(rows)||!rows.length)rows=DEMO.slice();
+try{localStorage.removeItem("ss_rows_v3")}catch(e){}   // cache baris lama dibuang — tampilan selalu dari Sheets
+const OBKEY="ss_outbox";
+const loadOutbox=()=>{try{const a=JSON.parse(localStorage.getItem(OBKEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}};
+const saveOutbox=a=>{try{localStorage.setItem(OBKEY,JSON.stringify(a||[]))}catch(e){}};
+let rows=[];
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(rows))}catch(e){}}
 function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2200)}
 function goTab(x){
   $("tabInput").hidden=x!=="input";$("tabRekap").hidden=x!=="rekap";
@@ -460,14 +460,14 @@ function saveForm(){
     &&val("q1")===""&&val("q2")===""&&val("q3")===""){
     toast("Form masih kosong — isi dulu");return;
   }
-  rows.push({_id:uid(),_t:new Date().toISOString(),nama,asal:$("f_asal").value.trim(),haf:$("f_haf").value.trim()||"-",
+  const rec={_id:uid(),_t:new Date().toISOString(),nama,asal:$("f_asal").value.trim(),haf:$("f_haf").value.trim()||"-",
     q1:{c:val("q1")||"-",t:$("f_q1").value.trim()},
     q2:{c:val("q2")||"-",t:$("f_q2").value.trim()},
     q3:{c:val("q3")||"-",t:$("f_q3").value.trim()},
     tw,
-    w:new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"short"})+", "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":")});
-  persist();
-  toast("Tersimpan"+(nama?" — "+nama.split(" ")[0]:""));
+    w:new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"short"})+", "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":")};
+  saveOutbox(loadOutbox().concat(rec));
+  toast("Mengirim"+(nama?" — "+nama.split(" ")[0]:"")+"…");
   resetForm();
   goTab("rekap");
   apiSync(true);
@@ -536,7 +536,7 @@ function keyOf(r){return r._id||((r.nama||"")+"|"+(r.w||""))}
 function mergeRows(a,b){const m=new Map();[...(a||[]),...(b||[])].forEach(r=>m.set(keyOf(r),r));return [...m.values()]}
 const byNew=(a,b)=>String(b._t||"").localeCompare(String(a._t||""));
 function uid(){return "r"+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function updateSyncUI(){if($("rkFoot"))$("rkFoot").textContent=rows.length?`${rows.length} santri · ${apiOK===false?"data di device ini — Google Sheets tidak terjangkau":"database via Google Sheets"}`:""}
+function updateSyncUI(){if($("rkFoot"))$("rkFoot").textContent=apiOK===false?"Tidak terhubung Google Sheets — tampil lagi saat koneksi kembali":(rows.length?`${rows.length} santri · tampilan realtime dari Google Sheets`:"")}
 async function tryJson(u){try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)return null;const j=await r.json();return Array.isArray(j)?j:null}catch(e){return null}}
 async function fetchLegacy(){return await tryJson("data.json")||await tryJson("https://raw.githubusercontent.com/fariqsalafy/screening-santri/main/data.json")}
 const gErr=(r,j)=>(j&&j.error)||(j?"respon tak dikenal":"HTTP "+r.status);
@@ -557,43 +557,45 @@ async function apiSync(msg){
   try{
     const remote=await gGet();
     apiOK=true;
-    if(!remote.length){
-      try{const legacy=await fetchLegacy();if(legacy&&legacy.length)rows=mergeRows(legacy,rows)}catch(e){}
+    let fresh=remote;
+    const outbox=loadOutbox();
+    if(outbox.length){
+      const j=await gPost({action:"merge",rows:outbox});
+      if(j&&j.rows){saveOutbox([]);fresh=j.rows}
+    }
+    if(!fresh.length){
+      try{const legacy=await fetchLegacy();if(legacy&&legacy.length){
+        fresh=mergeRows(legacy,fresh);
+        const j=await gPost({action:"merge",rows:fresh});
+        if(j&&j.rows)fresh=j.rows;
+      }}catch(e){}
     }
     const before=JSON.stringify(rows);
-    if(rows.length){
-      const j=await gPost({action:"merge",rows});
-      rows=(j&&j.rows)?j.rows:rows;
-    }else if(remote.length){
-      rows=remote;
-    }
+    rows=fresh;
     const changed=JSON.stringify(rows)!==before;
-    if(changed){persist();renderRekap()}
-    if(msg)toast(changed?"Sinkron ✓ — data diperbarui":"Data sudah versi terbaru");
+    if(changed)renderRekap();
     updateSyncUI();
+    if(msg)toast(loadOutbox().length?"Menunggu koneksi — akan terkirim otomatis":"Sinkron ✓ — data terbaru dari Sheets");
     return true;
-  }catch(e){apiOK=false;updateSyncUI();if(msg)toast("Gagal sinkron Sheets: "+e.message);return false}
+  }catch(e){apiOK=false;updateSyncUI();if(msg)toast(loadOutbox().length?"Gagal koneksi — data masuk antrian, terkirim saat jaringan balik":"Gagal terhubung Sheets: "+e.message);return false}
 }
 async function apiDelete(r){
   try{
     const j=await gPost({action:"delete",_id:r._id||"",nama:r.nama||"",w:r.w||""});
-    if(j.rows){rows=j.rows;persist();renderRekap()}
-  }catch(e){}
+    if(j&&j.rows){rows=j.rows;renderRekap();toast("Data dihapus — Sheets diperbarui")}
+  }catch(e){toast("Gagal hapus (jaringan) — data tetap tampil, coba lagi")}
 }
 async function boot(){
-  if(!await apiSync(false)){
-    const legacy=await fetchLegacy();
-    if(legacy&&legacy.length){rows=mergeRows(legacy,rows);persist()}
-  }
+  await apiSync(false);
   updateSyncUI();renderRekap();
-  setInterval(()=>{if(!document.hidden)apiSync(false)},30000);
+  setInterval(()=>{if(!document.hidden)apiSync(false)},20000);
 }
 fillSelects();renderRekap();boot();
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)apiSync(false)});
 function delRow(i){
   const r=rows[i];
+  if(!r)return;
   if(!confirm("Hapus data "+(r.nama||"santri ini")+"?"))return;
-  rows.splice(i,1);persist();renderRekap();toast("Data dihapus");
   apiDelete(r);
 }
 function exportExcel(){
