@@ -134,12 +134,16 @@ tbody tr:hover td{background:rgba(232,182,76,.05)}
 .badge.cukup{background:rgba(122,167,255,.13);color:var(--blue);border:1px solid rgba(122,167,255,.3)}
 .badge.ulang{background:rgba(255,122,122,.13);color:var(--red);border:1px solid rgba(255,122,122,.3)}
 .ket-c{color:var(--text2);font-size:12px;max-width:190px;line-height:1.4}
-.t-last{position:relative}
-.row-del{position:absolute;top:50%;right:1px;transform:translateY(-50%);opacity:.38;transition:.15s;
-  border:1px solid rgba(255,122,122,.4);color:var(--red);background:rgba(255,122,122,.08);
-  border-radius:8px;padding:3px 9px;font-family:inherit;font-size:10.5px;font-weight:700;cursor:pointer;white-space:nowrap}
-tbody tr:hover .row-del{opacity:1}
-.row-del:hover{background:rgba(255,122,122,.2)}
+.t-aksi{white-space:nowrap;text-align:center}
+.bt-act{opacity:.42;transition:.15s;border-radius:8px;padding:3px 9px;font-family:inherit;font-size:10.5px;font-weight:700;cursor:pointer;white-space:nowrap;border:1px solid}
+.bte{color:var(--teal);border-color:rgba(61,219,194,.45);background:rgba(61,219,194,.08)}
+.btx{color:var(--red);border-color:rgba(255,122,122,.45);background:rgba(255,122,122,.08)}
+tbody tr:hover .bt-act{opacity:1}
+.bte:hover{background:rgba(61,219,194,.2)}
+.btx:hover{background:rgba(255,122,122,.2)}
+.edit-note{margin:0 0 12px;padding:10px 13px;border:1px solid rgba(232,182,76,.45);background:rgba(232,182,76,.12);border-radius:11px;font-size:12px;color:var(--text2);line-height:1.55}
+.edit-note[hidden]{display:none}
+.edit-note b{color:var(--gold)}
 .empty{text-align:center;padding:46px 20px;color:var(--text3)}
 .empty svg{width:40px;height:40px;margin-bottom:12px;opacity:.5}
 .empty p{font-size:13.5px;line-height:1.6}
@@ -188,7 +192,7 @@ tbody tr:hover .row-del{opacity:1}
   .asal-c,.haf-c,.ws-cell,.wq-c{font-size:11px}
   .badge{padding:2px 7px;font-size:9px}
   .ket-c{font-size:10.5px}
-  .row-del{opacity:1;pointer-events:auto;right:0;padding:4px 8px;font-size:9.5px}
+  .bt-act{opacity:1;padding:3px 6px;font-size:9.5px}
   .rekap-foot{font-size:10.5px}
   .empty{padding:34px 12px}
   .empty p{font-size:12.5px}
@@ -221,6 +225,7 @@ tbody tr:hover .row-del{opacity:1}
 </nav>
 
 <div id="tabInput">
+  <div class="edit-note" id="editNote" hidden></div>
   <div class="banner">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/></svg>
     <div><b>1 santri = 1 form.</b> Tilawah dinilai di 3 kategori (semua wajib diisi) + wawancara. Hasil langsung muncul di tab Rekap, nantinya tersimpan otomatis ke Google Sheets.</div>
@@ -352,6 +357,7 @@ tbody tr:hover .row-del{opacity:1}
         <th colspan="3" class="grp">Juz 30</th>
         <th colspan="3" class="grp">Juz 28-29</th>
         <th colspan="3" class="grp">Sambung Ayat</th>
+        <th rowspan="2" class="grp">Aksi</th>
       </tr><tr>
         <th>Target</th><th>Saudara</th><th>TPA</th>
         <th>Surat</th><th>Predikat</th><th>Keterangan</th>
@@ -366,9 +372,10 @@ tbody tr:hover .row-del{opacity:1}
 
 <div class="actions" id="actionBar">
   <div class="actions-inner">
-    <button class="btn btn-gold" onclick="saveForm()">
+    <button class="btn btn-gold" id="btnSave" onclick="saveForm()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      Simpan &amp; Lanjut</button>
+      <span id="btnSaveLbl">Simpan &amp; Lanjut</span></button>
+    <button class="btn btn-ghost" id="btnCancelEdit" hidden onclick="cancelEdit()">Batal Edit</button>
     <button class="btn btn-ghost" onclick="goTab('rekap')">Rekap</button>
   </div>
 </div>
@@ -460,14 +467,16 @@ function saveForm(){
     &&val("q1")===""&&val("q2")===""&&val("q3")===""){
     toast("Form masih kosong — isi dulu");return;
   }
-  const rec={_id:uid(),_t:new Date().toISOString(),nama,asal:$("f_asal").value.trim(),haf:$("f_haf").value.trim()||"-",
+  const em=editId, ep=editPrev;
+  const rec={_id:em||uid(),_t:new Date().toISOString(),nama,asal:$("f_asal").value.trim(),haf:$("f_haf").value.trim()||"-",
     q1:{c:val("q1")||"-",t:$("f_q1").value.trim()},
     q2:{c:val("q2")||"-",t:$("f_q2").value.trim()},
     q3:{c:val("q3")||"-",t:$("f_q3").value.trim()},
     tw,
-    w:new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"short"})+", "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":")};
+    w:ep?ep.w:(new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"short"})+", "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":"))};
   saveOutbox(loadOutbox().concat(rec));
-  toast("Mengirim"+(nama?" — "+nama.split(" ")[0]:"")+"…");
+  closeEditor();
+  toast(em?("Perubahan "+(nama?nama.split(" ")[0]+" ":"")+"dikirim…"):"Mengirim"+(nama?" — "+nama.split(" ")[0]:"")+"…");
   resetForm();
   goTab("rekap");
   apiSync(true);
@@ -486,13 +495,14 @@ function resetForm(){
 }
 const dimTxt=()=>"<span style='color:var(--text3);font-size:12px'>-</span>";
 const wqCell=(q,no)=>(q.c==="punya"||q.c==="ya")?(q.t?`<span style="color:var(--text)">${esc(q.t)}</span>`:dimTxt()):`<span style="color:var(--text3);font-size:12px">${no}</span>`;
-const catCells=(r,c,last,idx)=>{
+const catCells=(r,c)=>{
   const t=r.tw[c.id]||{};
   const has=t.li||t.surat;
   return `<td class="ws-cell">${has?esc(twName(t))+(t.ayat?" <span style='color:var(--text3);font-weight:400;font-size:11px'>s/d "+esc(t.ayat)+"</span>":""):dimTxt()}</td>`
     +`<td class="badge-c">${t.pred?`<span class="badge ${esc(t.pred)}">${esc(PRED[t.pred])}</span>`:dimTxt()}</td>`
-    +`<td${last?' class="t-last"':''}>${t.ket?`<span class="ket-c">${esc(t.ket)}</span>`:dimTxt()}${last?`<button class="row-del" title="Hapus data ${esc(r.nama||"")}" onclick="event.stopPropagation();delRow(${idx})">Hapus</button>`:""}</td>`;
+    +`<td>${t.ket?`<span class="ket-c">${esc(t.ket)}</span>`:dimTxt()}</td>`;
 };
+const aksiCell=(r,i)=>`<td class="t-aksi"><button class="bt-act bte" onclick="editRow(${i})">Edit</button><button class="bt-act btx" onclick="delRow(${i})">Hapus</button></td>`;
 function renderRekap(){
   const q=$("rkSearch").value.trim().toLowerCase();
   const f=$("rkFilter").value;
@@ -508,7 +518,7 @@ function renderRekap(){
   $("stUlang").textContent=cnt("ulang");
   const tb=$("rkBody");
   if(!list.length){
-    tb.innerHTML=`<tr><td colspan="16"><div class="empty"><p>Belum ada data yang cocok.<br>Hasil form input akan muncul di sini.</p></div></td></tr>`;
+    tb.innerHTML=`<tr><td colspan="17"><div class="empty"><p>Belum ada data yang cocok.<br>Hasil form input akan muncul di sini.</p></div></td></tr>`;
   }else{
     tb.innerHTML=list.map((r,li)=>{
       const i=rows.indexOf(r);
@@ -522,7 +532,8 @@ function renderRekap(){
         <td class="wq-c">${wqCell(r.q3,"belum")}</td>
         ${catCells(r,CATS[0],false)}
         ${catCells(r,CATS[1],false)}
-        ${catCells(r,CATS[2],true,i)}
+        ${catCells(r,CATS[2],false)}
+        ${aksiCell(r,i)}
       </tr>`;
     }).join("");
   }
@@ -597,6 +608,48 @@ function delRow(i){
   if(!r)return;
   if(!confirm("Hapus data "+(r.nama||"santri ini")+"?"))return;
   apiDelete(r);
+}
+let editId=null,editPrev=null;
+function closeEditor(){
+  editId=null;editPrev=null;
+  $("btnSaveLbl").textContent="Simpan & Lanjut";
+  $("btnCancelEdit").hidden=true;
+  $("editNote").hidden=true;
+}
+function cancelEdit(){resetForm();closeEditor();toast("Edit dibatalkan")}
+function setQ(g,onVal,fid,q){
+  const c=q||{};
+  document.querySelectorAll(`.chip[data-g="${g}"]`).forEach(ch=>ch.classList.toggle("active",ch.dataset.v===(c.c||"")));
+  const w=$("w_"+g);
+  if(w)w.classList.toggle("show",(c.c||"")===onVal);
+  $(fid).value=(c.c||"")===onVal?(c.t||""):"";
+}
+function setCat(c,t){
+  const sel=$(c.key+"_surat"),wrap=$("w_"+c.key+"_li");
+  sel.value=t.li?"Lainnya":(t.surat||"");
+  wrap.style.display=sel.value==="Lainnya"?"flex":"none";
+  $(c.key+"_li").value=t.li||"";
+  if(c.ayat)$(c.key+"_ayat").value=t.ayat||"";
+  $(c.key+"_ket").value=t.ket||"";
+  document.querySelectorAll(`.seg[data-cat="${c.id}"] button`).forEach(b=>b.classList.toggle("active",b.dataset.p===(t.pred||"")));
+}
+function editRow(i){
+  const r=rows[i];
+  if(!r)return;
+  editId=r._id||"";editPrev=r;
+  $("f_nama").value=r.nama&&r.nama!=="-"?r.nama:"";
+  $("f_asal").value=r.asal||"";
+  $("f_haf").value=r.haf&&r.haf!=="-"?r.haf:"";
+  setQ("q1","punya","f_q1",r.q1);
+  setQ("q2","ya","f_q2",r.q2);
+  setQ("q3","ya","f_q3",r.q3);
+  CATS.forEach(c=>setCat(c,(r.tw||{})[c.id]||{}));
+  $("editNote").innerHTML="✍ Mode edit: menimpa data <b>"+esc(r.nama||"(tanpa nama)")+"</b>. Tekan <b>Simpan Perubahan</b> setelah selesai, atau <b>Batal Edit</b>.";
+  $("editNote").hidden=false;
+  $("btnSaveLbl").textContent="Simpan Perubahan";
+  $("btnCancelEdit").hidden=false;
+  goTab("input");
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 function exportExcel(){
   const data=[...rows].sort(byNew).map((r,i)=>{
