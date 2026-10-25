@@ -31,7 +31,7 @@ const HEADERS = [
   'j30s', 'j30l', 'j30p', 'j30k',
   'j28s', 'j28a', 'j28l', 'j28p', 'j28k',
   'smbs', 'smba', 'smbl', 'smbp', 'smbk',
-  'w'
+  'w', '_t'
 ];
 
 /** Jalankan sekali setelah paste, untuk authorize + bikin sheet. */
@@ -83,6 +83,12 @@ function ss_() {
     sh.appendRow(HEADERS);
     sh.setFrozenRows(1);
     sh.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
+  } else {
+    // self-heal: jika skema kolom berubah (mis. penambahan kolom _t), perbarui baris header
+    const cur = sh.getRange(1, 1, 1, HEADERS.length).getValues()[0].join('\u0001');
+    if (cur !== HEADERS.join('\u0001')) {
+      sh.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold');
+    }
   }
   return sh;
 }
@@ -120,7 +126,8 @@ function rowToObj_(r) {
       juz2829: { surat: s(14), ayat: s(15), li: s(16), pred: s(17), ket: s(18) },
       sambung: { surat: s(19), ayat: s(20), li: s(21), pred: s(22), ket: s(23) }
     },
-    w: s(24)
+    w: s(24),
+    _t: s(25)
   };
 }
 
@@ -136,7 +143,8 @@ function objToRow_(o) {
     g(o.tw && o.tw.juz2829, 'li'), g(o.tw && o.tw.juz2829, 'pred'), g(o.tw && o.tw.juz2829, 'ket'),
     g(o.tw && o.tw.sambung, 'surat'), g(o.tw && o.tw.sambung, 'ayat'),
     g(o.tw && o.tw.sambung, 'li'), g(o.tw && o.tw.sambung, 'pred'), g(o.tw && o.tw.sambung, 'ket'),
-    g(o, 'w')
+    g(o, 'w'),
+    g(o, '_t')
   ];
 }
 
