@@ -16,7 +16,7 @@ Project pribadi (bukan SMP ABBS). Satu file `index.html` (vanilla JS), tanpa bui
      Masing-masing punya predikat: Sangat Baik / Baik / Cukup / Perlu Diulang + keterangan.
 - **Rekap** — kartu statistik, pencarian & filter predikat, tabel 16 kolom sesuai template (NO | Nama | Asal | Hafalan | Target | Saudara | TPA | 3 kategori × Surat/Predikat/Keterangan) dengan garis tiap sel; urutan terbaru di atas; hapus via tombol muncul saat hover di baris.
 - **Rekap & Export** — tabel rekap mengikuti `template rekapan.xlsx` (header 2 tingkat identitas + wawancara + 3 kategori × Surat/Predikat/Ket, kolom NO, seluruh sel bergaris). Data terbaru selalu tampil di atas (`_t`) & tampilan otomatis menyegarkan via Sheets (interval 30 detik + saat tab dibuka kembali). Export Excel diisi langsung ke template (JSZip) — hasilnya sama dengan rekap web; fallback SheetJS (polos, merge & lebar kolom sama) lalu CSV.
-- **Data** — database **Google Spreadsheet** via Apps Script Web App (`Code.gs`); `data.json` di root hanya sebagai cadangan/cadangan migrasi awal.
+- **Data** — database **Google Spreadsheet** via Apps Script Web App (`Code.gs`); `data.json` di root hanya sebagai cadangan arsip lama, **tidak dipakai lagi oleh aplikasi**.
 
 ## Cara simpan data lintas-device
 Halaman statis tidak bisa menulis repo, jadi data disimpan di Google Spreadsheet lewat Apps Script:
@@ -26,7 +26,7 @@ Halaman statis tidak bisa menulis repo, jadi data disimpan di Google Spreadsheet
 3. Save/Hapus di aplikasi otomatis merge + tulis ke sheet `data` (25 kolom). Device lain tinggal buka URL yang sama; merge antar device pakai key `"_id" || "nama|waktu"` — yang dikirim terakhir menang.
 
 - Tanpa koneksi/URL salah = data hanya di device (localStorage `ss_rows_v3`), muncul lagi saat Sheets terjangkau.
-- Sheet kosong saat pertama buka = aplikasi otomatis migrasi isi `data.json` lama + data localStorage device itu, sekali saja.
+- Sheet kosong = tampil kosong (realtime dari Sheets). Data lama `data.json` **tidak** dimuat ulang otomatis — penghapusan bersifat benar-benar permanen.
 - Siapa pun yang punya URL bisa menulis; kalau mau menutupnya, isi variabel `SECRET` di `Code.gs` dan sisipkan `?secret=…` / field `secret` di tiap request.
 
 ## Struktur data (baris santri)
@@ -57,7 +57,7 @@ Di Spreadsheet, tiap baris di-*flat*-kan jadi 25 kolom oleh `Code.gs` (header ot
 - `GAPI` — URL Web App Apps Script (bisa ditimpa lewat localStorage `ss_api`, tombol Sinkron Sheet)
 
 ## Local dev
-Buka `index.html` langsung di browser, atau `python3 -m http.server` dari folder ini lalu buka localhost. Read data.json otomatis fallback ke raw.githubusercontent.com bila fetch lokal gagal.
+Buka `index.html` langsung di browser, atau `python3 -m http.server` dari folder ini lalu buka localhost. (Fitur fallback baca `data.json` dari raw.githubusercontent sudah dihapus — data hanya mengalir dari Spreadsheet.)
 
 ## Rencana lanjutan (belum)
 - [ ] Verifikasi multi-device nyata (2 HP, URL sama, cek merge + hapus)

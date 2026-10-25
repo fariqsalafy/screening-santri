@@ -546,12 +546,9 @@ const APKEY="ss_api";
 let apiOK=null;
 const apiUrl=()=>{try{return (localStorage.getItem(APKEY)||"").trim()||GAPI}catch(e){return GAPI}};
 function keyOf(r){return r._id||((r.nama||"")+"|"+(r.w||""))}
-function mergeRows(a,b){const m=new Map();[...(a||[]),...(b||[])].forEach(r=>m.set(keyOf(r),r));return [...m.values()]}
 const byNew=(a,b)=>String(b._t||"").localeCompare(String(a._t||""));
 function uid(){return "r"+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function updateSyncUI(){if($("rkFoot"))$("rkFoot").textContent=apiOK===false?"Tidak terhubung Google Sheets — tampil lagi saat koneksi kembali":(rows.length?`${rows.length} santri · tampilan realtime dari Google Sheets`:"")}
-async function tryJson(u){try{const r=await fetch(u,{cache:"no-store"});if(!r.ok)return null;const j=await r.json();return Array.isArray(j)?j:null}catch(e){return null}}
-async function fetchLegacy(){return await tryJson("data.json")||await tryJson("https://raw.githubusercontent.com/fariqsalafy/screening-santri/main/data.json")}
 const gErr=(r,j)=>(j&&j.error)||(j?"respon tak dikenal":"HTTP "+r.status);
 async function gGet(){
   const u=apiUrl()+(apiUrl().includes("?")?"&":"?")+"action=list";
@@ -575,13 +572,6 @@ async function apiSync(msg){
     if(outbox.length){
       const j=await gPost({action:"merge",rows:outbox});
       if(j&&j.rows){saveOutbox([]);fresh=j.rows}
-    }
-    if(!fresh.length){
-      try{const legacy=await fetchLegacy();if(legacy&&legacy.length){
-        fresh=mergeRows(legacy,fresh);
-        const j=await gPost({action:"merge",rows:fresh});
-        if(j&&j.rows)fresh=j.rows;
-      }}catch(e){}
     }
     const before=JSON.stringify(rows);
     rows=fresh;
