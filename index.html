@@ -78,6 +78,10 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .seg button.active[data-p="ulang"]{background:linear-gradient(135deg,var(--red),#DA6B6B);border-color:var(--red)}
 .seg-sm{grid-template-columns:repeat(4,1fr);gap:6px}
 .seg-sm button{padding:9px 4px;font-size:11.5px;border-radius:9px}
+.seg-sex{grid-template-columns:repeat(2,1fr);gap:8px;max-width:340px}
+.seg-sex button{padding:11px 6px;font-size:13.5px}
+.seg-sex button.active{background:linear-gradient(135deg,var(--a1),var(--a2));border-color:var(--a1);color:#fff}
+.fld select:disabled{background:var(--bg3);color:var(--text3);cursor:not-allowed}
 .sub{padding:14px 17px 16px;border-bottom:1px solid var(--border)}
 .sub:last-child{border-bottom:none}
 .sub-head{display:flex;gap:9px;align-items:flex-start;margin-bottom:11px}
@@ -230,15 +234,23 @@ tbody tr:hover .bt-act{opacity:1}
   <div class="edit-note" id="editNote" hidden></div>
   <div class="banner">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/></svg>
-    <div><b>1 santri = 1 form.</b> Tilawah dinilai di 3 kategori (semua wajib diisi) + wawancara. Hasil langsung muncul di tab Rekap, nantinya tersimpan otomatis ke Google Sheets.</div>
+    <div><b>1 santri = 1 form.</b> Tahfidz dinilai di 3 kategori (semua wajib diisi) + wawancara. Hasil langsung muncul di tab Rekap, nantinya tersimpan otomatis ke Google Sheets.</div>
   </div>
 
   <section class="card">
-    <div class="card-head"><div class="step">1</div><div><h2>Identitas Santri</h2><div class="hint">Semua isian opsional — isi yang tersedia saja</div></div></div>
+    <div class="card-head"><div class="step">1</div><div><h2>Identitas Santri</h2><div class="hint">Pilih putra/putri dulu, lalu pilih nama dari daftar</div></div></div>
     <div class="card-body">
-      <div class="fld"><label>Nama Lengkap</label><input id="f_nama" type="text" placeholder="Tulis nama santri" autocomplete="off"></div>
+      <div class="fld"><label>Jenis Kelamin</label>
+        <div class="seg seg-sex" id="fSex">
+          <button type="button" data-sex="putra">Putra</button>
+          <button type="button" data-sex="putri">Putri</button>
+        </div>
+      </div>
       <div class="row two" style="margin-top:13px">
-        <div class="fld"><label>Asal Sekolah / TPA</label><input id="f_asal" type="text" placeholder="Contoh: MI Aisyah, TPA Nurul Huda" autocomplete="off"></div>
+        <div class="fld"><label>Nama Santri</label><select id="f_nama" disabled><option value="">— pilih putra/putri dulu —</option></select></div>
+        <div class="fld"><label>Asal Sekolah / TPA</label><input id="f_asal" type="text" placeholder="Terisi otomatis saat pilih nama" autocomplete="off"><div class="sm-note">Terisi otomatis dari daftar — boleh diubah manual</div></div>
+      </div>
+      <div class="row" style="margin-top:13px">
         <div class="fld"><label>Jumlah Hafalan</label><input id="f_haf" type="text" inputmode="decimal" placeholder="Contoh: 1,5 juz"><div class="sm-note">Bisa pakai &ldquo;juz&rdquo; atau surat-ayat</div></div>
       </div>
     </div>
@@ -283,7 +295,7 @@ tbody tr:hover .bt-act{opacity:1}
   </section>
 
   <section class="card">
-    <div class="card-head"><div class="step">3</div><div><h2>Tilawah — 3 Kategori Ujian</h2><div class="hint">Semua kategori wajib dinilai &middot; urutan surat = prioritas</div></div></div>
+    <div class="card-head"><div class="step">3</div><div><h2>Tahfidz — 3 Kategori Ujian</h2><div class="hint">Semua kategori wajib dinilai &middot; urutan surat = prioritas</div></div></div>
     <div class="card-body" style="padding:0">
       <div class="sub">
         <div class="sub-head"><span class="sub-tag t1">1</span><div><h3>Juz 30 — melafalkan 1 surat penuh</h3><div class="sh-ket">Pilih 1 surat, harus dari pembacaan penuh</div></div></div>
@@ -397,6 +409,52 @@ const CATS = [
   {id:"juz2829",key:"s28",judul:"Juz 28–29 — surat tidak penuh",ayat:true,ayatReq:false},
   {id:"sambung",key:"sam",judul:"Sambung Ayat",ayat:true,ayatReq:true}
 ];
+/* Daftar murid baru (sumber: data murid baru.xlsx) — n: nama, s: asal sekolah/TPA */
+const MURID_PUTRA=[
+  {n:"Syahir Alvaro Irham Dewantoro",s:"SDIT Ar Risalah Surakarta"},
+  {n:"Shalahudin Al Ayyubi",s:"MI Amanah Ummah Masaran"},
+  {n:"Shafiyurrahman Alby Setyawan",s:"MIN 9 Seragen"},
+  {n:"Akhdan Al Fatih",s:"SDN Sukaragam 03"},
+  {n:"Luqman Hanif",s:"Kemuning"},
+  {n:"Muhammad ibrahim Dzeko Al fatieh",s:"SDI Amanah Ummah"},
+  {n:"Yusuf Al Zufar",s:"MI At-taqwa Nguter"},
+  {n:"Arkan Khoirul Anam",s:"SDIT Al Hikmah Kemuning"},
+];
+const MURID_PUTRI=[
+  {n:"Adibah Shakila Atmarini",s:"MITQ Al Hikam Surakarta"},
+  {n:"Shakila Afnan Ardila Putri",s:"SDIT Ar Risalah Surakarta"},
+  {n:"Najwa Azzahra Triqasan",s:"STTD Al Busyro"},
+  {n:"Shafiya Althafunnisa",s:"STTD Al Busyro"},
+  {n:"Talita Kamila Sakhi",s:"STTD Al Busyro"},
+  {n:"Almira Nafilah Al Firdaus",s:"STTD Al Busyro"},
+  {n:"Tsamara Qanitah Aurelia'",s:"SDIT Ar Risalah Wonosari Klaten"},
+  {n:"Malikah Syahidah An Nawa",s:"MI Al Islam Mranggen"},
+  {n:"Fatiah Mumtazah",s:"SDIT Mutiara Insani"},
+  {n:"Shofiah Huwaidah",s:"MIM Ngadirejan"},
+  {n:"Kaysa Hisan",s:"Kuttab Amal Mulya"},
+  {n:"Anindita Zahra Winda",s:"DJI PU Surakarta"},
+  {n:"Naura Althafunnisa",s:"MI Ahmad Maryam"},
+  {n:"Sitta Idy Zakiyya",s:"SDI Ar Risalah Wonosari"},
+  {n:"Adzkia Khoirina Hidayat",s:"SDIT Al Ihsan Colomadu"},
+  {n:"Nada fajria Salsabila",s:"MIN 1 Surakarta"},
+  {n:"Fatiya Hasna Arifah",s:"MI Adab Muhammadiyah pacitan"},
+  {n:"Ihda Husnayain",s:"SDIT Al Hikmah Kemuning"},
+  {n:"Rofifah safiatun nisa'",s:"kutab harun arrosyid"},
+  {n:"Dinda salsabila",s:"kutab harun arrosyid"},
+  {n:"Abidah Dzahabiyyah Rafidallo",s:"SDIT ArRohmah Magetan"},
+  {n:"Aruni Muthiah",s:"SDIT Ar Rohman Magetan"},
+  {n:"Hasyma Hasyay",s:"Sttb Al Busyro"},
+  {n:"Muti'ah Fathunnisa",s:"Ar Risalah Miri Gemolong"},
+  {n:"Najwa Khoira Wilda",s:"Ar Risalah Miri Gemolong"},
+  {n:"Hunafa Ghassani Ghazia",s:"SDIT Ar Risalah"},
+  {n:"Mikaila Ashfiya Nuha El Mukhbit",s:"SDN 5 Nagrikaler"},
+  {n:"Akhazia Rahma A",s:"MI Al Islam"},
+  {n:"Fatimah AlKhansa Farizqi K",s:"SDI Amanah Ummah"},
+  {n:"Syaikha Nafisha Zahira",s:"MIT Al Karimah kra"},
+  {n:"Annida",s:"MI Ahmad Maryam"},
+  {n:"Aqila Naila Syahidah",s:""},
+];
+const MURID={putra:MURID_PUTRA,putri:MURID_PUTRI};
 const twName=t=>t?(t.li||t.surat||"-"):"-";
 const DEMO=[
  {nama:"Ahmad Fauzan Hakim",asal:"MI Aisyah",haf:"1 juz",q1:{c:"punya",t:"Selesai juz 30 sebelum kelas 9"},q2:{c:"tidak",t:""},q3:{c:"ya",t:"TPA Nurul Huda, 1 tahun"},tw:{juz30:{surat:"An Naba",ayat:"",li:"",pred:"sangat",ket:"Tajwid bagus, suara jernih"},juz2829:{surat:"Al Mulk",ayat:"12",li:"",pred:"baik",ket:"Lancar sampai 12"},sambung:{surat:"An Naziat",ayat:"5",li:"",pred:"cukup",ket:"Sambungan kadang berhenti"}},w:"23 Okt, 19.20"},
@@ -484,6 +542,7 @@ function saveForm(){
   apiSync(true);
 }
 function resetForm(){
+  setSex("");
   $("f_asal").value="";$("f_haf").value="";$("f_q1").value="";$("f_q2").value="";$("f_q3").value="";
   $("w_q1").classList.remove("show");$("w_q2").classList.remove("show");$("w_q3").classList.remove("show");
   document.querySelectorAll(".chip.active").forEach(c=>c.classList.remove("active"));
@@ -625,11 +684,41 @@ function setCat(c,t){
   $(c.key+"_ket").value=t.ket||"";
   document.querySelectorAll(`.seg[data-cat="${c.id}"] button`).forEach(b=>b.classList.toggle("active",b.dataset.p===(t.pred||"")));
 }
+/* ——— identitas: putra/putri dulu → nama dari daftar ——— */
+let sexSel="";
+const muridList=()=>MURID[sexSel]||[];
+function fillNama(keepName){
+  const sel=$("f_nama"),old=keepName||"";
+  sel.innerHTML="";
+  if(!sexSel){
+    if(old){sel.appendChild(new Option(old,old));sel.value=old;sel.disabled=false;return}
+    sel.appendChild(new Option("— pilih putra/putri dulu —",""));sel.disabled=true;return;
+  }
+  sel.appendChild(new Option("— pilih nama —",""));
+  muridList().forEach(m=>sel.appendChild(new Option(m.n,m.n)));
+  if(old&&!muridList().some(m=>m.n===old))sel.appendChild(new Option(old,old)); // nama lama di luar daftar (mode edit)
+  sel.disabled=false;
+  sel.value=old;
+}
+function setSex(v,keepName){
+  sexSel=v||"";
+  document.querySelectorAll("#fSex button").forEach(b=>b.classList.toggle("active",b.dataset.sex===sexSel));
+  fillNama(keepName);
+}
+function isiAsal(){
+  const m=muridList().find(x=>x.n===$("f_nama").value);
+  $("f_asal").value=m?m.s:"";
+}
+document.querySelectorAll("#fSex button").forEach(b=>b.addEventListener("click",()=>{if(b.dataset.sex===sexSel)return;setSex(b.dataset.sex);isiAsal()}));
+$("f_nama").addEventListener("change",isiAsal);
+setSex(""); // keadaan awal: gender belum dipilih → nama terkunci
 function editRow(i){
   const r=rows[i];
   if(!r)return;
   editId=r._id||"";editPrev=r;
-  $("f_nama").value=r.nama&&r.nama!=="-"?r.nama:"";
+  const nm=r.nama&&r.nama!=="-"?r.nama:"";
+  const sex=MURID_PUTRI.some(m=>m.n===nm)?"putri":(MURID_PUTRA.some(m=>m.n===nm)?"putra":"");
+  setSex(sex,nm);
   $("f_asal").value=r.asal||"";
   $("f_haf").value=r.haf&&r.haf!=="-"?r.haf:"";
   setQ("q1","punya","f_q1",r.q1);

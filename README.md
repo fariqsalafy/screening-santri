@@ -7,9 +7,9 @@ Project pribadi (bukan SMP ABBS). Satu file `index.html` (vanilla JS), tanpa bui
 
 ## Fitur
 - **Form Santri** (3 kartu):
-  1. Identitas — nama, asal sekolah/TPA, jumlah hafalan *(semua opsional)*
+  1. Identitas — **pilih Putra/Putri** dulu, baru **nama santri dari dropdown** (daftar `data murid baru.xlsx`); asal sekolah/TPA terisi otomatis dari nama terpilih; jumlah hafalan diisi manual
   2. Wawancara — 3 pertanyaan standar (target hafalan, saudara yg pahal many, riwayat TPA) dengan chip jawaban cepat + mengisi detail
-  3. Tilawah — **3 kategori, semuanya wajib dinilai**:
+  3. Tahfidz — **3 kategori, semuanya wajib dinilai**:
      - **Juz 30** — melafalkan 1 surat penuh (pilih dari daftar prioritas / "Lainnya" tulis manual)
      - **Juz 28–29** — surat tidak penuh (+ ayat terakhir, opsional)
      - **Sambung Ayat** — penguji menyebut ayat, peserta menyambung (**wajib** mencatat ayat) 
@@ -53,6 +53,7 @@ Di Spreadsheet, tiap baris di-*flat*-kan jadi 25 kolom oleh `Code.gs` (header ot
 - `SURAT` — daftar surat per kategori (urutan = prioritas; entri "Lainnya" memunculkan input manual)
 - `PRED` — label predikat
 - `CATS` — definisi 3 kategori (judul, apakah ada kolom ayat, wajib/tidak)
+- `MURID_PUTRA` / `MURID_PUTRI` — daftar murid baru (`{n: nama, s: asal sekolah}`) untuk dropdown identitas; sumber: `data murid baru.xlsx` (sheet Putra/Putri)
 - `DEMO` — data demo (fallback bila Sheets & data.json tak terbaca; key localStorage `ss_rows_v3`)
 - `GAPI` — URL Web App Apps Script (bisa ditimpa lewat localStorage `ss_api`, tombol Sinkron Sheet)
 
@@ -61,6 +62,6 @@ Buka `index.html` langsung di browser, atau `python3 -m http.server` dari folder
 
 ## Rencana lanjutan (belum)
 - [ ] Verifikasi multi-device nyata (2 HP, URL sama, cek merge + hapus)
-- [ ] Bila daftar pendaftar dari spreadsheet → import sebagai urutan form
+- [x] Daftar murid baru (`data murid baru.xlsx`) → dropdown nama (gender dulu, lalu nama; asal otomatis) ✓
 - [ ] Kirim hasil ke orang tua via WA (opsional)
 - [x] Migration dari data.json (token GitHub) → Google Sheets ✓
