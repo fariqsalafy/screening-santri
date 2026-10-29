@@ -32,7 +32,8 @@ const HEADERS = [
   'j30s', 'j30l', 'j30p', 'j30k',
   'j28s', 'j28a', 'j28l', 'j28p', 'j28k',
   'smbs', 'smba', 'smbl', 'smbp', 'smbk',
-  'w', '_t'
+  'w', '_t',
+  'tilawah', 'catatan'
 ];
 
 /** Jalankan sekali setelah paste, untuk authorize + bikin sheet. */
@@ -99,7 +100,8 @@ function readRows_() {
   const last = sh.getLastRow();
   if (last < 2) return [];
   const vals = sh.getRange(2, 1, last - 1, HEADERS.length).getValues();
-  return vals.filter(r => String(r[1]).trim() || String(r[HEADERS.length - 1]).trim()).map(rowToObj_);
+  const iNama = HEADERS.indexOf('nama'), iT = HEADERS.indexOf('_t');
+  return vals.filter(r => String(r[iNama]).trim() || String(r[iT]).trim()).map(rowToObj_);
 }
 
 function writeRows_(objs) {
@@ -128,7 +130,8 @@ function rowToObj_(r) {
       sambung: { surat: s(19), ayat: s(20), li: s(21), pred: s(22), ket: s(23) }
     },
     w: s(24),
-    _t: s(25)
+    _t: s(25),
+    tilawah: s(26), catatan: s(27)
   };
 }
 
@@ -145,7 +148,8 @@ function objToRow_(o) {
     g(o.tw && o.tw.sambung, 'surat'), g(o.tw && o.tw.sambung, 'ayat'),
     g(o.tw && o.tw.sambung, 'li'), g(o.tw && o.tw.sambung, 'pred'), g(o.tw && o.tw.sambung, 'ket'),
     g(o, 'w'),
-    g(o, '_t')
+    g(o, '_t'),
+    g(o, 'tilawah'), g(o, 'catatan')
   ];
 }
 

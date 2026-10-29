@@ -6,7 +6,7 @@ Project pribadi (bukan SMP ABBS). Satu file `index.html` (vanilla JS), tanpa bui
 **Live:** https://fariqsalafy.github.io/screening-santri/
 
 ## Fitur
-- **Form Santri** (3 kartu):
+- **Form Santri** (5 kartu):
   1. Identitas — **pilih Putra/Putri** dulu, baru **nama santri dari dropdown** (daftar `data murid baru.xlsx`); asal sekolah/TPA terisi otomatis dari nama terpilih; jumlah hafalan diisi manual
   2. Wawancara — 3 pertanyaan standar (target hafalan, saudara yg pahal many, riwayat TPA) dengan chip jawaban cepat + mengisi detail
   3. Tahfidz — **3 kategori, semuanya wajib dinilai**:
@@ -14,8 +14,10 @@ Project pribadi (bukan SMP ABBS). Satu file `index.html` (vanilla JS), tanpa bui
      - **Juz 28–29** — surat tidak penuh (+ ayat terakhir, opsional)
      - **Sambung Ayat** — penguji menyebut ayat, peserta menyambung (**wajib** mencatat ayat) 
      Masing-masing punya predikat: Sangat Baik / Baik / Cukup / Perlu Diulang + keterangan.
-- **Rekap** — kartu statistik, pencarian & filter predikat, tabel 16 kolom sesuai template (NO | Nama | Asal | Hafalan | Target | Saudara | TPA | 3 kategori × Surat/Predikat/Keterangan) dengan garis tiap sel; urutan terbaru di atas; hapus via tombol muncul saat hover di baris.
-- **Rekap & Export** — tabel rekap mengikuti `template rekapan.xlsx` (header 2 tingkat identitas + wawancara + 3 kategori × Surat/Predikat/Ket, kolom NO, seluruh sel bergaris). Data terbaru selalu tampil di atas (`_t`) & tampilan otomatis menyegarkan via Sheets (interval 30 detik + saat tab dibuka kembali). Export Excel diisi langsung ke template (JSZip) — hasilnya sama dengan rekap web; fallback SheetJS (polos, merge & lebar kolom sama) lalu CSV.
+  4. **Tilawah** — penilaian bacaan tilawah, **teks bebas (paragraf)**, opsional.
+  5. **Catatan** — catatan penutup, **teks bebas (paragraf)**, opsional.
+- **Rekap** — kartu statistik, pencarian & filter predikat, tabel 18 kolom sesuai template (NO | Nama | Asal | Hafalan | Target | Saudara | TPA | 3 kategori × Surat/Predikat/Keterangan | **Tilawah | Catatan**) dengan garis tiap sel; urutan terbaru di atas; hapus via tombol muncul saat hover di baris.
+- **Rekap & Export** — tabel rekap mengikuti `template rekapan.xlsx` (header 2 tingkat identitas + wawancara + 3 kategori × Surat/Predikat/Ket + Tilawah/Catatan, kolom NO, seluruh sel bergaris). Data terbaru selalu tampil di atas (`_t`) & tampilan otomatis menyegarkan via Sheets (interval 30 detik + saat tab dibuka kembali). Export Excel diisi langsung ke template (JSZip) — hasilnya sama dengan rekap web; fallback SheetJS (polos, merge & lebar kolom sama) lalu CSV.
 - **Data** — database **Google Spreadsheet** via Apps Script Web App (`Code.gs`); `data.json` di root hanya sebagai cadangan arsip lama, **tidak dipakai lagi oleh aplikasi**.
 
 ## Cara simpan data lintas-device
@@ -23,7 +25,8 @@ Halaman statis tidak bisa menulis repo, jadi data disimpan di Google Spreadsheet
 
 1. Buat Spreadsheet → **Extensions → Apps Script** → tempel `Code.gs` → Run `setup()` → Deploy sebagai **Web app** (Execute as: *Me*, Access: *Anyone*).
 2. URL `…/exec` sudah ditanam di `index.html` (`GAPI`). Bisa ditimpa lewat tombol **Sinkron Sheet → Simpan URL**.
-3. Save/Hapus di aplikasi otomatis merge + tulis ke sheet `data` (25 kolom). Device lain tinggal buka URL yang sama; merge antar device pakai key `"_id" || "nama|waktu"` — yang dikirim terakhir menang.
+3. Save/Hapus di aplikasi otomatis merge + tulis ke sheet `data` (**28 kolom**). Device lain tinggal buka URL yang sama; merge antar device pakai key `"_id" || "nama|waktu"` — yang dikirim terakhir menang.
+   > Saat skema bertambah kolom, `Code.gs` menulis ulang baris header otomatis (self-heal) — cukup **re-paste `Code.gs` & deploy ulang** setelah perubahan.
 
 - Tanpa koneksi/URL salah = data hanya di device (localStorage `ss_rows_v3`), muncul lagi saat Sheets terjangkau.
 - Sheet kosong = tampil kosong (realtime dari Sheets). Data lama `data.json` **tidak** dimuat ulang otomatis — penghapusan bersifat benar-benar permanen.
@@ -42,12 +45,14 @@ Halaman statis tidak bisa menulis repo, jadi data disimpan di Google Spreadsheet
     "juz2829": {"surat": "", "ayat": "", "li": "", "pred": "", "ket": ""},
     "sambung": {"surat": "", "ayat": "", "li": "", "pred": "", "ket": ""}
   },
-  "w": "tgl, jam"
+  "w": "tgl, jam",
+  "tilawah": "teks bebas (paragraf), opsional",
+  "catatan": "teks bebas (paragraf), opsional"
 }]
 ```
 `li` = isi bila pilihan surat "Lainnya" (judul tulis manual). `ayat` khusus kategori juz2829 (opsional) & sambung (wajib).
 
-Di Spreadsheet, tiap baris di-*flat*-kan jadi 25 kolom oleh `Code.gs` (header otomatis: `_id, nama, asal, haf, q1c, q1t, q2c, q2t, q3c, q3t, j30s, j30l, j30p, j30k, j28s, j28a, j28l, j28p, j28k, smbs, smba, smbl, smbp, smbk, w). Boleh dibaca/dilihat langsung di sheet; edit manual per baris juga ikut sinkron.
+Di Spreadsheet, tiap baris di-*flat*-kan jadi 28 kolom oleh `Code.gs` (header otomatis: `_id, nama, asal, haf, q1c, q1t, q2c, q2t, q3c, q3t, j30s, j30l, j30p, j30k, j28s, j28a, j28l, j28p, j28k, smbs, smba, smbl, smbp, smbk, w, _t, tilawah, catatan`). Boleh dibaca/dilihat langsung di sheet; edit manual per baris juga ikut sinkron.
 
 ## Konfigurasi di dalam kode (index.html)
 - `SURAT` — daftar surat per kategori (urutan = prioritas; entri "Lainnya" memunculkan input manual)

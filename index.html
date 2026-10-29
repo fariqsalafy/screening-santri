@@ -82,6 +82,8 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .seg-sex button{padding:11px 6px;font-size:13.5px}
 .seg-sex button.active{background:linear-gradient(135deg,var(--a1),var(--a2));border-color:var(--a1);color:#fff}
 .fld select:disabled{background:var(--bg3);color:var(--text3);cursor:not-allowed}
+.para-ta{min-height:104px;line-height:1.55}
+.para-c{color:var(--text2);font-size:12px;max-width:260px;line-height:1.45;white-space:pre-wrap}
 .sub{padding:14px 17px 16px;border-bottom:1px solid var(--border)}
 .sub:last-child{border-bottom:none}
 .sub-head{display:flex;gap:9px;align-items:flex-start;margin-bottom:11px}
@@ -122,7 +124,7 @@ header{padding:22px 2px 14px;display:flex;align-items:center;gap:13px}
 .stat .l{font-size:10px;color:var(--text2);font-weight:600;margin-top:4px;letter-spacing:.3px;text-transform:uppercase}
 .stat.c1 .n{color:var(--a1)}.stat.c2 .n{color:var(--gold)}.stat.c3 .n{color:var(--blue)}.stat.c4 .n{color:var(--red)}
 .table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow-x:auto;margin-bottom:14px}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:1540px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:1820px}
 thead th{position:sticky;top:33px;background:var(--bg4);text-align:center;padding:8px 10px;font-size:10.5px;color:#2E7D5F;
   font-weight:700;letter-spacing:.4px;text-transform:uppercase;border:1px solid var(--tbl-b);white-space:nowrap}
 thead th.grp{top:0;height:33px}
@@ -172,6 +174,8 @@ tbody tr:hover .bt-act{opacity:1}
   .card-body{padding:12px 12px 4px}
   .row{gap:8px;margin-bottom:10px}
   .fld input,.fld select,.fld textarea{padding:10px 11px;font-size:14px}
+  .para-ta{min-height:92px}
+  .para-c{max-width:200px;font-size:11px}
   .chip{padding:8px 12px;font-size:12.5px}
   .q-label{font-size:12.5px}
   .seg{grid-template-columns:repeat(2,1fr);gap:6px}
@@ -188,7 +192,7 @@ tbody tr:hover .bt-act{opacity:1}
   .filter-sel{flex:1 1 auto;max-width:none;padding:10px 11px;font-size:12.5px;min-width:0}
   .mini-btn{flex:1 1 0;justify-content:center;align-self:stretch;padding:10px 8px;font-size:12px}
   .table-wrap{border-radius:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  table{font-size:11.5px;min-width:1300px}
+  table{font-size:11.5px;min-width:1560px}
   thead th{padding:6px 6px;font-size:9px}
   thead th.grp{height:28px}
   thead th{top:28px}
@@ -234,7 +238,7 @@ tbody tr:hover .bt-act{opacity:1}
   <div class="edit-note" id="editNote" hidden></div>
   <div class="banner">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/></svg>
-    <div><b>1 santri = 1 form.</b> Tahfidz dinilai di 3 kategori (semua wajib diisi) + wawancara. Hasil langsung muncul di tab Rekap, nantinya tersimpan otomatis ke Google Sheets.</div>
+    <div><b>1 santri = 1 form.</b> Tahfidz dinilai di 3 kategori (semua wajib diisi) + wawancara, lalu <b>Tilawah</b> &amp; <b>Catatan</b> bebas. Hasil langsung muncul di tab Rekap, tersimpan otomatis ke Google Sheets.</div>
   </div>
 
   <section class="card">
@@ -335,6 +339,30 @@ tbody tr:hover .bt-act{opacity:1}
     </div>
   </section>
 
+  <section class="card">
+    <div class="card-head"><div class="step">4</div><div><h2>Tilawah</h2><div class="hint">Penilaian bacaan tilawah — tulis bebas</div></div></div>
+    <div class="card-body">
+      <div class="row">
+        <div class="fld"><label>Tilawah (bacaan)</label>
+          <textarea id="f_tilawah" class="para-ta" rows="4" placeholder="Tulis bebas: kelancaran, makhraj, tajwid, lagu/irama, adab saat membaca…"></textarea>
+          <div class="sm-note">Opsional — satu paragraf bebas</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="step">5</div><div><h2>Catatan</h2><div class="hint">Catatan penutup sebelum simpan</div></div></div>
+    <div class="card-body">
+      <div class="row">
+        <div class="fld"><label>Catatan</label>
+          <textarea id="f_catatan" class="para-ta" rows="4" placeholder="Catatan umum, rekomendasi, atau hal penting lain tentang santri…"></textarea>
+          <div class="sm-note">Opsional</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <p class="form-footer-note">Setelah tersimpan, form otomatis kosong untuk santri berikutnya.</p>
 </div>
 
@@ -371,6 +399,8 @@ tbody tr:hover .bt-act{opacity:1}
         <th colspan="3" class="grp">Juz 30</th>
         <th colspan="3" class="grp">Juz 28-29</th>
         <th colspan="3" class="grp">Sambung Ayat</th>
+        <th rowspan="2" class="grp">Tilawah</th>
+        <th rowspan="2" class="grp">Catatan</th>
         <th rowspan="2" class="grp">Aksi</th>
       </tr><tr>
         <th>Target</th><th>Saudara</th><th>TPA</th>
@@ -524,7 +554,8 @@ function saveForm(){
     tw[c.id]=t;
   });
   if(!nama&&$("f_asal").value.trim()===""&&$("f_haf").value.trim()===""&&!has
-    &&val("q1")===""&&val("q2")===""&&val("q3")===""){
+    &&val("q1")===""&&val("q2")===""&&val("q3")===""
+    &&$("f_tilawah").value.trim()===""&&$("f_catatan").value.trim()===""){
     toast("Form masih kosong — isi dulu");return;
   }
   const em=editId, ep=editPrev;
@@ -533,6 +564,8 @@ function saveForm(){
     q2:{c:val("q2")||"-",t:$("f_q2").value.trim()},
     q3:{c:val("q3")||"-",t:$("f_q3").value.trim()},
     tw,
+    tilawah:$("f_tilawah").value.trim(),
+    catatan:$("f_catatan").value.trim(),
     w:ep?ep.w:(new Date().toLocaleDateString("id-ID",{day:"2-digit",month:"short"})+", "+new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"}).replace(".",":"))};
   saveOutbox(loadOutbox().concat(rec));
   closeEditor();
@@ -544,6 +577,7 @@ function saveForm(){
 function resetForm(){
   setSex("");
   $("f_asal").value="";$("f_haf").value="";$("f_q1").value="";$("f_q2").value="";$("f_q3").value="";
+  $("f_tilawah").value="";$("f_catatan").value="";
   $("w_q1").classList.remove("show");$("w_q2").classList.remove("show");$("w_q3").classList.remove("show");
   document.querySelectorAll(".chip.active").forEach(c=>c.classList.remove("active"));
   CATS.forEach(c=>{
@@ -579,7 +613,7 @@ function renderRekap(){
   $("stUlang").textContent=cnt("ulang");
   const tb=$("rkBody");
   if(!list.length){
-    tb.innerHTML=`<tr><td colspan="17"><div class="empty"><p>Belum ada data yang cocok.<br>Hasil form input akan muncul di sini.</p></div></td></tr>`;
+    tb.innerHTML=`<tr><td colspan="19"><div class="empty"><p>Belum ada data yang cocok.<br>Hasil form input akan muncul di sini.</p></div></td></tr>`;
   }else{
     tb.innerHTML=list.map((r,li)=>{
       const i=rows.indexOf(r);
@@ -594,6 +628,8 @@ function renderRekap(){
         ${catCells(r,CATS[0],false)}
         ${catCells(r,CATS[1],false)}
         ${catCells(r,CATS[2],false)}
+        <td>${r.tilawah?`<span class="para-c">${esc(r.tilawah)}</span>`:dimTxt()}</td>
+        <td>${r.catatan?`<span class="para-c">${esc(r.catatan)}</span>`:dimTxt()}</td>
         ${aksiCell(r,i)}
       </tr>`;
     }).join("");
@@ -721,6 +757,8 @@ function editRow(i){
   setSex(sex,nm);
   $("f_asal").value=r.asal||"";
   $("f_haf").value=r.haf&&r.haf!=="-"?r.haf:"";
+  $("f_tilawah").value=r.tilawah||"";
+  $("f_catatan").value=r.catatan||"";
   setQ("q1","punya","f_q1",r.q1);
   setQ("q2","ya","f_q2",r.q2);
   setQ("q3","ya","f_q3",r.q3);
@@ -742,29 +780,61 @@ function exportExcel(){
       qv(r.q1,"belum"),qv(r.q2,"tidak"),qv(r.q3,"belum"),
       CT(j30),PRED[j30.pred]||"-",j30.ket||"-",
       CT(j28),PRED[j28.pred]||"-",j28.ket||"-",
-      CT(sam),PRED[sam.pred]||"-",sam.ket||"-"];
+      CT(sam),PRED[sam.pred]||"-",sam.ket||"-",
+      r.tilawah||"-",r.catatan||"-"];
   });
   exportPlain(data);
 }
 async function exportTemplate(buf,data){
   const NS="http://schemas.openxmlformats.org/spreadsheetml/2006/main";
-  const CL="ABCDEFGHIJKLMNOP";
+  const CL="ABCDEFGHIJKLMNOPQR";                       // 18 kolom: A..R (…+ Tilawah, Catatan)
+  const COLS=CL.length;
   const zip=await JSZip.loadAsync(buf);
   const entry=Object.keys(zip.files).find(f=>/^xl\/worksheets\/sheet\d+\.xml$/.test(f));
   const doc=new DOMParser().parseFromString(await zip.file(entry).async("string"),NS);
+  const rowsEl=()=>Array.from(doc.getElementsByTagNameNS(NS,"row"));
   const sheetData=doc.getElementsByTagNameNS(NS,"sheetData")[0];
-  const tplRow=doc.getElementsByTagNameNS(NS,"row")[2];            // baris-3: 16 sel kosong sudah bergaya
+  const tplRow=rowsEl()[2];                                         // baris-3: sel kosong sudah bergaya
   const sRef=tplRow?(tplRow.getElementsByTagNameNS(NS,"c")[0].getAttribute("s")||"1"):"1";
+  // perluas satu baris sampai COLS sel (klon dari baris-3 / baris baru) + rapikan ref & spans
+  const grow=row=>{
+    const cells=Array.from(row.getElementsByTagNameNS(NS,"c"));
+    const style=cells.length?(cells[cells.length-1].getAttribute("s")||sRef):sRef;
+    while(cells.length<COLS){const c=doc.createElementNS(NS,"c");c.setAttribute("s",style);row.appendChild(c);cells.push(c)}
+    cells.forEach((c,j)=>c.setAttribute("r",CL[j]+row.getAttribute("r")));
+    row.setAttribute("spans","1:"+COLS);
+  };
+  // header 2 tingkat untuk kolom baru: Tilawah, Catatan (digabung 2 baris)
+  const head=["Tilawah","Catatan"];
+  const hRows=rowsEl();
+  if(hRows[0]&&hRows[1]&&COLS>16){
+    const mc=doc.getElementsByTagNameNS(NS,"mergeCells")[0];
+    for(let j=16;j<COLS;j++){
+      const L=CL[j];
+      const c1=doc.createElementNS(NS,"c");c1.setAttribute("r",L+"1");c1.setAttribute("s","4");c1.setAttribute("t","inlineStr");
+      const is1=doc.createElementNS(NS,"is"),t1=doc.createElementNS(NS,"t");
+      t1.textContent=head[j-16]||("Kolom "+(j+1));is1.appendChild(t1);c1.appendChild(is1);
+      hRows[0].appendChild(c1);hRows[0].setAttribute("spans","1:"+COLS);
+      const c2=doc.createElementNS(NS,"c");c2.setAttribute("r",L+"2");c2.setAttribute("s","2");
+      hRows[1].appendChild(c2);hRows[1].setAttribute("spans","1:"+COLS);
+      if(mc){const m=doc.createElementNS(NS,"mergeCell");m.setAttribute("ref",L+"1:"+L+"2");mc.appendChild(m)}
+    }
+    if(mc)mc.setAttribute("count",String(mc.getElementsByTagNameNS(NS,"mergeCell").length));
+  }
+  // lebar: perluas sel terakhir <col> agar kolom baru tidak super sempit
+  if(COLS>16){
+    const colEls=doc.getElementsByTagNameNS(NS,"col"),lastCol=colEls[colEls.length-1];
+    if(lastCol&&+lastCol.getAttribute("max")===16){lastCol.setAttribute("max",String(COLS));lastCol.setAttribute("width","18");lastCol.setAttribute("customWidth","1")}
+  }
   data.forEach((vals,k)=>{
     const rn=3+k;
-    let row=doc.getElementsByTagNameNS(NS,"row")[rn-1];
+    let row=rowsEl().find(x=>+x.getAttribute("r")===rn);
     if(!row){
       row=tplRow?tplRow.cloneNode(true):doc.createElementNS(NS,"row");
-      row.setAttribute("r",String(rn));row.setAttribute("spans","1:16");
-      if(tplRow)Array.from(row.getElementsByTagNameNS(NS,"c")).forEach((c,j)=>c.setAttribute("r",CL[j]+rn));
-      else for(let j=0;j<16;j++){const c=doc.createElementNS(NS,"c");c.setAttribute("r",CL[j]+rn);c.setAttribute("s",sRef);row.appendChild(c)}
+      row.setAttribute("r",String(rn));
       sheetData.appendChild(row);
     }
+    grow(row);
     const cells=row.getElementsByTagNameNS(NS,"c");
     vals.forEach((v,j)=>{
       const cell=cells[j];if(!cell)return;
@@ -778,7 +848,7 @@ async function exportTemplate(buf,data){
   });
   Array.from(doc.getElementsByTagNameNS(NS,"row")).forEach(rowEl=>{if(+rowEl.getAttribute("r")>2+data.length)rowEl.parentNode.removeChild(rowEl)});
   const dim=doc.getElementsByTagNameNS(NS,"dimension")[0];
-  if(dim)dim.setAttribute("ref","A1:P"+(2+data.length));
+  if(dim)dim.setAttribute("ref","A1:"+CL[COLS-1]+Math.max(2+data.length,7));
   zip.file(entry,new XMLSerializer().serializeToString(doc));
   const blob=await zip.generateAsync({type:"blob"});
   const a=document.createElement("a");
@@ -800,12 +870,12 @@ function plainOrCsv(data){
   exportCsv(data);
 }
 function exportPlainXlsx(data){
-  const h1=["NO","Nama Santri","Asal Skolah","Hafalan","Wawancara","","","Juz 30","","","Juz 28-29","","","Sambung ayat","",""];
-  const h2=["","","","","target","saudara","TPA","Surat","Predikat","Keterangan","Surat","Predikat","Keterangan","Surat","Predikat","Keterangan"];
+  const h1=["NO","Nama Santri","Asal Skolah","Hafalan","Wawancara","","","Juz 30","","","Juz 28-29","","","Sambung ayat","","","Tilawah","Catatan"];
+  const h2=["","","","","target","saudara","TPA","Surat","Predikat","Keterangan","Surat","Predikat","Keterangan","Surat","Predikat","Keterangan","",""];
   const ws=XLSX.utils.aoa_to_sheet([h1,h2,...data]);
   const m=(r1,c1,r2,c2)=>({s:{r:r1,c:c1},e:{r:r2,c:c2}});
-  ws["!merges"]=[m(0,0,1,0),m(0,1,1,1),m(0,2,1,2),m(0,3,1,3),m(0,4,0,6),m(0,7,0,9),m(0,10,0,12),m(0,13,0,15)];
-  ws["!cols"]=[{wch:6},{wch:18},{wch:16},{wch:9},{wch:8},{wch:11},{wch:7},{wch:10},{wch:11},{wch:14},{wch:10},{wch:11},{wch:14},{wch:10},{wch:11},{wch:14}];
+  ws["!merges"]=[m(0,0,1,0),m(0,1,1,1),m(0,2,1,2),m(0,3,1,3),m(0,4,0,6),m(0,7,0,9),m(0,10,0,12),m(0,13,0,15),m(0,16,1,16),m(0,17,1,17)];
+  ws["!cols"]=[{wch:6},{wch:18},{wch:16},{wch:9},{wch:8},{wch:11},{wch:7},{wch:10},{wch:11},{wch:14},{wch:10},{wch:11},{wch:14},{wch:10},{wch:11},{wch:14},{wch:26},{wch:26}];
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,ws,"Rekap");
   XLSX.writeFile(wb,"rekap-screening-santri.xlsx");
