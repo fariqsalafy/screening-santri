@@ -238,7 +238,7 @@ tbody tr:hover .bt-act{opacity:1}
   <div class="edit-note" id="editNote" hidden></div>
   <div class="banner">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/></svg>
-    <div><b>1 santri = 1 form.</b> Tahfidz dinilai di 3 kategori (semua wajib diisi) + wawancara, lalu <b>Tilawah</b> &amp; <b>Catatan</b> bebas. Hasil langsung muncul di tab Rekap, tersimpan otomatis ke Google Sheets.</div>
+    <div><b>1 santri = 1 form.</b> Isi identitas &amp; wawancara, tulis <b>Tilawah</b> bebas, nilai Tahfidz di 3 kategori (semua wajib), lalu <b>Catatan</b> penutup. Hasil langsung muncul di tab Rekap, tersimpan otomatis ke Google Sheets.</div>
   </div>
 
   <section class="card">
@@ -299,7 +299,19 @@ tbody tr:hover .bt-act{opacity:1}
   </section>
 
   <section class="card">
-    <div class="card-head"><div class="step">3</div><div><h2>Tahfidz — 3 Kategori Ujian</h2><div class="hint">Semua kategori wajib dinilai &middot; urutan surat = prioritas</div></div></div>
+    <div class="card-head"><div class="step">3</div><div><h2>Tilawah</h2><div class="hint">Penilaian bacaan tilawah — tulis bebas</div></div></div>
+    <div class="card-body">
+      <div class="row">
+        <div class="fld"><label>Tilawah (bacaan)</label>
+          <textarea id="f_tilawah" class="para-ta" rows="4" placeholder="Tulis bebas: kelancaran, makhraj, tajwid, lagu/irama, adab saat membaca…"></textarea>
+          <div class="sm-note">Opsional — satu paragraf bebas</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><div class="step">4</div><div><h2>Tahfidz — 3 Kategori Ujian</h2><div class="hint">Semua kategori wajib dinilai &middot; urutan surat = prioritas</div></div></div>
     <div class="card-body" style="padding:0">
       <div class="sub">
         <div class="sub-head"><span class="sub-tag t1">1</span><div><h3>Juz 30 — melafalkan 1 surat penuh</h3><div class="sh-ket">Pilih 1 surat, harus dari pembacaan penuh</div></div></div>
@@ -340,18 +352,6 @@ tbody tr:hover .bt-act{opacity:1}
   </section>
 
   <section class="card">
-    <div class="card-head"><div class="step">4</div><div><h2>Tilawah</h2><div class="hint">Penilaian bacaan tilawah — tulis bebas</div></div></div>
-    <div class="card-body">
-      <div class="row">
-        <div class="fld"><label>Tilawah (bacaan)</label>
-          <textarea id="f_tilawah" class="para-ta" rows="4" placeholder="Tulis bebas: kelancaran, makhraj, tajwid, lagu/irama, adab saat membaca…"></textarea>
-          <div class="sm-note">Opsional — satu paragraf bebas</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="card">
     <div class="card-head"><div class="step">5</div><div><h2>Catatan</h2><div class="hint">Catatan penutup sebelum simpan</div></div></div>
     <div class="card-body">
       <div class="row">
@@ -379,6 +379,11 @@ tbody tr:hover .bt-act{opacity:1}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
       <input id="rkSearch" type="text" placeholder="Cari nama / asal sekolah…" oninput="renderRekap()">
     </div>
+    <select id="rkSex" class="filter-sel" onchange="renderRekap()">
+      <option value="">Semua putra/putri</option>
+      <option value="putra">Putra</option>
+      <option value="putri">Putri</option>
+    </select>
     <select id="rkFilter" class="filter-sel" onchange="renderRekap()">
       <option value="">Semua predikat</option>
       <option value="sangat">Sangat Baik</option>
@@ -485,6 +490,8 @@ const MURID_PUTRI=[
   {n:"Aqila Naila Syahidah",s:""},
 ];
 const MURID={putra:MURID_PUTRA,putri:MURID_PUTRI};
+/* jenis kelamin diturunkan dari keanggotaan daftar ("" bila di luar daftar) */
+const sexOf=nama=>{const n=nama||"";return MURID_PUTRI.some(m=>m.n===n)?"putri":(MURID_PUTRA.some(m=>m.n===n)?"putra":"")};
 const twName=t=>t?(t.li||t.surat||"-"):"-";
 const DEMO=[
  {nama:"Ahmad Fauzan Hakim",asal:"MI Aisyah",haf:"1 juz",q1:{c:"punya",t:"Selesai juz 30 sebelum kelas 9"},q2:{c:"tidak",t:""},q3:{c:"ya",t:"TPA Nurul Huda, 1 tahun"},tw:{juz30:{surat:"An Naba",ayat:"",li:"",pred:"sangat",ket:"Tajwid bagus, suara jernih"},juz2829:{surat:"Al Mulk",ayat:"12",li:"",pred:"baik",ket:"Lancar sampai 12"},sambung:{surat:"An Naziat",ayat:"5",li:"",pred:"cukup",ket:"Sambungan kadang berhenti"}},w:"23 Okt, 19.20"},
@@ -601,10 +608,12 @@ const aksiCell=(r,i)=>`<td class="t-aksi"><button class="bt-act bte" onclick="ed
 function renderRekap(){
   const q=$("rkSearch").value.trim().toLowerCase();
   const f=$("rkFilter").value;
+  const sx=$("rkSex").value;
   const list=[...rows].sort(byNew).filter(r=>{
     const okF=!f||CATS.some(c=>r.tw[c.id]&&r.tw[c.id].pred===f);
     const okQ=!q||r.nama.toLowerCase().includes(q)||(r.asal||"").toLowerCase().includes(q);
-    return okF&&okQ;
+    const okS=!sx||sexOf(r.nama)===sx;
+    return okF&&okQ&&okS;
   });
   const cnt=p=>rows.reduce((a,r)=>a+CATS.filter(c=>r.tw[c.id]&&r.tw[c.id].pred===p).length,0);
   $("stTotal").textContent=rows.length;
@@ -753,8 +762,7 @@ function editRow(i){
   if(!r)return;
   editId=r._id||"";editPrev=r;
   const nm=r.nama&&r.nama!=="-"?r.nama:"";
-  const sex=MURID_PUTRI.some(m=>m.n===nm)?"putri":(MURID_PUTRA.some(m=>m.n===nm)?"putra":"");
-  setSex(sex,nm);
+  setSex(sexOf(nm),nm);
   $("f_asal").value=r.asal||"";
   $("f_haf").value=r.haf&&r.haf!=="-"?r.haf:"";
   $("f_tilawah").value=r.tilawah||"";
