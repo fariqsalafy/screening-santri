@@ -1,2 +1,7 @@
 ~$*
 .playwright-mcp/
+
+# sumber data lokal (nama sudah di-inline ke index.html; tidak perlu ikut repo)
+data murid baru.xlsx
+# NB: "template rekapan.xlsx" SENGAJA di-track — dipakai app saat export (lihat index.html)
+
